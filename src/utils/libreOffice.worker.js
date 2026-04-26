@@ -3,7 +3,7 @@
  */
 
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
-import mammoth from 'mammoth/mammoth.browser';
+import * as mammoth from 'mammoth/mammoth.browser';
 
 // let loModule = null; // Currently unused in mock implementation
 

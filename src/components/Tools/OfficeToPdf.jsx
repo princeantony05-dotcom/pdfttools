@@ -13,11 +13,11 @@ import Dropzone from '../UI/Dropzone';
 import { downloadBlob } from '../../utils/pdfHelpers';
 import { libreOfficeApi } from '../../utils/libreOfficeApi';
 import { motion } from 'framer-motion';
-import mammoth from 'mammoth';
+import * as mammoth from 'mammoth';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
-import { renderAsync } from 'docx-preview';
+import * as docxPreview from 'docx-preview';
 
 const OfficeToPdf = ({ type = 'word' }) => {
   const [file, setFile] = useState(null);
@@ -57,7 +57,7 @@ const OfficeToPdf = ({ type = 'word' }) => {
         document.body.appendChild(container);
 
         // Render docx to HTML with high fidelity
-        await renderAsync(arrayBuffer, container, null, {
+        await docxPreview.renderAsync(arrayBuffer, container, null, {
           inWrapper: false,
           ignoreWidth: false,
           ignoreHeight: false,
