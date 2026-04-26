@@ -77,6 +77,7 @@ function App() {
       const currentUserData = getUserData();
       const isPro = user?.role === 'admin' || (currentUserData && (currentUserData.subscription?.plan?.includes('Pro') || currentUserData.subscription?.plan?.includes('Enterprise')));
       
+      /* Temporarily disabled usage limit
       if (!isPro) {
         const usage = parseInt(localStorage.getItem('pdf_masters_tool_usage_count') || '0');
         if (usage >= 6) {
@@ -86,6 +87,7 @@ function App() {
         }
         localStorage.setItem('pdf_masters_tool_usage_count', (usage + 1).toString());
       }
+      */
     }
     setActiveTool(toolId);
   };
