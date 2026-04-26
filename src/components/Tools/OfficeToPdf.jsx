@@ -64,12 +64,25 @@ const OfficeToPdf = ({ type = 'word' }) => {
           useFullWidth: true
         });
 
-        // Small delay to ensure all images and fonts are loaded
-        await new Promise(r => setTimeout(r, 1500));
+        setConversionLog("Loading document images...");
+        // Wait for all images to be fully loaded and decoded
+        const images = container.getElementsByTagName('img');
+        const imagePromises = Array.from(images).map(img => {
+          if (img.complete) return Promise.resolve();
+          return new Promise(resolve => {
+            img.onload = resolve;
+            img.onerror = resolve; // Continue even if one image fails
+          });
+        });
+        
+        await Promise.all(imagePromises);
+        // Additional small delay for browser to settle layout
+        await new Promise(r => setTimeout(r, 500));
 
         setConversionLog("Capturing exact pages...");
         const canvas = await html2canvas(container, {
           useCORS: true,
+          allowTaint: true,
           scale: 2,
           logging: false,
           backgroundColor: '#ffffff',
