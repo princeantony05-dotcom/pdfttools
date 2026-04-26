@@ -1,28 +1,40 @@
-# Use the official Node.js image (Bookworm is more stable for packages)
+# Use the official Node.js image
 FROM node:22-bookworm
 
-# Install LibreOffice, Java, Python, and the high-end pdf2docx engine
+# Set working directory
+WORKDIR /app
+
+# Stage 1: Install System & Python Tools
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libreoffice \
+    python3 \
+    python3-pip \
+    python3-dev \
+    python3-setuptools \
+    build-essential \
+    && apt-get clean
+
+# Stage 2: Install LibreOffice & Java
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libreoffice-writer \
+    libreoffice-calc \
+    libreoffice-impress \
+    libreoffice-pdfimport \
     openjdk-17-jre-headless \
+    && apt-get clean
+
+# Stage 3: Install Fonts & Utilities
+RUN apt-get update && apt-get install -y --no-install-recommends \
     fonts-liberation \
     fonts-noto \
     fonts-dejavu \
     fontconfig \
     ghostscript \
-    python3 \
-    python3-pip \
-    python3-setuptools \
-    python3-dev \
-    build-essential \
-    && pip3 install --no-cache-dir pdf2docx \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Set the working directory
-WORKDIR /app
+# Stage 4: Install Python Conversion AI
+RUN pip3 install --no-cache-dir pdf2docx --break-system-packages
 
-# Copy package files and install dependencies
+# Copy package files and install Node dependencies
 COPY package*.json ./
 RUN npm install
 
