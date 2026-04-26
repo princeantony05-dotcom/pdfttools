@@ -37,7 +37,7 @@ const Login = ({ onLoginSuccess }) => {
         if (result.success) {
           onLoginSuccess(result.user.role);
         } else {
-          setError(result.message + '. Hint: admin@pdfelite.app / admin123');
+          setError(result.message + '. Hint: admin@pdfmasterstool.online / admin123');
         }
       }
       setLoading(false);
@@ -75,7 +75,7 @@ const Login = ({ onLoginSuccess }) => {
             </div>
             <h2 style={{ marginBottom: '0.5rem' }}>{isSignUp ? 'Create Account' : 'Welcome Back'}</h2>
             <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-              {isSignUp ? 'Join PDFElite to manage your documents' : 'Log in to access your dashboard'}
+              {isSignUp ? 'Join PDFMasterstool to manage your documents' : 'Log in to access your dashboard'}
             </p>
           </motion.div>
         </AnimatePresence>
@@ -176,7 +176,7 @@ const Login = ({ onLoginSuccess }) => {
             </span>
           </p>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', color: 'var(--text-muted)', fontSize: '0.75rem' }}>
-            <ShieldCheck size={14} /> Secured by PDFElite Auth
+            <ShieldCheck size={14} /> Secured by PDFMasterstool Auth
           </div>
         </div>
       </motion.div>

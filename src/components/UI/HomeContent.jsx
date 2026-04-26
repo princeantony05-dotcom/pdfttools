@@ -6,13 +6,13 @@ const HomeContent = () => {
     <div style={{ marginTop: '6rem', borderTop: '1px solid var(--border)', paddingTop: '4rem' }}>
       {/* Why Section */}
       <section style={{ marginBottom: '5rem' }}>
-        <h2 style={{ fontSize: '2.25rem', textAlign: 'center', marginBottom: '3rem' }}>Why Choose <span style={{ color: 'var(--primary)' }}>PDF Elite</span>?</h2>
+        <h2 style={{ fontSize: '2.25rem', textAlign: 'center', marginBottom: '3rem' }}>Why Choose <span style={{ color: 'var(--primary)' }}>PDFMasterstool</span>?</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem' }}>
           <div>
             <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
               <ShieldCheck color="var(--primary)" /> 100% Private & Secure
             </h3>
-            <p>Unlike other PDF tools, PDF Elite processes your documents entirely in your web browser. Your sensitive files never leave your computer and are never uploaded to our servers, ensuring maximum privacy for your data.</p>
+            <p>Unlike other PDF tools, PDFMasterstool processes your documents entirely in your web browser. Your sensitive files never leave your computer and are never uploaded to our servers, ensuring maximum privacy for your data.</p>
           </div>
           <div>
             <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
@@ -66,8 +66,8 @@ const HomeContent = () => {
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
           <div className="glass-card" style={{ padding: '2rem' }}>
-            <h4 style={{ marginBottom: '0.75rem' }}>Is PDF Elite free to use?</h4>
-            <p style={{ fontSize: '0.95rem' }}>Yes, PDF Elite provides a robust set of free tools for all users. We believe everyone should have access to private, high-quality document processing software.</p>
+            <h4 style={{ marginBottom: '0.75rem' }}>Is PDFMasterstool free to use?</h4>
+            <p style={{ fontSize: '0.95rem' }}>Yes, PDFMasterstool provides a robust set of free tools for all users. We believe everyone should have access to private, high-quality document processing software.</p>
           </div>
           <div className="glass-card" style={{ padding: '2rem' }}>
             <h4 style={{ marginBottom: '0.75rem' }}>Do I need to create an account?</h4>
@@ -75,7 +75,7 @@ const HomeContent = () => {
           </div>
           <div className="glass-card" style={{ padding: '2rem' }}>
             <h4 style={{ marginBottom: '0.75rem' }}>Which browsers are supported?</h4>
-            <p style={{ fontSize: '0.95rem' }}>PDF Elite works best on modern browsers that support WebAssembly, including Google Chrome, Mozilla Firefox, Microsoft Edge, and Safari.</p>
+            <p style={{ fontSize: '0.95rem' }}>PDFMasterstool works best on modern browsers that support WebAssembly, including Google Chrome, Mozilla Firefox, Microsoft Edge, and Safari.</p>
           </div>
           <div className="glass-card" style={{ padding: '2rem' }}>
             <h4 style={{ marginBottom: '0.75rem' }}>How secure are my files?</h4>

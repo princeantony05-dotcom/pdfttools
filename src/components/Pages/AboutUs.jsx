@@ -12,14 +12,14 @@ const AboutUs = () => {
         <div style={{ display: 'inline-flex', padding: '1rem', backgroundColor: 'rgba(15, 23, 42, 0.05)', borderRadius: '20px', color: 'var(--secondary)', marginBottom: '1.5rem' }}>
           <Info size={48} />
         </div>
-        <h1 style={{ fontSize: '3rem', marginBottom: '1rem' }}>About PDFElite</h1>
+        <h1 style={{ fontSize: '3rem', marginBottom: '1rem' }}>About PDFMasterstool</h1>
         <p style={{ fontSize: '1.2rem', color: 'var(--text-muted)' }}>Empowering users with professional-grade, privacy-first PDF tools.</p>
       </motion.div>
 
       <section style={{ marginBottom: '4rem' }}>
         <h2>Our Mission</h2>
         <p style={{ fontSize: '1.1rem', lineHeight: '1.8' }}>
-          PDFElite was born out of a simple observation: most online PDF tools are a privacy nightmare. 
+          PDFMasterstool was born out of a simple observation: most online PDF tools are a privacy nightmare. 
           To merge or convert a document, users are often forced to upload sensitive data to unknown servers. 
           We believe you shouldn't have to sacrifice your privacy for productivity. Our mission is to provide 
           high-performance document tools that run entirely on your own machine.

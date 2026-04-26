@@ -36,22 +36,24 @@ async function performConversion(payload) {
   
   console.log(`LibreOffice Worker: Converting ${name} to ${format}...`);
   
-  // Real implementation steps:
-  // 1. Write buffer to Emscripten virtual filesystem (VFS)
-  // loModule.FS.writeFile(name, new Uint8Array(buffer));
+  // Simulated delay for "processing"
+  await new Promise(resolve => setTimeout(resolve, 1500)); 
+
+  // If the target format is PDF, we could potentially use pdf-lib to create a dummy PDF
+  // But for now, we will return the original buffer ONLY if the extension matches,
+  // otherwise we return a small placeholder buffer to avoid "unreadable" errors
+  // where the browser/OS tries to parse a PDF as a Word doc or vice versa.
   
-  // 2. Call LibreOffice kit to convert
-  // loModule.callMain(['--headless', '--convert-to', format, name]);
-  
-  // 3. Read the output from VFS
-  // const outputName = name.substring(0, name.lastIndexOf('.')) + '.' + format;
-  // const outputData = loModule.FS.readFile(outputName);
-  
-  // Mock conversion for demonstration:
-  await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate processing time
-  
-  // Return the original buffer as a placeholder (in reality, this would be outputData)
-  return buffer; 
+  const currentExt = name.split('.').pop().toLowerCase();
+  if (currentExt === format.toLowerCase()) {
+    return buffer;
+  }
+
+  // Create a very simple text-based placeholder for now
+  // In a production app, this would be replaced by the actual WASM conversion output
+  const placeholderText = `Placeholder for converted ${name} to ${format}. Real WASM engine integration required for full conversion.`;
+  const encoder = new TextEncoder();
+  return encoder.encode(placeholderText).buffer;
 }
 
 self.onmessage = async (event) => {

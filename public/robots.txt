@@ -3,4 +3,4 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://pdfelite.app/sitemap.xml
+Sitemap: https://pdfmasterstool.online/sitemap.xml

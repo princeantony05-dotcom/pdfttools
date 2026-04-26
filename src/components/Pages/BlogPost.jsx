@@ -12,7 +12,7 @@ const BlogPost = ({ postId, onBack, onSelectTool }) => {
     setPost(found);
     
     if (found) {
-      document.title = `${found.title} | PDFElite Blog`;
+      document.title = `${found.title} | PDFMasterstool Blog`;
     }
   }, [postId]);
 

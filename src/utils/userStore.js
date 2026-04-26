@@ -1,16 +1,16 @@
-const USERS_LIST_KEY = 'pdf_elite_registered_users';
-const LOGGED_IN_USER_KEY = 'pdf_elite_user_data';
+const USERS_LIST_KEY = 'pdf_masters_tool_registered_users';
+const LOGGED_IN_USER_KEY = 'pdf_masters_tool_user_data';
 
 const initialUsers = [
   { 
-    email: 'admin@pdfelite.app', 
+    email: 'admin@pdfmasterstool.online', 
     password: 'admin123', 
-    name: 'Admin Elite', 
+    name: 'Admin Master', 
     role: 'admin',
     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Admin'
   },
   { 
-    email: 'user@pdfelite.app', 
+    email: 'user@pdfmasterstool.online', 
     password: 'user123', 
     name: 'John Doe', 
     role: 'user',

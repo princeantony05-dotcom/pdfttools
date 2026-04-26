@@ -92,7 +92,7 @@ const Support = () => {
                 </div>
                 <div>
                   <h4 style={{ margin: 0 }}>Email Support</h4>
-                  <p style={{ margin: '0.25rem 0 0', fontSize: '0.85rem' }}>support@pdfelite.app</p>
+                  <p style={{ margin: '0.25rem 0 0', fontSize: '0.85rem' }}>support@pdfmasterstool.online</p>
                 </div>
               </div>
               <div style={{ display: 'flex', gap: '1.25rem' }}>
@@ -110,7 +110,7 @@ const Support = () => {
                 </div>
                 <div>
                   <h4 style={{ margin: 0 }}>Phone Support</h4>
-                  <p style={{ margin: '0.25rem 0 0', fontSize: '0.85rem' }}>+1 (800) PDF-ELITE (Pro Only)</p>
+                  <p style={{ margin: '0.25rem 0 0', fontSize: '0.85rem' }}>+1 (800) pdf-masters-tool (Pro Only)</p>
                 </div>
               </div>
             </div>
@@ -122,7 +122,7 @@ const Support = () => {
               {[
                 "Is my data safe during processing?",
                 "How do I cancel my subscription?",
-                "Can I use PDFElite offline?",
+                "Can I use PDFMasterstool offline?",
                 "What file formats are supported?"
               ].map((q, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.85rem', cursor: 'pointer', opacity: 0.8 }}>

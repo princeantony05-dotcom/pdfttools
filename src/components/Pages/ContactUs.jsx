@@ -28,7 +28,7 @@ const ContactUs = () => {
               </div>
               <div>
                 <h5 style={{ margin: 0 }}>Email</h5>
-                <p style={{ margin: 0, fontSize: '0.9rem' }}>support@pdfelite.app</p>
+                <p style={{ margin: 0, fontSize: '0.9rem' }}>support@pdfmasterstool.online</p>
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -37,7 +37,7 @@ const ContactUs = () => {
               </div>
               <div>
                 <h5 style={{ margin: 0 }}>Social</h5>
-                <p style={{ margin: 0, fontSize: '0.9rem' }}>@PDFEliteTools on X</p>
+                <p style={{ margin: 0, fontSize: '0.9rem' }}>@PDFMasterstoolTools on X</p>
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>

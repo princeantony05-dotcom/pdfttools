@@ -61,7 +61,7 @@ const AdminDashboard = () => {
         <aside className="admin-sidebar">
           <div style={{ padding: '0 1.25rem 2rem', borderBottom: '1px solid var(--border)', marginBottom: '1.5rem' }}>
             <h3 style={{ margin: 0, color: 'var(--primary)', fontSize: '1.1rem' }}>Admin Panel</h3>
-            <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-muted)' }}>PDFElite Management</p>
+            <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-muted)' }}>PDFMasterstool Management</p>
           </div>
           {navItems.map((item) => (
             <div 
@@ -108,7 +108,7 @@ const OverviewTab = () => {
     <div>
       <div style={{ marginBottom: '2.5rem' }}>
         <h2 style={{ marginBottom: '0.5rem' }}>Overview Dashboard</h2>
-        <p style={{ color: 'var(--text-muted)' }}>Key performance indicators for PDFElite.</p>
+        <p style={{ color: 'var(--text-muted)' }}>Key performance indicators for PDFMasterstool.</p>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem', marginBottom: '2.5rem' }}>
@@ -633,11 +633,11 @@ const SecurityTab = () => {
         </div>
         <div className="admin-form-group">
           <label>Administrator Username</label>
-          <input type="text" defaultValue="AdminElite" className="admin-input" />
+          <input type="text" defaultValue="AdminMaster" className="admin-input" />
         </div>
         <div className="admin-form-group">
           <label>Admin Email</label>
-          <input type="email" defaultValue="admin@pdfelite.app" className="admin-input" />
+          <input type="email" defaultValue="admin@pdfmasterstool.online" className="admin-input" />
         </div>
         <button className="btn-secondary">Update Identity</button>
       </div>

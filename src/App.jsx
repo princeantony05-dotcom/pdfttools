@@ -78,13 +78,13 @@ function App() {
       const isPro = user?.role === 'admin' || (currentUserData && (currentUserData.subscription?.plan?.includes('Pro') || currentUserData.subscription?.plan?.includes('Enterprise')));
       
       if (!isPro) {
-        const usage = parseInt(localStorage.getItem('pdf_elite_usage_count') || '0');
+        const usage = parseInt(localStorage.getItem('pdf_masters_tool_usage_count') || '0');
         if (usage >= 6) {
           alert("You have reached your free limit of 6 tool uses. Please purchase a Pro plan to continue.");
           setActiveTool('pricing');
           return;
         }
-        localStorage.setItem('pdf_elite_usage_count', (usage + 1).toString());
+        localStorage.setItem('pdf_masters_tool_usage_count', (usage + 1).toString());
       }
     }
     setActiveTool(toolId);
@@ -157,7 +157,7 @@ function App() {
               transition={{ duration: 0.3 }}
             >
               <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-                <h1 style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>PDF Elite: Professional PDF Tools <br/><span style={{ color: 'var(--primary)' }}>Made Simple & Private</span></h1>
+                <h1 style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>PDFMasterstool: Professional PDF Tools <br/><span style={{ color: 'var(--primary)' }}>Made Simple & Private</span></h1>
                 <p style={{ maxWidth: '600px', margin: '0 auto' }}>Every tool you need to work with PDFs in one place. 100% private, browser-side processing.</p>
               </div>
 
@@ -229,7 +229,7 @@ function App() {
                   </h2>
                   <p style={{ margin: 0, fontSize: '0.9rem' }}>
                     {activeTool === 'privacy' ? 'How we protect your data' : 
-                     activeTool === 'about' ? 'The mission behind PDFElite' : 
+                     activeTool === 'about' ? 'The mission behind PDFMasterstool' : 
                      activeTool === 'disclaimer' ? 'Legal terms of use' : 
                      activeTool === 'contact' ? 'Get in touch with our team' : 
                      activeTool === 'pricing' ? 'Choose the plan that fits your needs' :
@@ -273,7 +273,7 @@ function App() {
       </main>
 
       <footer style={{ padding: '3rem 5%', borderTop: '1px solid var(--border)', marginTop: '4rem', textAlign: 'center' }}>
-        <p style={{ fontSize: '0.9rem' }}>© 2026 PDFElite. All processing happens in your browser. Your files never leave your device.</p>
+        <p style={{ fontSize: '0.9rem' }}>© 2026 PDFMasterstool. All processing happens in your browser. Your files never leave your device.</p>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginTop: '1rem' }}>
           <button onClick={() => handleToolSelection('privacy')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', cursor: 'pointer' }}>Privacy Policy</button>
           <button onClick={() => handleToolSelection('about')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', cursor: 'pointer' }}>About Us</button>

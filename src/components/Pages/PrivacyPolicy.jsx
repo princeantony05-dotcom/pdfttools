@@ -13,14 +13,14 @@ const PrivacyPolicy = () => {
           <ShieldCheck size={48} />
         </div>
         <h1 style={{ fontSize: '3rem', marginBottom: '1rem' }}>Privacy Policy</h1>
-        <p style={{ fontSize: '1.2rem', color: 'var(--text-muted)' }}>Your privacy is our priority. At PDFElite, your files never leave your device.</p>
+        <p style={{ fontSize: '1.2rem', color: 'var(--text-muted)' }}>Your privacy is our priority. At PDFMasterstool, your files never leave your device.</p>
       </motion.div>
 
       <section style={{ marginBottom: '3rem' }}>
         <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
           <ServerOff size={24} color="var(--primary)" /> 1. No File Uploads
         </h2>
-        <p>Unlike traditional PDF tools that require you to upload your sensitive documents to a server, PDFElite uses cutting-edge WebAssembly (WASM) technology to process everything locally in your browser. When you "upload" a file to our tools, it is loaded into your computer's memory, not our servers.</p>
+        <p>Unlike traditional PDF tools that require you to upload your sensitive documents to a server, PDFMasterstool uses cutting-edge WebAssembly (WASM) technology to process everything locally in your browser. When you "upload" a file to our tools, it is loaded into your computer's memory, not our servers.</p>
       </section>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
@@ -52,7 +52,7 @@ const PrivacyPolicy = () => {
 
       <section style={{ padding: '2rem', backgroundColor: 'rgba(37, 99, 235, 0.05)', borderRadius: '20px', border: '1px solid rgba(37, 99, 235, 0.1)' }}>
         <h3 style={{ marginBottom: '1rem' }}>Contact Us</h3>
-        <p>If you have any questions about our privacy-first approach, please reach out to us at privacy@pdfelite.app.</p>
+        <p>If you have any questions about our privacy-first approach, please reach out to us at privacy@pdfmasterstool.online.</p>
       </section>
     </div>
   );

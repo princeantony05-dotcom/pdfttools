@@ -20,7 +20,7 @@ const Blog = ({ onSelectPost }) => {
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
       <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-        <h1 style={{ fontSize: '3rem', marginBottom: '1rem' }}>PDF Elite Blog</h1>
+        <h1 style={{ fontSize: '3rem', marginBottom: '1rem' }}>PDFMasterstool Blog</h1>
         <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem' }}>Tips, tutorials, and updates on managing your documents securely.</p>
         
         <div style={{ 

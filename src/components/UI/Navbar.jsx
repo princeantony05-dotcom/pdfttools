@@ -73,7 +73,7 @@ const Navbar = ({ onSelectTool, isLoggedIn, userRole, onLogout }) => {
           <div style={{ background: 'linear-gradient(135deg, #6366f1, #ec4899)', width: '36px', height: '36px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <FileText size={20} color="white" />
           </div>
-          <h2 className="logo-text">PDF<span style={{ color: 'var(--primary)' }}>Elite</span></h2>
+          <h2 className="logo-text">PDF<span style={{ color: 'var(--primary)' }}>Masterstool</span></h2>
         </div>
       </div>
       
