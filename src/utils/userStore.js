@@ -4,7 +4,7 @@ const LOGGED_IN_USER_KEY = 'pdf_masters_tool_user_data';
 const initialUsers = [
   { 
     email: 'admin@pdfmasterstool.online', 
-    password: 'admin123', 
+    password: 'AdminPassword@2026', 
     name: 'Admin Master', 
     role: 'admin',
     avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Admin'
