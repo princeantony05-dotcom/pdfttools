@@ -1,23 +1,16 @@
 # Use the official Node.js image (Bookworm is more stable for packages)
 FROM node:22-bookworm
 
-# Install LibreOffice, Java, and a massive collection of fonts to prevent "black lines"
+# Install LibreOffice, Java, and essential fonts
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libreoffice-writer \
-    libreoffice-calc \
-    libreoffice-impress \
-    libreoffice-pdfimport \
-    libreoffice-common \
-    libreoffice-java-common \
+    libreoffice \
     openjdk-17-jre-headless \
     fonts-liberation \
     fonts-noto \
     fonts-dejavu \
-    fonts-freefont-ttf \
     fontconfig \
     ghostscript \
     unzip \
-    libxml2 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
