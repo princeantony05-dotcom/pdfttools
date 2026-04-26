@@ -55,14 +55,23 @@ app.post('/api/convert', upload.single('file'), async (req, res) => {
       return res.status(400).json({ error: 'No file uploaded' });
     }
 
-    const { format = '.pdf' } = req.body;
+    const { format = 'pdf' } = req.body;
+    const cleanFormat = format.startsWith('.') ? format.slice(1) : format;
     const inputBuffer = req.file.buffer;
 
-    console.log(`>>> [API] Converting ${req.file.originalname} (${req.file.size} bytes) to ${format}...`);
+    console.log(`>>> [API] Converting ${req.file.originalname} to ${cleanFormat}...`);
 
-    // Attempt conversion
+    // Attempt conversion with explicit options if needed
     try {
-      const outputBuffer = await convertAsync(inputBuffer, format, undefined);
+      // Some versions of libreoffice-convert take 4 arguments, others take 3.
+      // We'll use the callback version wrapped in a promise for max control.
+      const outputBuffer = await new Promise((resolve, reject) => {
+        libre.convert(inputBuffer, `.${cleanFormat}`, undefined, (err, data) => {
+          if (err) return reject(err);
+          resolve(data);
+        });
+      });
+
       console.log(`>>> [API] Success! Converted size: ${outputBuffer.length} bytes`);
 
       res.set({
