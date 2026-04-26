@@ -2,8 +2,7 @@
  * LibreOffice Worker - Runs the LibreOffice WASM engine.
  */
 
-// This is where the LibreOffice WASM loader would be imported
-// importScripts('/libreoffice/libreoffice.js'); 
+import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 
 // let loModule = null; // Currently unused in mock implementation
 
@@ -50,27 +49,42 @@ async function performConversion(payload) {
   }
 
   if (format.toLowerCase() === 'pdf') {
-    // Return a minimal valid PDF structure so it at least opens in a viewer
-    const minimalPdf = `%PDF-1.4
-1 0 obj < /Type /Catalog /Pages 2 0 R >> endobj
-2 0 obj < /Type /Pages /Kids [3 0 R] /Count 1 >> endobj
-3 0 obj < /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << >> >> endobj
-4 0 obj < /Length 51 >> stream
-BT /F1 24 Tf 100 700 Td (Placeholder: Real WASM Conversion Needed) Tj ET
-endstream endobj
-xref
-0 5
-0000000000 65535 f
-0000000009 00000 n
-0000000056 00000 n
-0000000111 00000 n
-0000000212 00000 n
-trailer < /Size 5 /Root 1 0 R >>
-startxref
-311
-%%EOF`;
-    const encoder = new TextEncoder();
-    return encoder.encode(minimalPdf).buffer;
+    try {
+      const pdfDoc = await PDFDocument.create();
+      const page = pdfDoc.addPage([600, 400]);
+      const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+      
+      page.drawText('PDFMasterstool Conversion Placeholder', {
+        x: 50,
+        y: 350,
+        size: 24,
+        font: font,
+        color: rgb(0.1, 0.4, 0.9),
+      });
+      
+      page.drawText('Full LibreOffice WASM engine required for real conversion.', {
+        x: 50,
+        y: 300,
+        size: 14,
+        font: font,
+        color: rgb(0.4, 0.4, 0.4),
+      });
+
+      page.drawText(`Input File: ${name}`, {
+        x: 50,
+        y: 250,
+        size: 12,
+        font: font,
+      });
+
+      const pdfBytes = await pdfDoc.save();
+      return pdfBytes.buffer;
+    } catch (err) {
+      console.error('Failed to generate placeholder PDF:', err);
+      // Fallback to text if pdf-lib fails in worker
+      const encoder = new TextEncoder();
+      return encoder.encode("%PDF-1.4\n%Fallback").buffer;
+    }
   }
 
   // For other formats (Docx, etc.), return a text-based placeholder
