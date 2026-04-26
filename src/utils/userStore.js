@@ -36,11 +36,27 @@ const defaultUserDataTemplate = (profile) => ({
 
 export const getRegisteredUsers = () => {
   const stored = localStorage.getItem(USERS_LIST_KEY);
-  if (!stored) {
+  let users = initialUsers;
+  
+  if (stored) {
+    users = JSON.parse(stored);
+    // Force update admin credentials if they exist in initialUsers
+    initialUsers.forEach(initialUser => {
+      if (initialUser.role === 'admin') {
+        const adminIndex = users.findIndex(u => u.role === 'admin');
+        if (adminIndex !== -1) {
+          users[adminIndex] = { ...users[adminIndex], ...initialUser };
+        } else {
+          users.push(initialUser);
+        }
+      }
+    });
+    localStorage.setItem(USERS_LIST_KEY, JSON.stringify(users));
+  } else {
     localStorage.setItem(USERS_LIST_KEY, JSON.stringify(initialUsers));
-    return initialUsers;
   }
-  return JSON.parse(stored);
+  
+  return users;
 };
 
 export const checkEmailExists = (email) => {
