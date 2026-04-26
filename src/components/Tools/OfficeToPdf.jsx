@@ -50,15 +50,29 @@ const OfficeToPdf = ({ type = 'word' }) => {
         setConversionLog("Rendering high-fidelity document...");
         // Create hidden element for docx-preview
         const container = document.createElement('div');
+        container.id = 'docx-render-container';
         container.style.position = 'fixed';
         container.style.left = '-9999px';
         container.style.top = '0';
-        container.style.width = '816px'; // Standard Word width (8.5in at 96dpi)
+        container.style.width = '816px'; 
+        container.style.backgroundColor = 'white';
+        container.style.color = '#000000'; // Reset global text color to black
+        
+        // Inject docx-preview styles and reset site-wide conflicts
+        const style = document.createElement('style');
+        style.innerHTML = `
+          #docx-render-container .docx-wrapper { background-color: white !important; padding: 0 !important; }
+          #docx-render-container .docx { background: white !important; margin: 0 !important; box-shadow: none !important; }
+          #docx-render-container .docx p { margin: 0; padding: 0; color: inherit; }
+          #docx-render-container .docx span { color: inherit; font-family: inherit; }
+          #docx-render-container img { max-width: 100% !important; height: auto !important; }
+        `;
         document.body.appendChild(container);
+        container.appendChild(style);
 
         // Render docx to HTML with high fidelity
         await docxPreview.renderAsync(arrayBuffer, container, null, {
-          inWrapper: false,
+          inWrapper: true,
           ignoreWidth: false,
           ignoreHeight: false,
           useFullWidth: true
