@@ -81,10 +81,13 @@ app.post('/api/convert', upload.single('file'), async (req, res) => {
     const cleanFormat = format.startsWith('.') ? format.slice(1) : format;
     const inputBuffer = req.file.buffer;
     
+    // Get the original extension (crucial for LibreOffice to know what it's reading)
+    const inputExt = path.extname(req.file.originalname) || '.pdf';
+    
     // Create temporary files for the conversion process
     const tempDir = '/tmp';
     const timestamp = Date.now();
-    tempInputPath = path.join(tempDir, `input_${timestamp}.docx`);
+    tempInputPath = path.join(tempDir, `input_${timestamp}${inputExt}`);
     tempOutputPath = path.join(tempDir, `input_${timestamp}.${cleanFormat}`);
     const userProfilePath = path.join(tempDir, `profile_${timestamp}`);
 
