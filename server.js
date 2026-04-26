@@ -109,9 +109,16 @@ app.post('/api/convert', upload.single('file'), async (req, res) => {
     const outputBuffer = await fs.readFile(tempOutputPath);
     console.log(`>>> [API] Success! Converted size: ${outputBuffer.length} bytes`);
 
+    // Determine Content-Type
+    let contentType = 'application/octet-stream';
+    if (cleanFormat === 'pdf') contentType = 'application/pdf';
+    else if (cleanFormat === 'docx') contentType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+    else if (cleanFormat === 'xlsx') contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+    else if (cleanFormat === 'pptx') contentType = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
+
     res.set({
-      'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename="converted.pdf"`,
+      'Content-Type': contentType,
+      'Content-Disposition': `attachment; filename="converted.${cleanFormat}"`,
       'Content-Length': outputBuffer.length
     });
 

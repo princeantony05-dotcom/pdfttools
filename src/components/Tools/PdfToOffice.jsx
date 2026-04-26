@@ -34,13 +34,27 @@ const PdfToOffice = ({ type = 'word' }) => {
     setStatus('processing');
 
     try {
-      const resultBuffer = await libreOfficeApi.pdfToOffice(file, format);
-      setResult(resultBuffer);
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('format', format); // 'docx', 'xlsx', etc.
+
+      const response = await fetch('/api/convert', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Server conversion failed');
+      }
+
+      const blob = await response.blob();
+      setResult(blob);
       setStatus('success');
     } catch (err) {
       console.error('Conversion failed:', err);
       setStatus('idle');
-      alert('Failed to convert PDF. The file may be restricted or complex.');
+      alert(`Failed to convert PDF: ${err.message}`);
     }
   };
 
