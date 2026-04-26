@@ -62,13 +62,17 @@ const distPath = path.join(__dirname, 'dist');
 app.use(express.static(distPath));
 
 // Handle SPA routing
-app.get('*', (req, res) => {
+app.get('/*', (req, res) => {
   const indexPath = path.join(distPath, 'index.html');
-  fs.access(indexPath)
-    .then(() => res.sendFile(indexPath))
-    .catch(() => res.status(404).send('Application is still building or dist folder is missing. Please wait 1-2 minutes and refresh.'));
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      res.status(404).send('Application is still building or dist folder is missing. Please wait 1-2 minutes and refresh.');
+    }
+  });
 });
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+app.listen(port, '0.0.0.0', () => {
+  console.log(`>>> PDFMasterstool Server is LIVE on port ${port}`);
+  console.log(`>>> Serving static files from: ${distPath}`);
+  console.log(`>>> Health check available at /health`);
 });

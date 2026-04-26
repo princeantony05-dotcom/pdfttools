@@ -1,5 +1,7 @@
-[build]
-installPkgs = ['libreoffice', 'fonts-liberation', 'fontconfig']
+[phases.setup]
+nixPkgs = ['libreoffice', 'fonts-liberation', 'fontconfig']
+
+[phases.build]
 cmds = ['npm install', 'npm run build']
 
 [start]
