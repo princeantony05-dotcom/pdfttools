@@ -1,14 +1,11 @@
-# Use the official Node.js image
-FROM node:22-bullseye
+# Use the official Node.js image (Bookworm is more stable for packages)
+FROM node:22-bookworm
 
-# Install LibreOffice and all necessary modules for PDF import/export
-RUN apt-get update && apt-get install -y \
-    libreoffice-writer \
-    libreoffice-calc \
-    libreoffice-impress \
-    libreoffice-pdfimport \
+# Install LibreOffice and all necessary modules
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libreoffice \
     libreoffice-java-common \
-    openjdk-11-jre-headless \
+    openjdk-17-jre-headless \
     fonts-liberation \
     fontconfig \
     ghostscript \
