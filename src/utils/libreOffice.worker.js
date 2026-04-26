@@ -3,6 +3,7 @@
  */
 
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import mammoth from 'mammoth/mammoth.browser';
 
 // let loModule = null; // Currently unused in mock implementation
 
@@ -50,6 +51,49 @@ async function performConversion(payload) {
 
   if (format.toLowerCase() === 'pdf') {
     try {
+      // Check if it's a Word document
+      const currentExt = name.split('.').pop().toLowerCase();
+      
+      if (currentExt === 'docx' || currentExt === 'doc') {
+        console.log('LibreOffice Worker: Performing Word to PDF conversion...');
+        
+        // Use mammoth to extract text
+        const result = await mammoth.extractRawText({ arrayBuffer: buffer });
+        const text = result.value;
+        
+        // Create PDF from text
+        const pdfDoc = await PDFDocument.create();
+        let page = pdfDoc.addPage([600, 800]);
+        const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+        const margin = 50;
+        let y = 750;
+        const fontSize = 11;
+        const lineHeight = 14;
+
+        const lines = text.split('\n');
+        for (const line of lines) {
+          if (y < 20) { // Bottom margin
+            page = pdfDoc.addPage([600, 800]);
+            y = 750;
+          }
+          
+          if (line.trim()) {
+            page.drawText(line.trim(), {
+              x: margin,
+              y: y,
+              size: fontSize,
+              font: font,
+              color: rgb(0, 0, 0),
+            });
+          }
+          y -= lineHeight;
+        }
+
+        const pdfBytes = await pdfDoc.save();
+        return pdfBytes.buffer;
+      }
+
+      // Default Placeholder for other formats (Excel, PPT, etc.)
       const pdfDoc = await PDFDocument.create();
       const page = pdfDoc.addPage([600, 400]);
       const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
@@ -80,8 +124,7 @@ async function performConversion(payload) {
       const pdfBytes = await pdfDoc.save();
       return pdfBytes.buffer;
     } catch (err) {
-      console.error('Failed to generate placeholder PDF:', err);
-      // Fallback to text if pdf-lib fails in worker
+      console.error('Failed to generate PDF:', err);
       const encoder = new TextEncoder();
       return encoder.encode("%PDF-1.4\n%Fallback").buffer;
     }
