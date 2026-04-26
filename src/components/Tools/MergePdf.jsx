@@ -35,28 +35,34 @@ const MergePdf = () => {
   return (
     <div style={{ width: '100%' }}>
       {!isComplete && !isProcessing && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '2rem', alignItems: 'start' }}>
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <Dropzone onFilesSelected={setFiles} />
-          </motion.div>
+        <>
+          {files.length === 0 ? (
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ maxWidth: '800px', margin: '4rem auto' }}>
+              <Dropzone onFilesSelected={setFiles} />
+            </motion.div>
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '2rem', alignItems: 'start' }}>
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                <Dropzone onFilesSelected={setFiles} />
+              </motion.div>
 
-          <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} style={{ backgroundColor: 'rgba(0,0,0,0.02)', padding: '1.5rem', borderRadius: '20px', border: '1px solid var(--border)', position: 'sticky', top: '1rem' }}>
-            <h4 style={{ marginBottom: '1.5rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.6 }}>Merge Options</h4>
-            {files.length > 0 && (
-              <div style={{ marginBottom: '1.5rem', maxHeight: '200px', overflowY: 'auto', padding: '0.5rem' }}>
-                {files.map((f, i) => (
-                  <div key={i} style={{ fontSize: '0.75rem', padding: '0.5rem', backgroundColor: 'white', borderRadius: '8px', border: '1px solid var(--border)', marginBottom: '0.5rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    {f.name}
-                  </div>
-                ))}
-              </div>
-            )}
-            <button className="btn-primary" onClick={handleMerge} disabled={files.length < 2} style={{ width: '100%', padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem' }}>
-              Merge Files <ArrowRight size={20} />
-            </button>
-            <button onClick={reset} className="btn-secondary" style={{ width: '100%', marginTop: '1rem' }}>Clear All</button>
-          </motion.div>
-        </div>
+              <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} style={{ backgroundColor: 'rgba(0,0,0,0.02)', padding: '1.5rem', borderRadius: '20px', border: '1px solid var(--border)', position: 'sticky', top: '1rem' }}>
+                <h4 style={{ marginBottom: '1.5rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.6 }}>Merge Options</h4>
+                <div style={{ marginBottom: '1.5rem', maxHeight: '200px', overflowY: 'auto', padding: '0.5rem' }}>
+                  {files.map((f, i) => (
+                    <div key={i} style={{ fontSize: '0.75rem', padding: '0.5rem', backgroundColor: 'white', borderRadius: '8px', border: '1px solid var(--border)', marginBottom: '0.5rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      {f.name}
+                    </div>
+                  ))}
+                </div>
+                <button className="btn-primary" onClick={handleMerge} disabled={files.length < 2} style={{ width: '100%', padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem' }}>
+                  Merge Files <ArrowRight size={20} />
+                </button>
+                <button onClick={reset} className="btn-secondary" style={{ width: '100%', marginTop: '1rem' }}>Clear All</button>
+              </motion.div>
+            </div>
+          )}
+        </>
       )}
 
       {isProcessing && (

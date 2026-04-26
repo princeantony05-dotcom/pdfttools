@@ -66,36 +66,42 @@ const PdfToOffice = ({ type = 'word' }) => {
   return (
     <div style={{ width: '100%' }}>
       {status === 'idle' && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '2rem', alignItems: 'start' }}>
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <Dropzone 
-              onFilesSelected={(f) => setFile(f[0])} 
-              accept=".pdf" 
-              multiple={false} 
-              label="Select the PDF you want to convert"
-            />
-          </motion.div>
-
-          {file ? (
-            <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} style={{ backgroundColor: 'rgba(0,0,0,0.02)', padding: '1.5rem', borderRadius: '20px', border: '1px solid var(--border)', position: 'sticky', top: '1rem' }}>
-              <h4 style={{ marginBottom: '1.5rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.6 }}>Conversion Options</h4>
-              <div style={{ marginBottom: '1.5rem', padding: '1.1rem', backgroundColor: 'white', borderRadius: '12px', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <Icon size={24} color={color} />
-                <div style={{ overflow: 'hidden' }}>
-                  <div style={{ fontSize: '0.8rem', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{file.name}</div>
-                  <div style={{ fontSize: '0.7rem', opacity: 0.5 }}>PDF Ready</div>
-                </div>
-              </div>
-              <button className="btn-primary" onClick={handleConvert} style={{ width: '100%', padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem' }}>
-                Convert to {format.toUpperCase()} <ArrowRight size={20} />
-              </button>
+        <>
+          {!file ? (
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ maxWidth: '800px', margin: '4rem auto' }}>
+              <Dropzone 
+                onFilesSelected={(f) => setFile(f[0])} 
+                accept=".pdf" 
+                multiple={false} 
+              />
             </motion.div>
           ) : (
-            <div style={{ padding: '2rem', textAlign: 'center', opacity: 0.3, border: '1px dashed var(--border)', borderRadius: '20px' }}>
-              <p style={{ fontSize: '0.9rem' }}>Select a PDF to see options</p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '2rem', alignItems: 'start' }}>
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                <Dropzone 
+                  onFilesSelected={(f) => setFile(f[0])} 
+                  accept=".pdf" 
+                  multiple={false} 
+                />
+              </motion.div>
+
+              <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} style={{ backgroundColor: 'rgba(0,0,0,0.02)', padding: '1.5rem', borderRadius: '20px', border: '1px solid var(--border)', position: 'sticky', top: '1rem' }}>
+                <h4 style={{ marginBottom: '1.5rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.6 }}>Conversion Options</h4>
+                <div style={{ marginBottom: '1.5rem', padding: '1.1rem', backgroundColor: 'white', borderRadius: '12px', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <Icon size={24} color={color} />
+                  <div style={{ overflow: 'hidden' }}>
+                    <div style={{ fontSize: '0.8rem', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{file.name}</div>
+                    <div style={{ fontSize: '0.7rem', opacity: 0.5 }}>PDF Ready</div>
+                  </div>
+                </div>
+                <button className="btn-primary" onClick={handleConvert} style={{ width: '100%', padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem' }}>
+                  Convert to {format.toUpperCase()} <ArrowRight size={20} />
+                </button>
+                <button onClick={reset} className="btn-secondary" style={{ width: '100%', marginTop: '1rem' }}>Clear All</button>
+              </motion.div>
             </div>
           )}
-        </div>
+        </>
       )}
 
       {status === 'processing' && (
