@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Tool Components (to be created)
+// Tool Components
 import MergePdf from './components/Tools/MergePdf';
 import SplitPdf from './components/Tools/SplitPdf';
 import RotatePdf from './components/Tools/RotatePdf';
