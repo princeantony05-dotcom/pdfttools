@@ -218,6 +218,7 @@ function App() {
                 >
                   <ChevronLeft size={20} />
                 </button>
+                <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 600, opacity: 0.8 }}>{currentTool?.name}</h3>
               </div>
 
               {/* Conditional Layout: Sidebar for tools/content, single column for Auth */}

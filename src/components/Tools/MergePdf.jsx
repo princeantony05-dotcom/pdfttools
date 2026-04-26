@@ -47,8 +47,9 @@ const MergePdf = () => {
             </ul>
           </div>
 
-          <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>
-            <button className="btn-primary" onClick={handleMerge} disabled={files.length < 2} style={{ width: '100%', padding: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem' }}>
+          <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} style={{ backgroundColor: 'rgba(0,0,0,0.02)', padding: '1.5rem', borderRadius: '20px', border: '1px solid var(--border)' }}>
+            <h4 style={{ marginBottom: '1.5rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.6 }}>Merge Options</h4>
+            <button className="btn-primary" onClick={handleMerge} disabled={files.length < 2} style={{ width: '100%', padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem' }}>
               Merge Files <ArrowRight size={20} />
             </button>
             <button onClick={reset} className="btn-secondary" style={{ width: '100%', marginTop: '1rem' }}>Clear All</button>
@@ -70,8 +71,9 @@ const MergePdf = () => {
             <h3>Merged Document Ready</h3>
           </div>
 
-          <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>
-            <button className="btn-primary" onClick={() => downloadBlob(result, 'merged_document.pdf', 'application/pdf')} style={{ width: '100%', padding: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem' }}>
+          <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} style={{ backgroundColor: 'rgba(16, 185, 129, 0.05)', padding: '1.5rem', borderRadius: '20px', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
+            <h4 style={{ marginBottom: '1.5rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#10b981' }}>Export PDF</h4>
+            <button className="btn-primary" onClick={() => downloadBlob(result, 'merged_document.pdf', 'application/pdf')} style={{ width: '100%', padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', backgroundColor: '#10b981' }}>
               <Download size={20} /> Download PDF
             </button>
             <button onClick={reset} className="btn-secondary" style={{ width: '100%', marginTop: '1rem' }}>Merge More</button>
