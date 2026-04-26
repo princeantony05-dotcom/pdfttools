@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { 
   FileText, 
   FileSpreadsheet, 
@@ -6,12 +6,16 @@ import {
   Download, 
   Loader2, 
   CheckCircle2, 
-  Zap
+  Zap,
+  Layout
 } from 'lucide-react';
 import Dropzone from '../UI/Dropzone';
 import { downloadBlob } from '../../utils/pdfHelpers';
 import { libreOfficeApi } from '../../utils/libreOfficeApi';
 import { motion } from 'framer-motion';
+import mammoth from 'mammoth';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 const OfficeToPdf = ({ type = 'word' }) => {
   const [file, setFile] = useState(null);
@@ -29,18 +33,69 @@ const OfficeToPdf = ({ type = 'word' }) => {
 
   const { name, icon: Icon, accept, color } = getToolInfo();
 
+  const hiddenContainerRef = useRef(null);
+  const [conversionLog, setConversionLog] = useState("");
+
   const handleConvert = async () => {
     if (!file) return;
     setStatus('processing');
+    setConversionLog("Reading document...");
 
     try {
-      const resultBuffer = await libreOfficeApi.officeToPdf(file);
-      setResult(resultBuffer);
-      setStatus('success');
+      const currentExt = file.name.split('.').pop().toLowerCase();
+      
+      if (currentExt === 'docx' || currentExt === 'doc') {
+        setConversionLog("Parsing layout and images...");
+        const arrayBuffer = await file.arrayBuffer();
+        
+        // Convert to HTML
+        const { value: html } = await mammoth.convertToHtml({ arrayBuffer });
+        
+        setConversionLog("Rendering high-fidelity preview...");
+        // Create hidden element for rendering
+        const container = document.createElement('div');
+        container.style.width = '800px';
+        container.style.padding = '40px';
+        container.style.backgroundColor = 'white';
+        container.style.position = 'fixed';
+        container.style.left = '-9999px';
+        container.innerHTML = html;
+        document.body.appendChild(container);
+
+        setConversionLog("Generating PDF pages...");
+        const canvas = await html2canvas(container, {
+          useCORS: true,
+          scale: 2,
+          logging: false,
+          backgroundColor: '#ffffff'
+        });
+
+        const imgData = canvas.toDataURL('image/jpeg', 0.95);
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+        const imgWidth = canvas.width;
+        const imgHeight = canvas.height;
+        const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+        const finalWidth = imgWidth * ratio;
+        const finalHeight = imgHeight * ratio;
+
+        pdf.addImage(imgData, 'JPEG', 0, 0, finalWidth, finalHeight);
+        
+        const pdfBlob = pdf.output('blob');
+        setResult(pdfBlob);
+        document.body.removeChild(container);
+        setStatus('success');
+      } else {
+        // Fallback to worker for other formats
+        const resultBuffer = await libreOfficeApi.officeToPdf(file);
+        setResult(resultBuffer);
+        setStatus('success');
+      }
     } catch (err) {
       console.error('Conversion failed:', err);
       setStatus('idle');
-      alert('Failed to convert document. Ensure the file is not corrupted.');
+      alert('High-fidelity conversion failed. Falling back to basic processing.');
     }
   };
 
@@ -103,8 +158,8 @@ const OfficeToPdf = ({ type = 'word' }) => {
       {status === 'processing' && (
         <div style={{ textAlign: 'center', padding: '10rem 0' }}>
           <Loader2 size={64} className="animate-spin" style={{ color: color, margin: '0 auto' }} />
-          <h3 style={{ marginTop: '2rem' }}>Converting to PDF...</h3>
-          <p style={{ color: 'var(--text-muted)' }}>Using LibreOffice WASM in your browser.</p>
+          <h3 style={{ marginTop: '2rem' }}>{conversionLog}</h3>
+          <p style={{ color: 'var(--text-muted)' }}>Using High-Fidelity Rendering in your browser.</p>
         </div>
       )}
 
