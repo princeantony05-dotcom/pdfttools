@@ -9,14 +9,15 @@ import {
   ChevronRight,
   ZoomIn,
   ZoomOut,
-  MousePointer2
+  MousePointer2,
+  Eraser
 } from 'lucide-react';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import * as pdfjs from 'pdfjs-dist';
 import Dropzone from '../UI/Dropzone';
 import { downloadBlob } from '../../utils/pdfHelpers';
 
-// Set worker source for PDF.js (Matched to version 5.6.205)
+// Set worker source for PDF.js
 pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@5.6.205/build/pdf.worker.min.mjs`;
 
 const EditPdf = () => {
@@ -25,17 +26,18 @@ const EditPdf = () => {
   const [numPages, setNumPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [scale, setScale] = useState(1.5);
-  const [tool, setTool] = useState('select'); // select, text, draw
+  const [tool, setTool] = useState('select'); // select, text, draw, eraser
   const [status, setStatus] = useState('idle'); // idle, loading, editing, saving
   
-  const [annotations, setAnnotations] = useState([]); // { type: 'text', x, y, content, page }
-  const [drawings, setDrawings] = useState([]); // { type: 'draw', points: [], color, width, page }
+  const [annotations, setAnnotations] = useState([]); // { type: 'text', x, y, content, page, id }
+  const [drawings, setDrawings] = useState([]); // { type: 'draw', points: [], color, width, page, id }
   
   const canvasRef = useRef(null);
   const drawingCanvasRef = useRef(null);
-  const containerRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [currentPoints, setCurrentPoints] = useState([]);
+  const [draggedId, setDraggedId] = useState(null);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 
   // Load PDF
   useEffect(() => {
@@ -59,14 +61,13 @@ const EditPdf = () => {
     loadPdf();
   }, [file]);
 
-  // Drawing Logic
+  // Drawing & Rendering Logic
   const redrawCanvas = useCallback(() => {
     const canvas = drawingCanvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Draw existing drawings for current page
     drawings
       .filter(d => d.page === currentPage)
       .forEach(drawing => {
@@ -80,7 +81,6 @@ const EditPdf = () => {
         ctx.stroke();
       });
 
-    // Draw current points
     if (currentPoints.length > 0) {
       ctx.beginPath();
       ctx.strokeStyle = '#4f46e5';
@@ -93,26 +93,16 @@ const EditPdf = () => {
     }
   }, [drawings, currentPage, currentPoints]);
 
-  // Render Page
   const renderPage = useCallback(async () => {
     if (!pdfDoc || !canvasRef.current) return;
-
     const page = await pdfDoc.getPage(currentPage);
     const viewport = page.getViewport({ scale });
-    
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
     canvas.height = viewport.height;
     canvas.width = viewport.width;
+    await page.render({ canvasContext: context, viewport }).promise;
 
-    const renderContext = {
-      canvasContext: context,
-      viewport: viewport
-    };
-    
-    await page.render(renderContext).promise;
-
-    // Sync drawing canvas size
     if (drawingCanvasRef.current) {
       drawingCanvasRef.current.width = viewport.width;
       drawingCanvasRef.current.height = viewport.height;
@@ -120,68 +110,84 @@ const EditPdf = () => {
     }
   }, [pdfDoc, currentPage, scale, redrawCanvas]);
 
-  useEffect(() => {
-    renderPage();
-  }, [renderPage]);
+  useEffect(() => { renderPage(); }, [renderPage]);
 
-  const startDrawing = (e) => {
-    if (tool !== 'draw') return;
-    setIsDrawing(true);
+  // Interaction Handlers
+  const handleMouseDown = (e) => {
     const rect = drawingCanvasRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left);
-    const y = (e.clientY - rect.top);
-    setCurrentPoints([{ x, y }]);
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    if (tool === 'draw') {
+      setIsDrawing(true);
+      setCurrentPoints([{ x, y }]);
+    } else if (tool === 'eraser') {
+      // Erase drawings that are close to the click
+      setDrawings(prev => prev.filter(d => {
+        if (d.page !== currentPage) return true;
+        const isNear = d.points.some(p => Math.abs(p.x - x) < 10 && Math.abs(p.y - y) < 10);
+        return !isNear;
+      }));
+    }
   };
 
-  const draw = (e) => {
-    if (!isDrawing) return;
+  const handleMouseMove = (e) => {
     const rect = drawingCanvasRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left);
-    const y = (e.clientY - rect.top);
-    setCurrentPoints(prev => [...prev, { x, y }]);
-    redrawCanvas();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    if (isDrawing) {
+      setCurrentPoints(prev => [...prev, { x, y }]);
+      redrawCanvas();
+    } else if (draggedId) {
+      setAnnotations(prev => prev.map(ann => 
+        ann.id === draggedId ? { ...ann, x: x - dragOffset.x, y: y - dragOffset.y } : ann
+      ));
+    }
   };
 
-  const stopDrawing = () => {
-    if (!isDrawing) return;
-    setIsDrawing(false);
-    if (currentPoints.length > 1) {
+  const handleMouseUp = () => {
+    if (isDrawing && currentPoints.length > 1) {
       setDrawings(prev => [...prev, {
         type: 'draw',
         points: currentPoints,
         color: '#4f46e5',
         width: 2,
-        page: currentPage
-      }]);
-    }
-    setCurrentPoints([]);
-  };
-
-  // Text Annotation Logic
-  const handleCanvasClick = (e) => {
-    if (tool !== 'text') return;
-    const rect = drawingCanvasRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left);
-    const y = (e.clientY - rect.top);
-
-    const content = prompt('Enter text:');
-    if (content) {
-      setAnnotations(prev => [...prev, {
-        type: 'text',
-        x,
-        y,
-        content,
         page: currentPage,
         id: Date.now()
       }]);
     }
+    setIsDrawing(false);
+    setCurrentPoints([]);
+    setDraggedId(null);
   };
 
-  const removeAnnotation = (id) => {
-    setAnnotations(prev => prev.filter(a => a.id !== id));
+  const handleCanvasClick = (e) => {
+    if (tool !== 'text') return;
+    const rect = drawingCanvasRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const content = prompt('Enter text:');
+    if (content) {
+      setAnnotations(prev => [...prev, {
+        type: 'text', x, y, content, page: currentPage, id: Date.now()
+      }]);
+    }
   };
 
-  // Save/Export
+  // Dragging Logic
+  const startDrag = (e, ann) => {
+    if (tool !== 'select') return;
+    e.stopPropagation();
+    const rect = drawingCanvasRef.current.getBoundingClientRect();
+    setDraggedId(ann.id);
+    setDragOffset({
+      x: e.clientX - rect.left - ann.x,
+      y: e.clientY - rect.top - ann.y
+    });
+  };
+
   const handleSave = async () => {
     setStatus('saving');
     try {
@@ -190,44 +196,29 @@ const EditPdf = () => {
       const pages = pdfDoc.getPages();
       const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
-      // Add Text Annotations
       for (const ann of annotations) {
         const page = pages[ann.page - 1];
         const { width, height } = page.getSize();
-        
-        // Convert canvas coordinates to PDF coordinates
-        // Canvas (0,0) is top-left. PDF (0,0) is bottom-left.
-
-
         page.drawText(ann.content, {
           x: (ann.x / canvasRef.current.width) * width,
-          y: height - (ann.y / canvasRef.current.height) * height - 12, // adjust for font baseline
-          size: 12 / scale * (width / (canvasRef.current.width / scale)), 
+          y: height - (ann.y / canvasRef.current.height) * height - (10 * scale),
+          size: 12,
           font: font,
           color: rgb(0, 0, 0),
         });
       }
 
-      // Add Drawings (Simplified as lines)
       for (const draw of drawings) {
         const page = pages[draw.page - 1];
         const { width, height } = page.getSize();
-        
         for (let i = 0; i < draw.points.length - 1; i++) {
           const p1 = draw.points[i];
           const p2 = draw.points[i+1];
-          
           page.drawLine({
-            start: { 
-              x: (p1.x / canvasRef.current.width) * width, 
-              y: height - (p1.y / canvasRef.current.height) * height 
-            },
-            end: { 
-              x: (p2.x / canvasRef.current.width) * width, 
-              y: height - (p2.y / canvasRef.current.height) * height 
-            },
+            start: { x: (p1.x / canvasRef.current.width) * width, y: height - (p1.y / canvasRef.current.height) * height },
+            end: { x: (p2.x / canvasRef.current.width) * width, y: height - (p2.y / canvasRef.current.height) * height },
             thickness: draw.width,
-            color: rgb(0.31, 0.27, 0.9), // #4f46e5
+            color: rgb(0.31, 0.27, 0.9),
           });
         }
       }
@@ -236,7 +227,7 @@ const EditPdf = () => {
       downloadBlob(pdfBytes, `edited_${file.name}`, 'application/pdf');
       setStatus('editing');
     } catch (err) {
-      console.error('Error saving PDF:', err);
+      console.error('Save failed:', err);
       setStatus('editing');
     }
   };
@@ -260,34 +251,21 @@ const EditPdf = () => {
         </div>
       )}
 
-      {status === 'editing' || status === 'saving' ? (
+      {(status === 'editing' || status === 'saving') && (
         <>
-          {/* Toolbar */}
           <div className="glass" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 2rem', borderRadius: '16px' }}>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
-              <button 
-                className={`btn-icon ${tool === 'select' ? 'active' : ''}`}
-                onClick={() => setTool('select')}
-                title="Select"
-                style={{ backgroundColor: tool === 'select' ? 'var(--primary)' : 'transparent', color: tool === 'select' ? 'white' : 'inherit' }}
-              >
-                <MousePointer2 size={20} />
+              <button className={`btn-icon ${tool === 'select' ? 'active' : ''}`} onClick={() => setTool('select')} title="Move Tool">
+                <MousePointer2 size={20} color={tool === 'select' ? 'white' : 'currentColor'} />
               </button>
-              <button 
-                className={`btn-icon ${tool === 'text' ? 'active' : ''}`}
-                onClick={() => setTool('text')}
-                title="Add Text"
-                style={{ backgroundColor: tool === 'text' ? 'var(--primary)' : 'transparent', color: tool === 'text' ? 'white' : 'inherit' }}
-              >
-                <Type size={20} />
+              <button className={`btn-icon ${tool === 'text' ? 'active' : ''}`} onClick={() => setTool('text')} title="Add Text">
+                <Type size={20} color={tool === 'text' ? 'white' : 'currentColor'} />
               </button>
-              <button 
-                className={`btn-icon ${tool === 'draw' ? 'active' : ''}`}
-                onClick={() => setTool('draw')}
-                title="Draw/Sign"
-                style={{ backgroundColor: tool === 'draw' ? 'var(--primary)' : 'transparent', color: tool === 'draw' ? 'white' : 'inherit' }}
-              >
-                <Pencil size={20} />
+              <button className={`btn-icon ${tool === 'draw' ? 'active' : ''}`} onClick={() => setTool('draw')} title="Draw Tool">
+                <Pencil size={20} color={tool === 'draw' ? 'white' : 'currentColor'} />
+              </button>
+              <button className={`btn-icon ${tool === 'eraser' ? 'active' : ''}`} onClick={() => setTool('eraser')} title="Eraser Tool">
+                <Eraser size={20} color={tool === 'eraser' ? 'white' : 'currentColor'} />
               </button>
             </div>
 
@@ -297,107 +275,58 @@ const EditPdf = () => {
                 <span style={{ fontSize: '0.85rem', minWidth: '40px', textAlign: 'center' }}>{Math.round(scale * 100)}%</span>
                 <button onClick={() => setScale(Math.min(3, scale + 0.2))} style={{ background: 'none' }}><ZoomIn size={16} /></button>
               </div>
-
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <button 
-                  disabled={currentPage <= 1} 
-                  onClick={() => setCurrentPage(p => p - 1)}
-                  style={{ background: 'none', opacity: currentPage <= 1 ? 0.3 : 1 }}
-                >
-                  <ChevronLeft size={24} />
-                </button>
+                <button disabled={currentPage <= 1} onClick={() => setCurrentPage(p => p - 1)} style={{ background: 'none', opacity: currentPage <= 1 ? 0.3 : 1 }}><ChevronLeft size={24} /></button>
                 <span style={{ fontSize: '0.9rem', fontWeight: 500 }}>Page {currentPage} of {numPages}</span>
-                <button 
-                  disabled={currentPage >= numPages} 
-                  onClick={() => setCurrentPage(p => p + 1)}
-                  style={{ background: 'none', opacity: currentPage >= numPages ? 0.3 : 1 }}
-                >
-                  <ChevronRight size={24} />
-                </button>
+                <button disabled={currentPage >= numPages} onClick={() => setCurrentPage(p => p + 1)} style={{ background: 'none', opacity: currentPage >= numPages ? 0.3 : 1 }}><ChevronRight size={24} /></button>
               </div>
             </div>
 
-            <button 
-              className="btn-primary" 
-              onClick={handleSave} 
-              disabled={status === 'saving'}
-              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-            >
+            <button className="btn-primary" onClick={handleSave} disabled={status === 'saving'} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               {status === 'saving' ? <Loader2 size={18} className="animate-spin" /> : <Download size={18} />}
               Save Changes
             </button>
           </div>
 
-          {/* Editor Area */}
-          <div 
-            ref={containerRef}
-            style={{ 
-              flex: 1, 
-              overflow: 'auto', 
-              backgroundColor: 'rgba(0,0,0,0.2)', 
-              borderRadius: '16px', 
-              display: 'flex', 
-              justifyContent: 'center', 
-              padding: '2rem',
-              position: 'relative'
-            }}
-          >
+          <div style={{ flex: 1, overflow: 'auto', backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: '16px', display: 'flex', justifyContent: 'center', padding: '2rem', position: 'relative' }}>
             <div style={{ position: 'relative', boxShadow: '0 20px 50px rgba(0,0,0,0.5)' }}>
               <canvas ref={canvasRef} />
               <canvas 
                 ref={drawingCanvasRef}
-                onMouseDown={startDrawing}
-                onMouseMove={draw}
-                onMouseUp={stopDrawing}
-                onMouseLeave={stopDrawing}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
                 onClick={handleCanvasClick}
-                style={{ 
-                  position: 'absolute', 
-                  top: 0, 
-                  left: 0, 
-                  cursor: tool === 'draw' ? 'crosshair' : (tool === 'text' ? 'text' : 'default'),
-                  zIndex: 10
-                }}
+                style={{ position: 'absolute', top: 0, left: 0, cursor: tool === 'draw' ? 'crosshair' : (tool === 'text' ? 'text' : (tool === 'eraser' ? 'pointer' : 'default')), zIndex: 10 }}
               />
-              
-              {/* Text Annotations Layer */}
-              {annotations
-                .filter(a => a.page === currentPage)
-                .map(ann => (
-                  <div 
-                    key={ann.id}
-                    style={{
-                      position: 'absolute',
-                      top: ann.y,
-                      left: ann.x,
-                      color: 'black',
-                      padding: '2px 4px',
-                      backgroundColor: 'rgba(255,255,0,0.2)',
-                      border: tool === 'select' ? '1px dashed #666' : 'none',
-                      fontSize: `${12 * scale}px`,
-                      pointerEvents: tool === 'select' ? 'auto' : 'none',
-                      zIndex: 15,
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px'
-                    }}
-                  >
-                    {ann.content}
-                    {tool === 'select' && (
-                      <button 
-                        onClick={() => removeAnnotation(ann.id)}
-                        style={{ padding: 0, background: 'none', color: '#f43f5e' }}
-                      >
-                        <Trash2 size={12} />
-                      </button>
-                    )}
-                  </div>
-                ))
-              }
+              {annotations.filter(a => a.page === currentPage).map(ann => (
+                <div 
+                  key={ann.id}
+                  onMouseDown={(e) => startDrag(e, ann)}
+                  style={{
+                    position: 'absolute', top: ann.y, left: ann.x, color: 'black', padding: '2px 4px',
+                    backgroundColor: 'rgba(255,255,0,0.2)',
+                    border: tool === 'select' ? '1px dashed #4f46e5' : 'none',
+                    fontSize: `${12 * scale}px`,
+                    cursor: tool === 'select' ? 'move' : 'default',
+                    zIndex: 15, display: 'flex', alignItems: 'center', gap: '4px',
+                    pointerEvents: tool === 'select' || tool === 'eraser' ? 'auto' : 'none'
+                  }}
+                  onClick={(e) => {
+                    if (tool === 'eraser') {
+                      e.stopPropagation();
+                      setAnnotations(prev => prev.filter(a => a.id !== ann.id));
+                    }
+                  }}
+                >
+                  {ann.content}
+                </div>
+              ))}
             </div>
           </div>
         </>
-      ) : null}
+      )}
     </div>
   );
 };

@@ -6,11 +6,10 @@ import {
   Download, 
   Loader2, 
   CheckCircle2, 
-  ChevronRight
+  ArrowRight
 } from 'lucide-react';
 import Dropzone from '../UI/Dropzone';
 import { downloadBlob } from '../../utils/pdfHelpers';
-import { libreOfficeApi } from '../../utils/libreOfficeApi';
 import { motion } from 'framer-motion';
 
 const PdfToOffice = ({ type = 'word' }) => {
@@ -27,7 +26,7 @@ const PdfToOffice = ({ type = 'word' }) => {
     }
   };
 
-  const { name, icon: Icon, format, color } = getToolInfo();
+  const { icon: Icon, format, color } = getToolInfo();
 
   const handleConvert = async () => {
     if (!file) return;
@@ -36,7 +35,7 @@ const PdfToOffice = ({ type = 'word' }) => {
     try {
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('format', format); // 'docx', 'xlsx', etc.
+      formData.append('format', format);
 
       const response = await fetch('/api/convert', {
         method: 'POST',
@@ -65,63 +64,58 @@ const PdfToOffice = ({ type = 'word' }) => {
   };
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-      {status === 'idle' && (
+    <div style={{ width: '100%' }}>
+      {!file && status === 'idle' && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1.5rem', marginBottom: '1.5rem' }}>
-               <div style={{ backgroundColor: 'rgba(0,0,0,0.05)', width: '60px', height: '60px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                 <FileText size={30} />
-               </div>
-               <ChevronRight size={24} style={{ color: 'var(--border)' }} />
-               <div style={{ backgroundColor: `${color}15`, width: '80px', height: '80px', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: color }}>
-                 <Icon size={40} />
-               </div>
-            </div>
-            <h2 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>{name}</h2>
-            <p style={{ color: 'var(--text-muted)' }}>Transform your static PDF into an editable {format.toUpperCase()} document.</p>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', alignItems: 'center' }}>
-            <Dropzone 
-              onFilesSelected={(f) => setFile(f[0])} 
-              accept=".pdf" 
-              multiple={false} 
-              label="Select the PDF you want to convert"
-            />
-            
-            {file && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} style={{ width: '100%', maxWidth: '400px' }}>
-                <button className="btn-primary" onClick={handleConvert} style={{ width: '100%', padding: '1.25rem' }}>
-                  Convert to {format.toUpperCase()}
-                </button>
-              </motion.div>
-            )}
-          </div>
+          <Dropzone 
+            onFilesSelected={(f) => setFile(f[0])} 
+            accept=".pdf" 
+            multiple={false} 
+            label="Select the PDF you want to convert"
+          />
         </motion.div>
       )}
 
+      {file && status === 'idle' && (
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '2rem', alignItems: 'center' }}>
+          <div className="glass-card" style={{ padding: '3rem', textAlign: 'center' }}>
+            <div style={{ color: color, marginBottom: '1rem' }}><Icon size={64} style={{ margin: '0 auto' }} /></div>
+            <h3 style={{ marginBottom: '0.5rem' }}>{file.name}</h3>
+            <p style={{ fontSize: '0.9rem', opacity: 0.6 }}>PDF Document</p>
+          </div>
+
+          <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>
+            <button className="btn-primary" onClick={handleConvert} style={{ width: '100%', padding: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem' }}>
+              Convert to {format.toUpperCase()} <ArrowRight size={20} />
+            </button>
+            <button onClick={reset} className="btn-secondary" style={{ width: '100%', marginTop: '1rem' }}>Change File</button>
+          </motion.div>
+        </div>
+      )}
+
       {status === 'processing' && (
-        <div style={{ textAlign: 'center', padding: '10rem 0' }}>
+        <div style={{ textAlign: 'center', padding: '6rem 0' }}>
           <Loader2 size={64} className="animate-spin" style={{ color: color, margin: '0 auto' }} />
-          <h3 style={{ marginTop: '2rem' }}>Reconstructing document...</h3>
-          <p style={{ color: 'var(--text-muted)' }}>This may take a few moments for complex layouts.</p>
+          <h3 style={{ marginTop: '2rem' }}>Reconstructing Document...</h3>
+          <p style={{ color: 'var(--text-muted)' }}>Using High-Fidelity Python Engine for perfect formatting.</p>
         </div>
       )}
 
       {status === 'success' && (
-        <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} style={{ textAlign: 'center', padding: '4rem' }}>
-          <CheckCircle2 size={80} color="#10b981" style={{ margin: '0 auto 2rem' }} />
-          <h2 style={{ marginBottom: '1rem' }}>Success!</h2>
-          <p style={{ marginBottom: '2.5rem', color: 'var(--text-muted)' }}>Your editable {format.toUpperCase()} is ready.</p>
-
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-            <button className="btn-primary" onClick={() => downloadBlob(result, `${file.name.split('.')[0]}.${format}`, 'application/octet-stream')}>
-              <Download size={20} style={{ marginRight: '0.5rem' }} /> Download {format.toUpperCase()}
-            </button>
-            <button className="btn-secondary" onClick={reset}>Convert Another</button>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '2rem', alignItems: 'center' }}>
+          <div className="glass-card" style={{ padding: '3rem', textAlign: 'center', borderColor: '#10b981' }}>
+            <CheckCircle2 size={80} color="#10b981" style={{ margin: '0 auto 1.5rem' }} />
+            <h3>{file.name.split('.')[0]}.{format}</h3>
+            <p style={{ color: '#10b981', fontWeight: 600 }}>Ready for download</p>
           </div>
-        </motion.div>
+
+          <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>
+            <button className="btn-primary" onClick={() => downloadBlob(result, `${file.name.split('.')[0]}.${format}`, 'application/octet-stream')} style={{ width: '100%', padding: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem' }}>
+              <Download size={20} /> Download {format.toUpperCase()}
+            </button>
+            <button onClick={reset} className="btn-secondary" style={{ width: '100%', marginTop: '1rem' }}>Convert Another</button>
+          </motion.div>
+        </div>
       )}
     </div>
   );

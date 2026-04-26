@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { 
   FileText, 
   FileSpreadsheet, 
@@ -7,11 +7,10 @@ import {
   Loader2, 
   CheckCircle2, 
   Zap,
-  Layout
+  ArrowRight
 } from 'lucide-react';
 import Dropzone from '../UI/Dropzone';
 import { downloadBlob } from '../../utils/pdfHelpers';
-import { libreOfficeApi } from '../../utils/libreOfficeApi';
 import { motion } from 'framer-motion';
 
 const OfficeToPdf = ({ type = 'word' }) => {
@@ -28,21 +27,17 @@ const OfficeToPdf = ({ type = 'word' }) => {
     }
   };
 
-  const { name, icon: Icon, accept, color } = getToolInfo();
-  const [conversionLog, setConversionLog] = useState("");
+  const { icon: Icon, accept, color } = getToolInfo();
 
   const handleConvert = async () => {
     if (!file) return;
     setStatus('processing');
-    setConversionLog("Sending to server engine...");
 
     try {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('format', '.pdf');
 
-      setConversionLog("Processing on server (LibreOffice)...");
-      
       const response = await fetch('/api/convert', {
         method: 'POST',
         body: formData,
@@ -70,76 +65,58 @@ const OfficeToPdf = ({ type = 'word' }) => {
   };
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-      {status === 'idle' && (
+    <div style={{ width: '100%' }}>
+      {!file && status === 'idle' && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <div style={{ 
-              backgroundColor: `${color}15`, 
-              width: '80px', 
-              height: '80px', 
-              borderRadius: '24px', 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center',
-              margin: '0 auto 1.5rem',
-              color: color
-            }}>
-              <Icon size={40} />
-            </div>
-            <h2 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>{name}</h2>
-            <p style={{ color: 'var(--text-muted)' }}>High-fidelity conversion powered by LibreOffice WASM. 100% private.</p>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', alignItems: 'center' }}>
-            <Dropzone 
-              onFilesSelected={(f) => setFile(f[0])} 
-              accept={accept} 
-              multiple={false} 
-              label={`Drag & Drop your ${type.toUpperCase()} file here`}
-            />
-            
-            {file && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} style={{ width: '100%', maxWidth: '400px' }}>
-                <button className="btn-primary" onClick={handleConvert} style={{ width: '100%', padding: '1.25rem' }}>
-                  Convert to PDF
-                </button>
-              </motion.div>
-            )}
-          </div>
-
-          <div style={{ marginTop: '4rem', display: 'flex', justifyContent: 'center', gap: '3rem', opacity: 0.6 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem' }}>
-              <Zap size={16} /> Fast Local Processing
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem' }}>
-              <CheckCircle2 size={16} /> Original Formatting Kept
-            </div>
-          </div>
+          <Dropzone 
+            onFilesSelected={(f) => setFile(f[0])} 
+            accept={accept} 
+            multiple={false} 
+            label={`Drag & Drop your ${type.toUpperCase()} file here`}
+          />
         </motion.div>
       )}
 
+      {file && status === 'idle' && (
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '2rem', alignItems: 'center' }}>
+          <div className="glass-card" style={{ padding: '3rem', textAlign: 'center' }}>
+            <div style={{ color: color, marginBottom: '1rem' }}><Icon size={64} style={{ margin: '0 auto' }} /></div>
+            <h3 style={{ marginBottom: '0.5rem' }}>{file.name}</h3>
+            <p style={{ fontSize: '0.9rem', opacity: 0.6 }}>{(file.size / 1024).toFixed(1)} KB</p>
+          </div>
+
+          <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>
+            <button className="btn-primary" onClick={handleConvert} style={{ width: '100%', padding: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem' }}>
+              Convert to PDF <ArrowRight size={20} />
+            </button>
+            <button onClick={reset} className="btn-secondary" style={{ width: '100%', marginTop: '1rem' }}>Change File</button>
+          </motion.div>
+        </div>
+      )}
+
       {status === 'processing' && (
-        <div style={{ textAlign: 'center', padding: '10rem 0' }}>
+        <div style={{ textAlign: 'center', padding: '6rem 0' }}>
           <Loader2 size={64} className="animate-spin" style={{ color: color, margin: '0 auto' }} />
-          <h3 style={{ marginTop: '2rem' }}>{conversionLog}</h3>
-          <p style={{ color: 'var(--text-muted)' }}>Using High-Fidelity Rendering in your browser.</p>
+          <h3 style={{ marginTop: '2rem' }}>Processing High-Fidelity PDF...</h3>
+          <p style={{ color: 'var(--text-muted)' }}>Using LibreOffice Engine for perfect alignment.</p>
         </div>
       )}
 
       {status === 'success' && (
-        <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} style={{ textAlign: 'center', padding: '4rem' }}>
-          <CheckCircle2 size={80} color="#10b981" style={{ margin: '0 auto 2rem' }} />
-          <h2 style={{ marginBottom: '1rem' }}>Conversion Complete!</h2>
-          <p style={{ marginBottom: '2.5rem', color: 'var(--text-muted)' }}>Your document has been professionally converted to PDF.</p>
-
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-            <button className="btn-primary" onClick={() => downloadBlob(result, `${file.name.split('.')[0]}.pdf`, 'application/pdf')}>
-              <Download size={20} style={{ marginRight: '0.5rem' }} /> Download PDF
-            </button>
-            <button className="btn-secondary" onClick={reset}>Convert Another</button>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '2rem', alignItems: 'center' }}>
+          <div className="glass-card" style={{ padding: '3rem', textAlign: 'center', borderColor: '#10b981' }}>
+            <CheckCircle2 size={80} color="#10b981" style={{ margin: '0 auto 1.5rem' }} />
+            <h3>{file.name.split('.')[0]}.pdf</h3>
+            <p style={{ color: '#10b981', fontWeight: 600 }}>Ready for download</p>
           </div>
-        </motion.div>
+
+          <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>
+            <button className="btn-primary" onClick={() => downloadBlob(result, `${file.name.split('.')[0]}.pdf`, 'application/pdf')} style={{ width: '100%', padding: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem' }}>
+              <Download size={20} /> Download PDF
+            </button>
+            <button onClick={reset} className="btn-secondary" style={{ width: '100%', marginTop: '1rem' }}>Convert Another</button>
+          </motion.div>
+        </div>
       )}
     </div>
   );

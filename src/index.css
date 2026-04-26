@@ -165,10 +165,11 @@ p { color: var(--text-muted); font-size: 1.1rem; }
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  border-radius: 12px;
+  padding: 0.4rem 0.75rem;
+  border-radius: 10px;
   color: var(--text-muted);
   font-weight: 500;
+  font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s ease;
   user-select: none;
@@ -480,14 +481,14 @@ p { color: var(--text-muted); font-size: 1.1rem; }
 }
 
 .navbar-header {
-  padding: 0.75rem 5%;
+  padding: 0.4rem 3%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 1rem 2rem;
-  border-radius: 24px;
+  margin: 0.5rem 1.5rem;
+  border-radius: 18px;
   position: sticky;
-  top: 1rem;
+  top: 0.5rem;
   z-index: 1000;
 }
 

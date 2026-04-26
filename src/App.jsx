@@ -30,6 +30,7 @@ import PdfToOffice from './components/Tools/PdfToOffice';
 import PasswordTool from './components/Tools/PasswordTool';
 import EditPdf from './components/Tools/EditPdf';
 import WatermarkTool from './components/Tools/WatermarkTool';
+import PdfOrganizer from './components/Tools/PdfOrganizer';
 import Navbar from './components/UI/Navbar';
 import { getUserData } from './utils/userStore';
 
@@ -64,6 +65,7 @@ const TOOLS = [
   { id: 'pdf-word', name: 'PDF to Word', icon: FileText, description: 'Convert PDF to editable Word', color: '#2563eb' },
   { id: 'pdf-excel', name: 'PDF to Excel', icon: FileSpreadsheet, description: 'Convert PDF to Excel spreadsheets', color: '#059669' },
   { id: 'pdf-ppt', name: 'PDF to PPT', icon: Presentation, description: 'Convert PDF to PPT presentations', color: '#d97706' },
+  { id: 'organizer', name: 'PDF Organizer', icon: LayoutDashboard, description: 'Reorder, rotate, and delete pages visually', color: '#6366f1' },
   { id: 'password', name: 'Protect/Remove', icon: Lock, description: 'Add or remove password protection', color: '#475569' },
 ];
 
@@ -121,6 +123,7 @@ function App() {
       case 'pdf-word': return <PdfToOffice type="word" onBack={() => handleToolSelection(null)} />;
       case 'pdf-excel': return <PdfToOffice type="excel" onBack={() => handleToolSelection(null)} />;
       case 'pdf-ppt': return <PdfToOffice type="ppt" onBack={() => handleToolSelection(null)} />;
+      case 'organizer': return <PdfOrganizer onBack={() => handleToolSelection(null)} />;
       case 'password': return <PasswordTool onBack={() => handleToolSelection(null)} />;
       case 'privacy': return <PrivacyPolicy />;
       case 'about': return <AboutUs />;
@@ -206,44 +209,14 @@ function App() {
             >
 
 
-              <div style={{ marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <div style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
                 <button 
                   onClick={() => handleToolSelection(null)}
                   className="btn-secondary"
-                  style={{ padding: '8px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  style={{ padding: '6px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                 >
-                  <ChevronLeft size={24} />
+                  <ChevronLeft size={20} />
                 </button>
-                <div>
-                  <h2 style={{ margin: 0 }}>
-                    {activeTool === 'privacy' ? 'Privacy Policy' : 
-                     activeTool === 'about' ? 'About Us' : 
-                     activeTool === 'disclaimer' ? 'Disclaimer' : 
-                     activeTool === 'contact' ? 'Contact Us' : 
-                     activeTool === 'pricing' ? 'Upgrade Your Workflow' :
-                     activeTool === 'login' ? 'Sign In' :
-                     activeTool === 'admin' ? 'Admin Control Center' :
-                     activeTool === 'blog' ? 'Blog & Resources' :
-                     activeTool === 'blog-post' ? 'Read Article' :
-                     activeTool === 'user-dashboard' ? 'My Account Dashboard' :
-                     activeTool === 'support' ? 'Customer Support' :
-                     currentTool?.name}
-                  </h2>
-                  <p style={{ margin: 0, fontSize: '0.9rem' }}>
-                    {activeTool === 'privacy' ? 'How we protect your data' : 
-                     activeTool === 'about' ? 'The mission behind PDFMasterstool' : 
-                     activeTool === 'disclaimer' ? 'Legal terms of use' : 
-                     activeTool === 'contact' ? 'Get in touch with our team' : 
-                     activeTool === 'pricing' ? 'Choose the plan that fits your needs' :
-                     activeTool === 'login' ? 'Access your account' :
-                     activeTool === 'admin' ? 'System metrics and management' :
-                     activeTool === 'blog' ? 'Tips, tutorials, and document management news' :
-                     activeTool === 'blog-post' ? 'Detailed guide for your workflow' :
-                     activeTool === 'user-dashboard' ? 'Manage your profile, subscriptions, and history' :
-                     activeTool === 'support' ? 'How can we help you today?' :
-                     currentTool?.description}
-                  </p>
-                </div>
               </div>
 
               {/* Conditional Layout: Sidebar for tools/content, single column for Auth */}
