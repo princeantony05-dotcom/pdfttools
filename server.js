@@ -52,12 +52,21 @@ app.post('/api/convert', upload.single('file'), async (req, res) => {
   }
 });
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', engine: 'libreoffice' });
+});
+
 // Serve static files from the Vite build directory
-app.use(express.static(path.join(__dirname, 'dist')));
+const distPath = path.join(__dirname, 'dist');
+app.use(express.static(distPath));
 
 // Handle SPA routing
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  const indexPath = path.join(distPath, 'index.html');
+  fs.access(indexPath)
+    .then(() => res.sendFile(indexPath))
+    .catch(() => res.status(404).send('Application is still building or dist folder is missing. Please wait 1-2 minutes and refresh.'));
 });
 
 app.listen(port, () => {

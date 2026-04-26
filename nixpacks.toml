@@ -1,5 +1,6 @@
 [build]
 installPkgs = ['libreoffice', 'fonts-liberation', 'fontconfig']
+cmds = ['npm install', 'npm run build']
 
 [start]
-cmd = 'npm run start'
+cmd = 'npm start'
