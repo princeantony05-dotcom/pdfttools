@@ -16,11 +16,14 @@ import {
   Settings,
   Menu,
   X,
-  ChevronRight
+  ChevronRight,
+  Globe
 } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 const Navbar = ({ onSelectTool, isLoggedIn, userRole, onLogout }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { lang, changeLanguage, t, languages } = useLanguage();
 
   const categories = [
     {
@@ -43,11 +46,11 @@ const Navbar = ({ onSelectTool, isLoggedIn, userRole, onLogout }) => {
     {
       name: 'Edit & Organize',
       tools: [
-        { id: 'merge', name: 'Merge PDF', icon: Combine, color: '#1e293b' },
-        { id: 'split', name: 'Split PDF', icon: Scissors, color: '#334155' },
+        { id: 'merge', name: t('tools.merge'), icon: Combine, color: '#1e293b' },
+        { id: 'split', name: t('tools.split'), icon: Scissors, color: '#334155' },
         { id: 'rotate', name: 'Rotate PDF', icon: RotateCw, color: '#64748b' },
         { id: 'delete', name: 'Delete Pages', icon: Trash2, color: '#ef4444' },
-        { id: 'edit', name: 'PDF Editor', icon: Edit3, color: '#2563eb' },
+        { id: 'edit', name: t('tools.edit'), icon: Edit3, color: '#2563eb' },
         { id: 'watermark', name: 'Watermark', icon: Stamp, color: '#475569' },
       ]
     }
@@ -100,10 +103,89 @@ const Navbar = ({ onSelectTool, isLoggedIn, userRole, onLogout }) => {
         ))}
       </nav>
 
-      {/* Mobile Dropdown Menu */}
+      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        {/* Language Selector Dropdown */}
+        <div className="nav-item desktop-only" style={{ marginRight: '0.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.9rem', padding: '8px 12px', borderRadius: '10px', background: 'rgba(0,0,0,0.03)' }}>
+            <Globe size={16} /> <span>{languages[lang].name}</span> <ChevronDown size={14} />
+          </div>
+          <div className="dropdown-menu" style={{ width: '160px' }}>
+            {Object.keys(languages).map(code => (
+              <div 
+                key={code} 
+                className={`dropdown-item ${lang === code ? 'active' : ''}`}
+                onClick={() => changeLanguage(code)}
+                style={{ justifyContent: 'space-between' }}
+              >
+                <span>{languages[code].flag} {languages[code].name}</span>
+                {lang === code && <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--primary)' }}></div>}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {isLoggedIn ? (
+          <>
+            {userRole === 'admin' && (
+              <button 
+                className="btn-secondary desktop-only" 
+                style={{ padding: '8px 16px', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                onClick={() => handleToolSelect('admin')}
+              >
+                <Settings size={16} /> Admin
+              </button>
+            )}
+            <div 
+              onClick={() => handleToolSelect('user-dashboard')}
+              style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '4px 12px', background: 'rgba(0,0,0,0.03)', borderRadius: '12px', cursor: 'pointer' }}
+            >
+              <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <User size={18} />
+              </div>
+              <span className="desktop-only" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)' }}>{userRole === 'admin' ? 'Administrator' : t('nav.dashboard')}</span>
+            </div>
+            <button 
+              className="btn-secondary" 
+              style={{ padding: '8px 12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              onClick={onLogout}
+              title="Logout"
+            >
+              <LogOut size={18} />
+            </button>
+          </>
+        ) : (
+          <div className="desktop-only" style={{ display: 'flex', gap: '0.75rem' }}>
+            <button className="btn-secondary" style={{ padding: '8px 16px', fontSize: '0.9rem' }} onClick={() => handleToolSelect('blog')}>{t('nav.blog')}</button>
+            <button className="btn-secondary" style={{ padding: '8px 16px', fontSize: '0.9rem' }} onClick={() => handleToolSelect('pricing')}>{t('nav.pricing')}</button>
+            <button className="btn-primary" style={{ padding: '8px 20px', fontSize: '0.9rem' }} onClick={() => handleToolSelect('login')}>{t('nav.login')}</button>
+          </div>
+        )}
+      </div>
+
+      {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="mobile-dropdown-overlay animate-fade-in">
           <div className="mobile-dropdown-content glass">
+            {/* Mobile Language Selector */}
+            <div style={{ padding: '1rem', borderBottom: '1px solid var(--border)', display: 'flex', gap: '0.5rem', overflowX: 'auto' }}>
+              {Object.keys(languages).map(code => (
+                <button 
+                  key={code} 
+                  onClick={() => { changeLanguage(code); setMobileMenuOpen(false); }}
+                  style={{ 
+                    padding: '8px 12px', 
+                    borderRadius: '8px', 
+                    border: lang === code ? '2px solid var(--primary)' : '1px solid var(--border)',
+                    background: lang === code ? 'rgba(37, 99, 235, 0.05)' : 'white',
+                    fontSize: '0.8rem',
+                    whiteSpace: 'nowrap'
+                  }}
+                >
+                  {languages[code].flag} {languages[code].name}
+                </button>
+              ))}
+            </div>
+
             {categories.map((cat) => (
               <div key={cat.name} className="mobile-category">
                 <div className="mobile-category-title">{cat.name}</div>
@@ -128,57 +210,17 @@ const Navbar = ({ onSelectTool, isLoggedIn, userRole, onLogout }) => {
             <div style={{ padding: '1rem', borderTop: '1px solid var(--border)', marginTop: '0.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               {!isLoggedIn && (
                 <>
-                  <button className="btn-secondary" style={{ width: '100%' }} onClick={() => handleToolSelect('blog')}>Blog</button>
-                  <button className="btn-secondary" style={{ width: '100%' }} onClick={() => handleToolSelect('pricing')}>Pricing</button>
-                  <button className="btn-primary" style={{ width: '100%' }} onClick={() => handleToolSelect('login')}>Sign In</button>
+                  <button className="btn-secondary" style={{ width: '100%' }} onClick={() => handleToolSelect('blog')}>{t('nav.blog')}</button>
+                  <button className="btn-secondary" style={{ width: '100%' }} onClick={() => handleToolSelect('pricing')}>{t('nav.pricing')}</button>
+                  <button className="btn-primary" style={{ width: '100%' }} onClick={() => handleToolSelect('login')}>{t('nav.login')}</button>
                 </>
               )}
             </div>
           </div>
         </div>
       )}
-
-      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-        {isLoggedIn ? (
-          <>
-            {userRole === 'admin' && (
-              <button 
-                className="btn-secondary desktop-only" 
-                style={{ padding: '8px 16px', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-                onClick={() => handleToolSelect('admin')}
-              >
-                <Settings size={16} /> Admin
-              </button>
-            )}
-            <div 
-              onClick={() => handleToolSelect('user-dashboard')}
-              style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '4px 12px', background: 'rgba(0,0,0,0.03)', borderRadius: '12px', cursor: 'pointer' }}
-            >
-              <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <User size={18} />
-              </div>
-              <span className="desktop-only" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)' }}>{userRole === 'admin' ? 'Administrator' : 'My Account'}</span>
-            </div>
-            <button 
-              className="btn-secondary" 
-              style={{ padding: '8px 12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-              onClick={onLogout}
-              title="Logout"
-            >
-              <LogOut size={18} />
-            </button>
-          </>
-        ) : (
-          <div className="desktop-only" style={{ display: 'flex', gap: '1rem' }}>
-            <button className="btn-secondary" style={{ padding: '8px 16px', fontSize: '0.9rem' }} onClick={() => handleToolSelect('blog')}>Blog</button>
-            <button className="btn-secondary" style={{ padding: '8px 16px', fontSize: '0.9rem' }} onClick={() => handleToolSelect('pricing')}>Pricing</button>
-            <button className="btn-primary" style={{ padding: '8px 20px', fontSize: '0.9rem' }} onClick={() => handleToolSelect('login')}>Sign In</button>
-          </div>
-        )}
-      </div>
     </header>
   );
 };
 
 export default Navbar;
-

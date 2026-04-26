@@ -49,6 +49,7 @@ import Blog from './components/Pages/Blog';
 import BlogPost from './components/Pages/BlogPost';
 import UserDashboard from './components/Pages/UserDashboard';
 import Support from './components/Pages/Support';
+import { LanguageProvider, useLanguage } from './context/LanguageContext';
 
 const TOOLS = [
   { id: 'merge', name: 'Merge PDF', icon: Combine, description: 'Combine multiple PDFs into one document', color: '#1e293b' },
@@ -70,10 +71,11 @@ const TOOLS = [
   { id: 'password', name: 'Protect/Remove', icon: Lock, description: 'Add or remove password protection', color: '#475569' },
 ];
 
-function App() {
+function AppContent() {
   const [activeTool, setActiveTool] = useState(null);
   const [selectedBlogPostId, setSelectedBlogPostId] = useState(null);
   const [user, setUser] = useState(null); // { role: 'admin' | 'user' }
+  const { t, lang } = useLanguage();
 
   // Auto-scroll to top when tool/page changes
   useEffect(() => {
@@ -84,18 +86,6 @@ function App() {
     if (toolId && TOOLS.some(t => t.id === toolId)) {
       const currentUserData = getUserData();
       const isPro = user?.role === 'admin' || (currentUserData && (currentUserData.subscription?.plan?.includes('Pro') || currentUserData.subscription?.plan?.includes('Enterprise')));
-      
-      /* Temporarily disabled usage limit
-      if (!isPro) {
-        const usage = parseInt(localStorage.getItem('pdf_masters_tool_usage_count') || '0');
-        if (usage >= 6) {
-          alert("You have reached your free limit of 6 tool uses. Please purchase a Pro plan to continue.");
-          setActiveTool('pricing');
-          return;
-        }
-        localStorage.setItem('pdf_masters_tool_usage_count', (usage + 1).toString());
-      }
-      */
     }
     setActiveTool(toolId);
   };
@@ -147,7 +137,7 @@ function App() {
   };
 
   return (
-    <div className="app-container">
+    <div className="app-container" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
       <div className="bg-gradient-mesh"></div>
       
       <Navbar 
@@ -168,8 +158,8 @@ function App() {
               transition={{ duration: 0.3 }}
             >
               <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-                <h1 style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>PDFMasterstool: Professional PDF Tools <br/><span style={{ color: 'var(--primary)' }}>Made Simple & Private</span></h1>
-                <p style={{ maxWidth: '600px', margin: '0 auto' }}>Every tool you need to work with PDFs in one place. 100% private, browser-side processing.</p>
+                <h1 style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>{t('home.heroTitle')}</h1>
+                <p style={{ maxWidth: '600px', margin: '0 auto' }}>{t('home.heroSubtitle')}</p>
               </div>
 
               <AdPlaceholder type="leaderboard" />
@@ -213,8 +203,6 @@ function App() {
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
             >
-
-
               <div style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
                 <button 
                   onClick={() => handleToolSelection(null)}
@@ -255,7 +243,7 @@ function App() {
         </AnimatePresence>
       </main>
 
-      {/* Footer - Only hide on tool pages to maintain "App" feel */}
+      {/* Footer - Only show on home page or small content pages */}
       {(activeTool === null || ['login', 'admin', 'user', 'pricing', 'blog', 'privacy', 'about', 'disclaimer', 'contact', 'support'].includes(activeTool)) && (
         <footer style={{ padding: '3rem 5%', borderTop: '1px solid var(--border)', marginTop: '4rem', textAlign: 'center' }}>
           <p style={{ fontSize: '0.9rem' }}>© 2026 PDFMasterstool. All processing happens in your browser. Your files never leave your device.</p>
@@ -272,5 +260,12 @@ function App() {
   );
 }
 
-export default App;
+function App() {
+  return (
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
+  );
+}
 
+export default App;
