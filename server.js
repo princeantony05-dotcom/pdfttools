@@ -95,17 +95,20 @@ app.post('/api/convert', upload.single('file'), async (req, res) => {
 
     // Select the best filter for the output format
     let filter = cleanFormat;
-    if (cleanFormat === 'docx') filter = 'docx:"MS Word 2007 XML"';
-    else if (cleanFormat === 'xlsx') filter = 'xlsx:"Calc MS Excel 2007 XML"';
-    else if (cleanFormat === 'pptx') filter = 'pptx:"Impress MS PowerPoint 2007 XML"';
+    let inFilter = '';
+    
+    // If we are reading a PDF, we need to be explicit
+    if (inputExt.toLowerCase() === '.pdf') {
+      inFilter = '--infilter="writer_pdf_import"';
+    }
 
     // Run soffice inside the isolated workspace
-    const cmd = `${sofficePath} --headless --nologo --nofirststartwizard "-env:UserInstallation=file://${userProfilePath}" --convert-to ${filter} --outdir ${workDir} ${tempInputPath}`;
+    const cmd = `${sofficePath} --headless --nologo --nofirststartwizard "-env:UserInstallation=file://${userProfilePath}" ${inFilter} --convert-to ${filter} --outdir ${workDir} ${tempInputPath}`;
     
     console.log(`>>> [Exec] ${cmd}`);
 
     await new Promise((resolve, reject) => {
-      exec(cmd, (error, stdout, stderr) => {
+      exec(cmd, { timeout: 60000 }, (error, stdout, stderr) => {
         console.log(`>>> [Stdout] ${stdout}`);
         if (stderr) console.warn(`>>> [Stderr] ${stderr}`);
         
@@ -119,10 +122,12 @@ app.post('/api/convert', upload.single('file'), async (req, res) => {
 
     // Dynamically find the output file (don't guess the name)
     const files = await fs.readdir(workDir);
+    console.log(`>>> [System] Files in workspace: ${files.join(', ')}`);
+    
     const outputFileName = files.find(f => f.endsWith(`.${cleanFormat}`));
     
     if (!outputFileName) {
-      throw new Error('Engine finished but no output file was generated.');
+      throw new Error(`Engine finished but no .${cleanFormat} file was generated. Found: ${files.join(', ')}`);
     }
 
     tempOutputPath = path.join(workDir, outputFileName);
