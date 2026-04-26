@@ -16,6 +16,28 @@ const port = process.env.PORT || 3001;
 // Promisify libreoffice-convert
 const convertAsync = promisify(libre.convert);
 
+// Helper to find soffice binary
+async function findSoffice() {
+  const paths = [
+    '/usr/bin/soffice',
+    '/usr/bin/libreoffice',
+    '/usr/local/bin/soffice',
+    '/app/.nix-profile/bin/soffice', // Possible Nixpacks path
+    'soffice'
+  ];
+  
+  for (const p of paths) {
+    try {
+      await fs.access(p);
+      console.log(`>>> [System] Found LibreOffice at: ${p}`);
+      return p;
+    } catch (e) {}
+  }
+  return 'soffice'; // Default to PATH
+}
+
+const sofficePath = await findSoffice();
+
 app.use(cors());
 app.use(express.json());
 

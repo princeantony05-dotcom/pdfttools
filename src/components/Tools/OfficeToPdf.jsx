@@ -49,7 +49,8 @@ const OfficeToPdf = ({ type = 'word' }) => {
       });
 
       if (!response.ok) {
-        throw new Error('Server conversion failed');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Server conversion failed');
       }
 
       const blob = await response.blob();
@@ -58,7 +59,7 @@ const OfficeToPdf = ({ type = 'word' }) => {
     } catch (err) {
       console.error('Server conversion failed:', err);
       setStatus('idle');
-      alert('Conversion failed. Our server engine is currently unavailable or the file is too large.');
+      alert(`Conversion failed: ${err.message}`);
     }
   };
 
