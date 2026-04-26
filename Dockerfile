@@ -1,7 +1,7 @@
 # Use the official Node.js image (Bookworm is more stable for packages)
 FROM node:22-bookworm
 
-# Install LibreOffice, Java, and essential fonts
+# Install LibreOffice, Java, Python, and the high-end pdf2docx engine
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libreoffice \
     openjdk-17-jre-headless \
@@ -10,7 +10,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     fonts-dejavu \
     fontconfig \
     ghostscript \
-    unzip \
+    python3 \
+    python3-pip \
+    python3-setuptools \
+    && pip3 install --no-cache-dir pdf2docx \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

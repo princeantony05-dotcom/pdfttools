@@ -93,27 +93,33 @@ app.post('/api/convert', upload.single('file'), async (req, res) => {
     await fs.writeFile(tempInputPath, inputBuffer);
     console.log(`>>> [API] Workspace created: ${workDir}`);
 
-    // Select the best filter for the output format
-    let filter = cleanFormat;
-    let inFilter = '';
+    // Determine if we should use the specialized pdf2docx engine (only for PDF to Word)
+    const isPdfToWord = inputExt.toLowerCase() === '.pdf' && cleanFormat === 'docx';
     
-    // If we are reading a PDF, we need to be explicit
-    if (inputExt.toLowerCase() === '.pdf') {
-      inFilter = '--infilter="writer_pdf_import"';
+    let cmd;
+    if (isPdfToWord) {
+      console.log(`>>> [API] Using high-end pdf2docx engine for reconstruction...`);
+      // Use python3 -c to run pdf2docx directly
+      cmd = `python3 -c "from pdf2docx import Converter; cv = Converter('${tempInputPath}'); cv.convert('${tempOutputPath}'); cv.close()"`;
+    } else {
+      // Select the best filter for the output format
+      let filter = cleanFormat;
+      let inFilter = '';
+      if (inputExt.toLowerCase() === '.pdf') {
+        inFilter = '--infilter="writer_pdf_import"';
+      }
+      cmd = `${sofficePath} --headless --nologo --nofirststartwizard "-env:UserInstallation=file://${userProfilePath}" ${inFilter} --convert-to ${filter} --outdir ${workDir} ${tempInputPath}`;
     }
-
-    // Run soffice inside the isolated workspace
-    const cmd = `${sofficePath} --headless --nologo --nofirststartwizard "-env:UserInstallation=file://${userProfilePath}" ${inFilter} --convert-to ${filter} --outdir ${workDir} ${tempInputPath}`;
     
     console.log(`>>> [Exec] ${cmd}`);
 
     await new Promise((resolve, reject) => {
-      exec(cmd, { timeout: 60000 }, (error, stdout, stderr) => {
-        console.log(`>>> [Stdout] ${stdout}`);
+      exec(cmd, { timeout: 120000 }, (error, stdout, stderr) => {
+        if (stdout) console.log(`>>> [Stdout] ${stdout}`);
         if (stderr) console.warn(`>>> [Stderr] ${stderr}`);
         
         if (error) {
-          console.error(`>>> [LibreOffice Exec Error]:`, error);
+          console.error(`>>> [Engine Exec Error]:`, error);
           return reject(new Error(stderr || 'Conversion engine failed to respond'));
         }
         resolve();
