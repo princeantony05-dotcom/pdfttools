@@ -81,36 +81,42 @@ app.post('/api/convert', upload.single('file'), async (req, res) => {
     const cleanFormat = format.startsWith('.') ? format.slice(1) : format;
     const inputBuffer = req.file.buffer;
     
-    // Get the original extension (crucial for LibreOffice to know what it's reading)
-    const inputExt = path.extname(req.file.originalname) || '.pdf';
-    
-    // Create temporary files for the conversion process
-    const tempDir = '/tmp';
+    // Create a truly isolated workspace for this specific conversion
     const timestamp = Date.now();
-    tempInputPath = path.join(tempDir, `input_${timestamp}${inputExt}`);
-    tempOutputPath = path.join(tempDir, `input_${timestamp}.${cleanFormat}`);
-    const userProfilePath = path.join(tempDir, `profile_${timestamp}`);
+    const workDir = path.join('/tmp', `conv_${timestamp}`);
+    await fs.mkdir(workDir, { recursive: true });
+
+    const inputExt = path.extname(req.file.originalname) || '.pdf';
+    tempInputPath = path.join(workDir, `source${inputExt}`);
+    const userProfilePath = path.join(workDir, `profile`);
 
     await fs.writeFile(tempInputPath, inputBuffer);
-    console.log(`>>> [API] Starting direct conversion: ${req.file.originalname}`);
+    console.log(`>>> [API] Workspace created: ${workDir}`);
 
-    // Run soffice directly with a custom user profile to avoid permission issues
-    const cmd = `${sofficePath} --headless --nologo --nofirststartwizard "-env:UserInstallation=file://${userProfilePath}" --convert-to ${cleanFormat} --outdir ${tempDir} ${tempInputPath}`;
+    // Run soffice inside the isolated workspace
+    const cmd = `${sofficePath} --headless --nologo --nofirststartwizard "-env:UserInstallation=file://${userProfilePath}" --convert-to ${cleanFormat} --outdir ${workDir} ${tempInputPath}`;
     
     await new Promise((resolve, reject) => {
       exec(cmd, (error, stdout, stderr) => {
         if (error) {
           console.error(`>>> [LibreOffice Exec Error]:`, error);
-          console.error(`>>> [LibreOffice Stderr]:`, stderr);
-          return reject(new Error(stderr || 'Conversion failed at command level'));
+          return reject(new Error(stderr || 'Conversion engine failed to respond'));
         }
-        console.log(`>>> [LibreOffice Stdout]:`, stdout);
         resolve();
       });
     });
 
+    // Dynamically find the output file (don't guess the name)
+    const files = await fs.readdir(workDir);
+    const outputFileName = files.find(f => f.endsWith(`.${cleanFormat}`));
+    
+    if (!outputFileName) {
+      throw new Error('Engine finished but no output file was generated.');
+    }
+
+    tempOutputPath = path.join(workDir, outputFileName);
     const outputBuffer = await fs.readFile(tempOutputPath);
-    console.log(`>>> [API] Success! Converted size: ${outputBuffer.length} bytes`);
+    console.log(`>>> [API] Success! Converted file: ${outputFileName}`);
 
     // Determine Content-Type
     let contentType = 'application/octet-stream';
@@ -127,10 +133,8 @@ app.post('/api/convert', upload.single('file'), async (req, res) => {
 
     res.send(outputBuffer);
 
-    // Cleanup
-    await fs.unlink(tempInputPath).catch(() => {});
-    await fs.unlink(tempOutputPath).catch(() => {});
-    await fs.rm(userProfilePath, { recursive: true, force: true }).catch(() => {});
+    // Deep Cleanup
+    await fs.rm(workDir, { recursive: true, force: true }).catch(() => {});
 
   } catch (error) {
     console.error('>>> [Final Conversion Error]:', error);
