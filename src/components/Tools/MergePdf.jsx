@@ -34,21 +34,23 @@ const MergePdf = () => {
 
   return (
     <div style={{ width: '100%' }}>
-      {!isComplete && !isProcessing && files.length === 0 && (
-        <Dropzone onFilesSelected={setFiles} />
-      )}
+      {!isComplete && !isProcessing && (
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '2rem', alignItems: 'start' }}>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <Dropzone onFilesSelected={setFiles} />
+          </motion.div>
 
-      {files.length > 0 && !isProcessing && !isComplete && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '2rem', alignItems: 'center' }}>
-          <div className="glass-card" style={{ padding: '2rem' }}>
-            <h3 style={{ marginBottom: '1rem' }}>Selected Files ({files.length})</h3>
-            <ul style={{ listStyle: 'none', padding: 0, fontSize: '0.9rem' }}>
-              {files.map((f, i) => <li key={i} style={{ padding: '0.5rem 0', borderBottom: '1px solid var(--border)' }}>{f.name}</li>)}
-            </ul>
-          </div>
-
-          <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} style={{ backgroundColor: 'rgba(0,0,0,0.02)', padding: '1.5rem', borderRadius: '20px', border: '1px solid var(--border)' }}>
+          <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} style={{ backgroundColor: 'rgba(0,0,0,0.02)', padding: '1.5rem', borderRadius: '20px', border: '1px solid var(--border)', position: 'sticky', top: '1rem' }}>
             <h4 style={{ marginBottom: '1.5rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.6 }}>Merge Options</h4>
+            {files.length > 0 && (
+              <div style={{ marginBottom: '1.5rem', maxHeight: '200px', overflowY: 'auto', padding: '0.5rem' }}>
+                {files.map((f, i) => (
+                  <div key={i} style={{ fontSize: '0.75rem', padding: '0.5rem', backgroundColor: 'white', borderRadius: '8px', border: '1px solid var(--border)', marginBottom: '0.5rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {f.name}
+                  </div>
+                ))}
+              </div>
+            )}
             <button className="btn-primary" onClick={handleMerge} disabled={files.length < 2} style={{ width: '100%', padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem' }}>
               Merge Files <ArrowRight size={20} />
             </button>
@@ -65,13 +67,14 @@ const MergePdf = () => {
       )}
 
       {isComplete && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '2rem', alignItems: 'center' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '2rem', alignItems: 'start' }}>
           <div className="glass-card" style={{ padding: '3rem', textAlign: 'center', borderColor: '#10b981' }}>
             <CheckCircle size={80} color="#10b981" style={{ margin: '0 auto 1.5rem' }} />
             <h3>Merged Document Ready</h3>
+            <p style={{ fontSize: '0.9rem', opacity: 0.6 }}>{files.length} files combined successfully</p>
           </div>
 
-          <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} style={{ backgroundColor: 'rgba(16, 185, 129, 0.05)', padding: '1.5rem', borderRadius: '20px', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
+          <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} style={{ backgroundColor: 'rgba(16, 185, 129, 0.05)', padding: '1.5rem', borderRadius: '20px', border: '1px solid rgba(16, 185, 129, 0.2)', position: 'sticky', top: '1rem' }}>
             <h4 style={{ marginBottom: '1.5rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#10b981' }}>Export PDF</h4>
             <button className="btn-primary" onClick={() => downloadBlob(result, 'merged_document.pdf', 'application/pdf')} style={{ width: '100%', padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', backgroundColor: '#10b981' }}>
               <Download size={20} /> Download PDF

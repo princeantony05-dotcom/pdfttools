@@ -65,32 +65,36 @@ const PdfToOffice = ({ type = 'word' }) => {
 
   return (
     <div style={{ width: '100%' }}>
-      {!file && status === 'idle' && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-          <Dropzone 
-            onFilesSelected={(f) => setFile(f[0])} 
-            accept=".pdf" 
-            multiple={false} 
-            label="Select the PDF you want to convert"
-          />
-        </motion.div>
-      )}
-
-      {file && status === 'idle' && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '2rem', alignItems: 'center' }}>
-          <div className="glass-card" style={{ padding: '3rem', textAlign: 'center' }}>
-            <div style={{ color: color, marginBottom: '1rem' }}><Icon size={64} style={{ margin: '0 auto' }} /></div>
-            <h3 style={{ marginBottom: '0.5rem' }}>{file.name}</h3>
-            <p style={{ fontSize: '0.9rem', opacity: 0.6 }}>PDF Document</p>
-          </div>
-
-          <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} style={{ backgroundColor: 'rgba(0,0,0,0.02)', padding: '1.5rem', borderRadius: '20px', border: '1px solid var(--border)' }}>
-            <h4 style={{ marginBottom: '1.5rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.6 }}>Conversion Options</h4>
-            <button className="btn-primary" onClick={handleConvert} style={{ width: '100%', padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem' }}>
-              Convert to {format.toUpperCase()} <ArrowRight size={20} />
-            </button>
-            <button onClick={reset} className="btn-secondary" style={{ width: '100%', marginTop: '1rem' }}>Change File</button>
+      {status === 'idle' && (
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '2rem', alignItems: 'start' }}>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <Dropzone 
+              onFilesSelected={(f) => setFile(f[0])} 
+              accept=".pdf" 
+              multiple={false} 
+              label="Select the PDF you want to convert"
+            />
           </motion.div>
+
+          {file ? (
+            <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} style={{ backgroundColor: 'rgba(0,0,0,0.02)', padding: '1.5rem', borderRadius: '20px', border: '1px solid var(--border)', position: 'sticky', top: '1rem' }}>
+              <h4 style={{ marginBottom: '1.5rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.6 }}>Conversion Options</h4>
+              <div style={{ marginBottom: '1.5rem', padding: '1.1rem', backgroundColor: 'white', borderRadius: '12px', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <Icon size={24} color={color} />
+                <div style={{ overflow: 'hidden' }}>
+                  <div style={{ fontSize: '0.8rem', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{file.name}</div>
+                  <div style={{ fontSize: '0.7rem', opacity: 0.5 }}>PDF Ready</div>
+                </div>
+              </div>
+              <button className="btn-primary" onClick={handleConvert} style={{ width: '100%', padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem' }}>
+                Convert to {format.toUpperCase()} <ArrowRight size={20} />
+              </button>
+            </motion.div>
+          ) : (
+            <div style={{ padding: '2rem', textAlign: 'center', opacity: 0.3, border: '1px dashed var(--border)', borderRadius: '20px' }}>
+              <p style={{ fontSize: '0.9rem' }}>Select a PDF to see options</p>
+            </div>
+          )}
         </div>
       )}
 
@@ -103,14 +107,14 @@ const PdfToOffice = ({ type = 'word' }) => {
       )}
 
       {status === 'success' && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '2rem', alignItems: 'center' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '2rem', alignItems: 'start' }}>
           <div className="glass-card" style={{ padding: '3rem', textAlign: 'center', borderColor: '#10b981' }}>
             <CheckCircle2 size={80} color="#10b981" style={{ margin: '0 auto 1.5rem' }} />
             <h3>{file.name.split('.')[0]}.{format}</h3>
             <p style={{ color: '#10b981', fontWeight: 600 }}>Ready for download</p>
           </div>
 
-          <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} style={{ backgroundColor: 'rgba(16, 185, 129, 0.05)', padding: '1.5rem', borderRadius: '20px', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
+          <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} style={{ backgroundColor: 'rgba(16, 185, 129, 0.05)', padding: '1.5rem', borderRadius: '20px', border: '1px solid rgba(16, 185, 129, 0.2)', position: 'sticky', top: '1rem' }}>
             <h4 style={{ marginBottom: '1.5rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#10b981' }}>Export {format.toUpperCase()}</h4>
             <button className="btn-primary" onClick={() => downloadBlob(result, `${file.name.split('.')[0]}.${format}`, 'application/octet-stream')} style={{ width: '100%', padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', backgroundColor: '#10b981' }}>
               <Download size={20} /> Download {format.toUpperCase()}
