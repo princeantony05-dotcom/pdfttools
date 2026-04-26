@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { 
   Combine, 
   Scissors, 
@@ -74,6 +74,11 @@ function App() {
   const [activeTool, setActiveTool] = useState(null);
   const [selectedBlogPostId, setSelectedBlogPostId] = useState(null);
   const [user, setUser] = useState(null); // { role: 'admin' | 'user' }
+
+  // Auto-scroll to top when tool/page changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [activeTool]);
 
   const handleToolSelection = (toolId) => {
     if (toolId && TOOLS.some(t => t.id === toolId)) {
