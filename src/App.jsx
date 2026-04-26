@@ -221,17 +221,21 @@ function App() {
                 <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 600, opacity: 0.8 }}>{currentTool?.name}</h3>
               </div>
 
-              {/* Conditional Layout: Sidebar for tools/content, single column for Auth */}
-              {activeTool !== 'login' && activeTool !== 'admin' ? (
-                <div className="tool-layout-grid">
-                  {/* Left Sidebar Ad Zone */}
-                  <aside className="sidebar-ad-container">
-                    <AdPlaceholder type="sidebar" id="sidebar-left-1" />
-                    <AdPlaceholder type="square" id="sidebar-left-2" />
-                  </aside>
+              {/* Fixed Layout for Tools, Regular for others */}
+              {activeTool !== null && !['login', 'admin', 'user', 'pricing', 'blog', 'privacy', 'about', 'disclaimer', 'contact', 'support'].includes(activeTool) ? (
+                <div className="tool-layout-wrapper">
+                  <div className="tool-layout-grid">
+                    {/* Left Sidebar Ad Zone - Elastic */}
+                    <aside className="sidebar-ad-container">
+                      <AdPlaceholder type="sidebar" id="sidebar-left-1" />
+                      <AdPlaceholder type="square" id="sidebar-left-2" />
+                    </aside>
 
-                  <div className="glass" style={{ minHeight: '500px', padding: '2rem' }}>
-                    {renderTool()}
+                    <div className="tool-workspace-container">
+                      <div className="glass" style={{ minHeight: '600px', padding: '2rem' }}>
+                        {renderTool()}
+                      </div>
+                    </div>
                   </div>
                 </div>
               ) : (
@@ -239,29 +243,24 @@ function App() {
                   {renderTool()}
                 </div>
               )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </main>
 
-               {/* Bottom Banner Ad - Hidden on Tool/Auth pages to save space */}
-               {activeTool === null && (
-                 <AdPlaceholder type="banner" style={{ marginTop: '2rem' }} />
-               )}
-             </motion.div>
-           )}
-         </AnimatePresence>
-       </main>
-
-       {/* Footer - Only show on home page */}
-       {activeTool === null && (
-         <footer style={{ padding: '2rem 5%', borderTop: '1px solid var(--border)', marginTop: '2rem', textAlign: 'center' }}>
-           <p style={{ fontSize: '0.85rem' }}>© 2026 PDFMasterstool. All processing happens in your browser. Your files never leave your device.</p>
-           <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', marginTop: '1rem' }}>
-             <button onClick={() => handleToolSelection('privacy')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.75rem', cursor: 'pointer' }}>Privacy Policy</button>
-             <button onClick={() => handleToolSelection('about')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.75rem', cursor: 'pointer' }}>About Us</button>
-             <button onClick={() => handleToolSelection('disclaimer')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.75rem', cursor: 'pointer' }}>Disclaimer</button>
-             <button onClick={() => handleToolSelection('contact')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.75rem', cursor: 'pointer' }}>Contact</button>
-             <button onClick={() => handleToolSelection('support')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.75rem', cursor: 'pointer' }}>Support</button>
-           </div>
-         </footer>
-       )}
+      {/* Footer - Only hide on tool pages to maintain "App" feel */}
+      {(activeTool === null || ['login', 'admin', 'user', 'pricing', 'blog', 'privacy', 'about', 'disclaimer', 'contact', 'support'].includes(activeTool)) && (
+        <footer style={{ padding: '3rem 5%', borderTop: '1px solid var(--border)', marginTop: '4rem', textAlign: 'center' }}>
+          <p style={{ fontSize: '0.9rem' }}>© 2026 PDFMasterstool. All processing happens in your browser. Your files never leave your device.</p>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginTop: '1rem' }}>
+            <button onClick={() => handleToolSelection('privacy')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', cursor: 'pointer' }}>Privacy Policy</button>
+            <button onClick={() => handleToolSelection('about')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', cursor: 'pointer' }}>About Us</button>
+            <button onClick={() => handleToolSelection('disclaimer')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', cursor: 'pointer' }}>Disclaimer</button>
+            <button onClick={() => handleToolSelection('contact')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', cursor: 'pointer' }}>Contact</button>
+            <button onClick={() => handleToolSelection('support')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', cursor: 'pointer' }}>Support</button>
+          </div>
+        </footer>
+      )}
     </div>
   );
 }
