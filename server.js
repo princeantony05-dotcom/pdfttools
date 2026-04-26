@@ -61,12 +61,14 @@ app.get('/health', (req, res) => {
 const distPath = path.join(__dirname, 'dist');
 app.use(express.static(distPath));
 
-// Handle SPA routing
-app.get('/*', (req, res) => {
+// Handle SPA routing - Catch-all middleware
+app.use((req, res) => {
   const indexPath = path.join(distPath, 'index.html');
   res.sendFile(indexPath, (err) => {
     if (err) {
-      res.status(404).send('Application is still building or dist folder is missing. Please wait 1-2 minutes and refresh.');
+      if (!res.headersSent) {
+        res.status(404).send('Application is still building or dist folder is missing. Please wait 1-2 minutes and refresh.');
+      }
     }
   });
 });
