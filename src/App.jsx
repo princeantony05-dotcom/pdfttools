@@ -224,15 +224,15 @@ function App() {
               {/* Conditional Layout: Sidebar for tools/content, single column for Auth */}
               {activeTool !== 'login' && activeTool !== 'admin' ? (
                 <div className="tool-layout-grid">
+                  {/* Left Sidebar Ad Zone */}
+                  <aside className="sidebar-ad-container">
+                    <AdPlaceholder type="sidebar" id="sidebar-left-1" />
+                    <AdPlaceholder type="square" id="sidebar-left-2" />
+                  </aside>
+
                   <div className="glass" style={{ minHeight: '500px', padding: '2rem' }}>
                     {renderTool()}
                   </div>
-                  
-                  {/* Right Sidebar Ad Zone */}
-                  <aside className="sidebar-ad-container">
-                    <AdPlaceholder type="sidebar" />
-                    <AdPlaceholder type="square" />
-                  </aside>
                 </div>
               ) : (
                 <div className="glass" style={{ minHeight: '500px', padding: '2rem' }}>
