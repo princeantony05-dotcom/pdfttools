@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import fs from 'fs/promises';
 import cors from 'cors';
 import { promisify } from 'util';
+import { exec } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -49,50 +50,66 @@ const upload = multer({
 
 // Conversion endpoint
 app.post('/api/convert', upload.single('file'), async (req, res) => {
+  let tempInputPath = null;
+  let tempOutputPath = null;
+
   try {
     if (!req.file) {
-      console.error('>>> [API] No file received');
       return res.status(400).json({ error: 'No file uploaded' });
     }
 
     const { format = 'pdf' } = req.body;
     const cleanFormat = format.startsWith('.') ? format.slice(1) : format;
     const inputBuffer = req.file.buffer;
+    
+    // Create temporary files for the conversion process
+    const tempDir = '/tmp';
+    const timestamp = Date.now();
+    tempInputPath = path.join(tempDir, `input_${timestamp}.docx`);
+    tempOutputPath = path.join(tempDir, `input_${timestamp}.${cleanFormat}`);
+    const userProfilePath = path.join(tempDir, `profile_${timestamp}`);
 
-    console.log(`>>> [API] Converting ${req.file.originalname} to ${cleanFormat}...`);
+    await fs.writeFile(tempInputPath, inputBuffer);
+    console.log(`>>> [API] Starting direct conversion: ${req.file.originalname}`);
 
-    // Attempt conversion with explicit options if needed
-    try {
-      // Some versions of libreoffice-convert take 4 arguments, others take 3.
-      // We'll use the callback version wrapped in a promise for max control.
-      const outputBuffer = await new Promise((resolve, reject) => {
-        libre.convert(inputBuffer, `.${cleanFormat}`, undefined, (err, data) => {
-          if (err) return reject(err);
-          resolve(data);
-        });
+    // Run soffice directly with a custom user profile to avoid permission issues
+    const cmd = `soffice --headless --nologo --nofirststartwizard "-env:UserInstallation=file://${userProfilePath}" --convert-to ${cleanFormat} --outdir ${tempDir} ${tempInputPath}`;
+    
+    await new Promise((resolve, reject) => {
+      exec(cmd, (error, stdout, stderr) => {
+        if (error) {
+          console.error(`>>> [LibreOffice Exec Error]:`, error);
+          console.error(`>>> [LibreOffice Stderr]:`, stderr);
+          return reject(new Error(stderr || 'Conversion failed at command level'));
+        }
+        console.log(`>>> [LibreOffice Stdout]:`, stdout);
+        resolve();
       });
+    });
 
-      console.log(`>>> [API] Success! Converted size: ${outputBuffer.length} bytes`);
+    const outputBuffer = await fs.readFile(tempOutputPath);
+    console.log(`>>> [API] Success! Converted size: ${outputBuffer.length} bytes`);
 
-      res.set({
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="converted.pdf"`,
-        'Content-Length': outputBuffer.length
-      });
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename="converted.pdf"`,
+      'Content-Length': outputBuffer.length
+    });
 
-      res.send(outputBuffer);
-    } catch (libErr) {
-      console.error('>>> [LibreOffice Error]:', libErr);
-      // Check if it's a "not found" error
-      if (libErr.message && libErr.message.includes('ENOENT')) {
-        res.status(500).json({ error: 'LibreOffice engine not found on server. Check build logs.' });
-      } else {
-        res.status(500).json({ error: 'LibreOffice failed to process this specific file format.' });
-      }
-    }
+    res.send(outputBuffer);
+
+    // Cleanup
+    await fs.unlink(tempInputPath).catch(() => {});
+    await fs.unlink(tempOutputPath).catch(() => {});
+    await fs.rm(userProfilePath, { recursive: true, force: true }).catch(() => {});
+
   } catch (error) {
-    console.error('>>> [Server Error]:', error);
-    res.status(500).json({ error: 'Internal server error during conversion.' });
+    console.error('>>> [Final Conversion Error]:', error);
+    res.status(500).json({ error: `Conversion failed: ${error.message}` });
+    
+    // Attempt cleanup if failed
+    if (tempInputPath) await fs.unlink(tempInputPath).catch(() => {});
+    if (tempOutputPath) await fs.unlink(tempOutputPath).catch(() => {});
   }
 });
 
