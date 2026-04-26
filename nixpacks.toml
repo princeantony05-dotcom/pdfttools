@@ -1,8 +1,0 @@
-[phases.setup]
-nixPkgs = ['libreoffice-bin', 'openjdk11', 'fonts-liberation', 'fontconfig', 'ghostscript']
-
-[phases.build]
-cmds = ['npm install', 'npm run build']
-
-[start]
-cmd = 'npm start'
