@@ -51,18 +51,36 @@ const OfficeToPdf = ({ type = 'word' }) => {
         // Convert to HTML
         const { value: html } = await mammoth.convertToHtml({ arrayBuffer });
         
-        setConversionLog("Rendering high-fidelity preview...");
-        // Create hidden element for rendering
+        setConversionLog("Rendering professional layout...");
+        // Create hidden element with A4 styling
         const container = document.createElement('div');
-        container.style.width = '800px';
-        container.style.padding = '40px';
+        container.style.width = '794px'; // ~210mm at 96dpi
+        container.style.padding = '50px 70px'; // Standard margins
         container.style.backgroundColor = 'white';
         container.style.position = 'fixed';
         container.style.left = '-9999px';
-        container.innerHTML = html;
+        container.style.top = '0';
+        container.style.fontFamily = "'Times New Roman', serif";
+        container.style.lineHeight = '1.6';
+        container.style.color = '#000';
+        
+        // Add styling for images to prevent them from breaking the layout
+        const style = document.createElement('style');
+        style.innerHTML = `
+          img { max-width: 100%; height: auto; display: block; margin: 10px 0; }
+          p { margin-bottom: 1em; text-align: justify; }
+          h1, h2, h3 { margin-top: 1.5em; margin-bottom: 0.5em; color: #000; }
+          table { width: 100%; border-collapse: collapse; margin-bottom: 1em; }
+          td, th { border: 1px solid #ccc; padding: 8px; }
+        `;
+        container.appendChild(style);
+
+        const contentDiv = document.createElement('div');
+        contentDiv.innerHTML = html;
+        container.appendChild(contentDiv);
         document.body.appendChild(container);
 
-        setConversionLog("Generating PDF pages...");
+        setConversionLog("Capturing high-quality pages...");
         const canvas = await html2canvas(container, {
           useCORS: true,
           scale: 2,
@@ -70,17 +88,38 @@ const OfficeToPdf = ({ type = 'word' }) => {
           backgroundColor: '#ffffff'
         });
 
-        const imgData = canvas.toDataURL('image/jpeg', 0.95);
         const pdf = new jsPDF('p', 'mm', 'a4');
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = pdf.internal.pageSize.getHeight();
+        
         const imgWidth = canvas.width;
         const imgHeight = canvas.height;
-        const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-        const finalWidth = imgWidth * ratio;
-        const finalHeight = imgHeight * ratio;
+        
+        // Calculate how many A4 pages we need
+        const pageHeightInPx = (imgWidth * pdfHeight) / pdfWidth;
+        let heightLeft = imgHeight;
+        let position = 0;
+        let pageCount = 0;
 
-        pdf.addImage(imgData, 'JPEG', 0, 0, finalWidth, finalHeight);
+        while (heightLeft > 0) {
+          if (pageCount > 0) {
+            pdf.addPage();
+          }
+          
+          const canvasPage = document.createElement('canvas');
+          canvasPage.width = imgWidth;
+          canvasPage.height = Math.min(pageHeightInPx, heightLeft);
+          
+          const ctx = canvasPage.getContext('2d');
+          ctx.drawImage(canvas, 0, position, imgWidth, canvasPage.height, 0, 0, imgWidth, canvasPage.height);
+          
+          const pageData = canvasPage.toDataURL('image/jpeg', 0.95);
+          pdf.addImage(pageData, 'JPEG', 0, 0, pdfWidth, (canvasPage.height * pdfWidth) / imgWidth);
+          
+          position += pageHeightInPx;
+          heightLeft -= pageHeightInPx;
+          pageCount++;
+        }
         
         const pdfBlob = pdf.output('blob');
         setResult(pdfBlob);
@@ -95,7 +134,7 @@ const OfficeToPdf = ({ type = 'word' }) => {
     } catch (err) {
       console.error('Conversion failed:', err);
       setStatus('idle');
-      alert('High-fidelity conversion failed. Falling back to basic processing.');
+      alert('High-fidelity conversion failed. Ensure your file is a valid .docx document.');
     }
   };
 
