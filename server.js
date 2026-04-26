@@ -73,7 +73,7 @@ app.post('/api/convert', upload.single('file'), async (req, res) => {
     console.log(`>>> [API] Starting direct conversion: ${req.file.originalname}`);
 
     // Run soffice directly with a custom user profile to avoid permission issues
-    const cmd = `soffice --headless --nologo --nofirststartwizard "-env:UserInstallation=file://${userProfilePath}" --convert-to ${cleanFormat} --outdir ${tempDir} ${tempInputPath}`;
+    const cmd = `${sofficePath} --headless --nologo --nofirststartwizard "-env:UserInstallation=file://${userProfilePath}" --convert-to ${cleanFormat} --outdir ${tempDir} ${tempInputPath}`;
     
     await new Promise((resolve, reject) => {
       exec(cmd, (error, stdout, stderr) => {
