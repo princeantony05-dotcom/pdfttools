@@ -1,9 +1,12 @@
 # Use the official Node.js image
 FROM node:22-bullseye
 
-# Install LibreOffice and other dependencies
+# Install LibreOffice and all necessary modules for PDF import/export
 RUN apt-get update && apt-get install -y \
-    libreoffice \
+    libreoffice-writer \
+    libreoffice-calc \
+    libreoffice-impress \
+    libreoffice-pdfimport \
     libreoffice-java-common \
     openjdk-11-jre-headless \
     fonts-liberation \

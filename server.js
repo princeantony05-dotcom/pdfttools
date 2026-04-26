@@ -93,11 +93,22 @@ app.post('/api/convert', upload.single('file'), async (req, res) => {
     await fs.writeFile(tempInputPath, inputBuffer);
     console.log(`>>> [API] Workspace created: ${workDir}`);
 
+    // Select the best filter for the output format
+    let filter = cleanFormat;
+    if (cleanFormat === 'docx') filter = 'docx:"MS Word 2007 XML"';
+    else if (cleanFormat === 'xlsx') filter = 'xlsx:"Calc MS Excel 2007 XML"';
+    else if (cleanFormat === 'pptx') filter = 'pptx:"Impress MS PowerPoint 2007 XML"';
+
     // Run soffice inside the isolated workspace
-    const cmd = `${sofficePath} --headless --nologo --nofirststartwizard "-env:UserInstallation=file://${userProfilePath}" --convert-to ${cleanFormat} --outdir ${workDir} ${tempInputPath}`;
+    const cmd = `${sofficePath} --headless --nologo --nofirststartwizard "-env:UserInstallation=file://${userProfilePath}" --convert-to ${filter} --outdir ${workDir} ${tempInputPath}`;
     
+    console.log(`>>> [Exec] ${cmd}`);
+
     await new Promise((resolve, reject) => {
       exec(cmd, (error, stdout, stderr) => {
+        console.log(`>>> [Stdout] ${stdout}`);
+        if (stderr) console.warn(`>>> [Stderr] ${stderr}`);
+        
         if (error) {
           console.error(`>>> [LibreOffice Exec Error]:`, error);
           return reject(new Error(stderr || 'Conversion engine failed to respond'));
