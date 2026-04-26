@@ -13,17 +13,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     && apt-get clean
 
-# Stage 2: Install LibreOffice & Java
+# Stage 2: Install LibreOffice & Essential Fonts (The "All-in-One" stable version)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libreoffice-writer \
-    libreoffice-calc \
-    libreoffice-impress \
-    libreoffice-pdfimport \
+    libreoffice \
     openjdk-17-jre-headless \
-    && apt-get clean
-
-# Stage 3: Install Fonts & Utilities
-RUN apt-get update && apt-get install -y --no-install-recommends \
     fonts-liberation \
     fonts-noto \
     fonts-dejavu \
@@ -31,7 +24,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ghostscript \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Stage 4: Install Python Conversion AI in a Virtual Environment
+# Stage 3: Install Python Conversion AI in a Virtual Environment
 RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 RUN pip install --no-cache-dir pdf2docx
