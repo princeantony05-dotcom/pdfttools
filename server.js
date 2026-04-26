@@ -29,26 +29,39 @@ const upload = multer({
 app.post('/api/convert', upload.single('file'), async (req, res) => {
   try {
     if (!req.file) {
+      console.error('>>> [API] No file received');
       return res.status(400).json({ error: 'No file uploaded' });
     }
 
     const { format = '.pdf' } = req.body;
     const inputBuffer = req.file.buffer;
 
-    console.log(`Converting ${req.file.originalname} to ${format}...`);
+    console.log(`>>> [API] Converting ${req.file.originalname} (${req.file.size} bytes) to ${format}...`);
 
-    const outputBuffer = await convertAsync(inputBuffer, format, undefined);
+    // Attempt conversion
+    try {
+      const outputBuffer = await convertAsync(inputBuffer, format, undefined);
+      console.log(`>>> [API] Success! Converted size: ${outputBuffer.length} bytes`);
 
-    res.set({
-      'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename="converted.pdf"`,
-      'Content-Length': outputBuffer.length
-    });
+      res.set({
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename="converted.pdf"`,
+        'Content-Length': outputBuffer.length
+      });
 
-    res.send(outputBuffer);
+      res.send(outputBuffer);
+    } catch (libErr) {
+      console.error('>>> [LibreOffice Error]:', libErr);
+      // Check if it's a "not found" error
+      if (libErr.message && libErr.message.includes('ENOENT')) {
+        res.status(500).json({ error: 'LibreOffice engine not found on server. Check build logs.' });
+      } else {
+        res.status(500).json({ error: 'LibreOffice failed to process this specific file format.' });
+      }
+    }
   } catch (error) {
-    console.error('Conversion error:', error);
-    res.status(500).json({ error: 'Failed to convert document' });
+    console.error('>>> [Server Error]:', error);
+    res.status(500).json({ error: 'Internal server error during conversion.' });
   }
 });
 
