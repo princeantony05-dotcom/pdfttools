@@ -16,8 +16,8 @@ import * as pdfjs from 'pdfjs-dist';
 import Dropzone from '../UI/Dropzone';
 import { downloadBlob } from '../../utils/pdfHelpers';
 
-// Set worker source for PDF.js
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
+// Set worker source for PDF.js (Matched to version 5.6.205)
+pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@5.6.205/build/pdf.worker.min.mjs`;
 
 const EditPdf = () => {
   const [file, setFile] = useState(null);

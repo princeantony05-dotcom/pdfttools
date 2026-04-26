@@ -21,8 +21,7 @@ const ConvertJpgPdf = () => {
         let image;
         
         if (file.type === 'image/jpeg' || file.type === 'image/jpg') {
-          image = await pdfDoc.embedJp2(imageBytes); // pdf-lib uses embedJp2 for jpg sometimes or embedJpg
-          // Actually embedJpg is usually available
+          image = await pdfDoc.embedJpg(imageBytes);
         } else if (file.type === 'image/png') {
           image = await pdfDoc.embedPng(imageBytes);
         } else {
