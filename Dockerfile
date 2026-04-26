@@ -13,6 +13,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
     python3-pip \
     python3-setuptools \
+    python3-dev \
+    build-essential \
     && pip3 install --no-cache-dir pdf2docx \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*

@@ -88,6 +88,7 @@ app.post('/api/convert', upload.single('file'), async (req, res) => {
 
     const inputExt = path.extname(req.file.originalname) || '.pdf';
     tempInputPath = path.join(workDir, `source${inputExt}`);
+    tempOutputPath = path.join(workDir, `output.${cleanFormat}`);
     const userProfilePath = path.join(workDir, `profile`);
 
     await fs.writeFile(tempInputPath, inputBuffer);
