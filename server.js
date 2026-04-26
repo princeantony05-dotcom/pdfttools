@@ -17,24 +17,43 @@ const port = process.env.PORT || 3001;
 // Promisify libreoffice-convert
 const convertAsync = promisify(libre.convert);
 
-// Helper to find soffice binary
+// Helper to find soffice binary dynamically
 async function findSoffice() {
+  console.log(">>> [System] Starting engine search...");
+  
+  const checkCmd = (cmd) => new Promise(resolve => {
+    exec(`which ${cmd}`, (err, stdout) => {
+      if (!err && stdout.trim()) resolve(stdout.trim());
+      else resolve(null);
+    });
+  });
+
+  // Try common binary names
+  const binary = await checkCmd('soffice') || await checkCmd('libreoffice');
+  
+  if (binary) {
+    console.log(`>>> [System] Dynamic Search SUCCESS: Found engine at ${binary}`);
+    return binary;
+  }
+
+  // Final fallback to hardcoded common paths
   const paths = [
     '/usr/bin/soffice',
     '/usr/bin/libreoffice',
-    '/usr/local/bin/soffice',
-    '/app/.nix-profile/bin/soffice', // Possible Nixpacks path
-    'soffice'
+    '/nix/var/nix/profiles/default/bin/soffice',
+    '/app/.nix-profile/bin/soffice'
   ];
   
   for (const p of paths) {
     try {
       await fs.access(p);
-      console.log(`>>> [System] Found LibreOffice at: ${p}`);
+      console.log(`>>> [System] Manual Search SUCCESS: Found engine at ${p}`);
       return p;
     } catch (e) {}
   }
-  return 'soffice'; // Default to PATH
+
+  console.warn(">>> [System] Engine search FAILED. Will try generic 'soffice' in shell.");
+  return 'soffice'; 
 }
 
 const sofficePath = await findSoffice();
