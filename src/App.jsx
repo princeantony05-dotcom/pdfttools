@@ -226,8 +226,8 @@ function App() {
                 <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 600, opacity: 0.8 }}>{currentTool?.name}</h3>
               </div>
 
-              {/* Fixed Layout for Tools, Regular for others */}
-              {activeTool !== null && !['login', 'admin', 'user', 'pricing', 'blog', 'privacy', 'about', 'disclaimer', 'contact', 'support'].includes(activeTool) ? (
+              {/* Fixed Layout for Tools, Center Layout for Auth/Dashboard */}
+              {activeTool !== null && !['login', 'admin', 'user', 'user-dashboard', 'pricing', 'blog', 'privacy', 'about', 'disclaimer', 'contact', 'support'].includes(activeTool) ? (
                 <div className="tool-layout-wrapper">
                   <div className="tool-layout-grid">
                     {/* Left Sidebar Ad Zone - Elastic */}
@@ -244,8 +244,10 @@ function App() {
                   </div>
                 </div>
               ) : (
-                <div className="glass" style={{ minHeight: '500px', padding: '2rem' }}>
-                  {renderTool()}
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 'calc(100vh - 200px)' }}>
+                  <div className="glass" style={{ width: '100%', maxWidth: '500px', padding: '2rem' }}>
+                    {renderTool()}
+                  </div>
                 </div>
               )}
             </motion.div>

@@ -37,7 +37,7 @@ const Login = ({ onLoginSuccess }) => {
         if (result.success) {
           onLoginSuccess(result.user.role);
         } else {
-          setError(result.message + '. Hint: admin@pdfmasterstool.online / AdminPassword@2026');
+          setError(result.message);
         }
       }
       setLoading(false);
