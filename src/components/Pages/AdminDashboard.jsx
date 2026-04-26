@@ -98,10 +98,10 @@ const AdminDashboard = () => {
 
 const OverviewTab = () => {
   const stats = [
-    { name: 'Total Revenue', value: '$12,482', change: '+18.5%', icon: DollarSign, color: '#059669' },
-    { name: 'Active Subscriptions', value: '842', change: '+5.2%', icon: Users, color: '#2563eb' },
-    { name: 'Conversion Rate', value: '3.4%', change: '+0.8%', icon: TrendingUp, color: '#6366f1' },
-    { name: 'Files Processed', value: '158k', change: '+22%', icon: FileText, color: '#ef4444' },
+    { name: 'Total Revenue', value: '$0.00', change: '0%', icon: DollarSign, color: '#059669' },
+    { name: 'Active Subscriptions', value: '0', change: '0%', icon: Users, color: '#2563eb' },
+    { name: 'Conversion Rate', value: '0.0%', change: '0%', icon: TrendingUp, color: '#6366f1' },
+    { name: 'Files Processed', value: '0', change: '0%', icon: FileText, color: '#ef4444' },
   ];
 
   return (
@@ -405,12 +405,7 @@ const ContentTab = () => {
 };
 
 const UsersTab = () => {
-  const transactions = [
-    { id: '#TRX-9482', email: 'john@example.com', plan: 'Pro Monthly', wallet: '$45.00', amount: '$9.99', date: '2026-04-24', status: 'Completed' },
-    { id: '#TRX-9483', email: 'sarah.w@tech.co', plan: 'Enterprise', wallet: '$120.00', amount: '$29.99', date: '2026-04-24', status: 'Completed' },
-    { id: '#TRX-9484', email: 'mike@studio.io', plan: 'Pro Yearly', wallet: '$0.00', amount: '$89.00', date: '2026-04-23', status: 'Refunded' },
-    { id: '#TRX-9485', email: 'lucy@gmail.com', plan: 'Pro Monthly', wallet: '$12.50', amount: '$9.99', date: '2026-04-23', status: 'Completed' },
-  ];
+  const transactions = [];
 
   const handleDownloadExcel = () => {
     const ws = XLSX.utils.json_to_sheet(transactions);
@@ -514,8 +509,9 @@ const UsersTab = () => {
             ))}
           </tbody>
         </table>
-        <div style={{ padding: '1.5rem', textAlign: 'center', borderTop: '1px solid var(--border)', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-          Showing {transactions.length} of 1,284 transactions
+        <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>
+          <ShoppingBag size={48} style={{ margin: '0 auto 1rem', opacity: 0.2 }} />
+          <p>No transactions found</p>
         </div>
       </div>
     </div>
@@ -541,8 +537,8 @@ const BalanceTab = () => {
             <Wallet size={20} />
             <h4 style={{ margin: 0 }}>Available Balance</h4>
           </div>
-          <h2 style={{ fontSize: '2.25rem', margin: 0 }}>$8,429.50</h2>
-          <p style={{ color: '#059669', fontSize: '0.85rem', marginTop: '0.5rem', fontWeight: 600 }}>Ready for withdrawal</p>
+          <h2 style={{ fontSize: '2.25rem', margin: 0 }}>$0.00</h2>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem' }}>No balance available</p>
         </div>
 
         <div className="glass-card" style={{ padding: '2rem' }}>
@@ -550,8 +546,8 @@ const BalanceTab = () => {
             <Clock size={20} />
             <h4 style={{ margin: 0 }}>Pending Payouts</h4>
           </div>
-          <h2 style={{ fontSize: '2.25rem', margin: 0 }}>$1,250.00</h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem' }}>Next payout: April 28, 2026</p>
+          <h2 style={{ fontSize: '2.25rem', margin: 0 }}>$0.00</h2>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem' }}>No pending payouts</p>
         </div>
 
         <div className="glass-card" style={{ padding: '2rem' }}>
@@ -559,8 +555,8 @@ const BalanceTab = () => {
             <Banknote size={20} />
             <h4 style={{ margin: 0 }}>Lifetime Earnings</h4>
           </div>
-          <h2 style={{ fontSize: '2.25rem', margin: 0 }}>$42,092.00</h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem' }}>Since launch (Dec 2025)</p>
+          <h2 style={{ fontSize: '2.25rem', margin: 0 }}>$0.00</h2>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem' }}>Since launch</p>
         </div>
       </div>
 
@@ -569,9 +565,9 @@ const BalanceTab = () => {
           <h3 style={{ marginBottom: '1.5rem' }}>Earnings by Source</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             {[
-              { name: 'Stripe (Subscriptions)', amount: '$5,240.00', color: '#6366f1' },
-              { name: 'PayPal (One-time)', amount: '$2,150.50', color: '#2563eb' },
-              { name: 'Google AdSense', amount: '$1,039.00', color: '#d97706' },
+              { name: 'Stripe (Subscriptions)', amount: '$0.00', color: '#6366f1' },
+              { name: 'PayPal (One-time)', amount: '$0.00', color: '#2563eb' },
+              { name: 'Google AdSense', amount: '$0.00', color: '#d97706' },
             ].map(source => (
               <div key={source.name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -596,19 +592,9 @@ const BalanceTab = () => {
             </thead>
             <tbody>
               <tr>
-                <td>Apr 15, 2026</td>
-                <td>$2,400.00</td>
-                <td><span style={{ color: '#059669', fontSize: '0.85rem', fontWeight: 600 }}>Completed</span></td>
-              </tr>
-              <tr>
-                <td>Mar 28, 2026</td>
-                <td>$1,850.00</td>
-                <td><span style={{ color: '#059669', fontSize: '0.85rem', fontWeight: 600 }}>Completed</span></td>
-              </tr>
-              <tr>
-                <td>Mar 10, 2026</td>
-                <td>$3,100.00</td>
-                <td><span style={{ color: '#059669', fontSize: '0.85rem', fontWeight: 600 }}>Completed</span></td>
+                <td colSpan="3" style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
+                  No withdrawal history
+                </td>
               </tr>
             </tbody>
           </table>
