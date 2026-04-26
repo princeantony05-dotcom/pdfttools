@@ -13,16 +13,12 @@ import Dropzone from '../UI/Dropzone';
 import { downloadBlob } from '../../utils/pdfHelpers';
 import { libreOfficeApi } from '../../utils/libreOfficeApi';
 import { motion } from 'framer-motion';
-import * as mammoth from 'mammoth';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-
-import * as docxPreview from 'docx-preview';
 
 const OfficeToPdf = ({ type = 'word' }) => {
   const [file, setFile] = useState(null);
   const [status, setStatus] = useState('idle'); // idle, processing, success
   const [result, setResult] = useState(null);
+
   const getToolInfo = () => {
     switch (type) {
       case 'word': return { name: 'Word to PDF', icon: FileText, accept: '.docx,.doc', color: '#2563eb' };
@@ -38,118 +34,31 @@ const OfficeToPdf = ({ type = 'word' }) => {
   const handleConvert = async () => {
     if (!file) return;
     setStatus('processing');
-    setConversionLog("Reading document...");
+    setConversionLog("Sending to server engine...");
 
     try {
-      const currentExt = file.name.split('.').pop().toLowerCase();
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('format', '.pdf');
+
+      setConversionLog("Processing on server (LibreOffice)...");
       
-      if (currentExt === 'docx' || currentExt === 'doc') {
-        setConversionLog("Analyzing fonts and layout...");
-        const arrayBuffer = await file.arrayBuffer();
-        
-        setConversionLog("Rendering high-fidelity document...");
-        // Create hidden element for docx-preview
-        const container = document.createElement('div');
-        container.id = 'docx-render-container';
-        container.style.position = 'fixed';
-        container.style.left = '-9999px';
-        container.style.top = '0';
-        container.style.width = '816px'; 
-        container.style.backgroundColor = 'white';
-        container.style.color = '#000000'; // Reset global text color to black
-        
-        // Inject docx-preview styles and reset site-wide conflicts
-        const style = document.createElement('style');
-        style.innerHTML = `
-          #docx-render-container .docx-wrapper { background-color: white !important; padding: 0 !important; }
-          #docx-render-container .docx { background: white !important; margin: 0 !important; box-shadow: none !important; }
-          #docx-render-container .docx p { margin: 0; padding: 0; color: inherit; }
-          #docx-render-container .docx span { color: inherit; font-family: inherit; }
-          #docx-render-container img { max-width: 100% !important; height: auto !important; }
-        `;
-        document.body.appendChild(container);
-        container.appendChild(style);
+      const response = await fetch('/api/convert', {
+        method: 'POST',
+        body: formData,
+      });
 
-        // Render docx to HTML with high fidelity
-        await docxPreview.renderAsync(arrayBuffer, container, null, {
-          inWrapper: true,
-          ignoreWidth: false,
-          ignoreHeight: false,
-          useFullWidth: true
-        });
-
-        setConversionLog("Loading document images...");
-        // Wait for all images to be fully loaded and decoded
-        const images = container.getElementsByTagName('img');
-        const imagePromises = Array.from(images).map(img => {
-          if (img.complete) return Promise.resolve();
-          return new Promise(resolve => {
-            img.onload = resolve;
-            img.onerror = resolve; // Continue even if one image fails
-          });
-        });
-        
-        await Promise.all(imagePromises);
-        // Additional small delay for browser to settle layout
-        await new Promise(r => setTimeout(r, 500));
-
-        setConversionLog("Capturing exact pages...");
-        const canvas = await html2canvas(container, {
-          useCORS: true,
-          allowTaint: true,
-          scale: 2,
-          logging: false,
-          backgroundColor: '#ffffff',
-          windowWidth: 816
-        });
-
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-        
-        const imgWidth = canvas.width;
-        const imgHeight = canvas.height;
-        
-        // Use the exact page height calculated by the standard A4 ratio
-        const pageHeightInPx = (imgWidth * pdfHeight) / pdfWidth;
-        let heightLeft = imgHeight;
-        let position = 0;
-        let pageCount = 0;
-
-        while (heightLeft > 0) {
-          if (pageCount > 0) {
-            pdf.addPage();
-          }
-          
-          const canvasPage = document.createElement('canvas');
-          canvasPage.width = imgWidth;
-          canvasPage.height = Math.min(pageHeightInPx, heightLeft);
-          
-          const ctx = canvasPage.getContext('2d');
-          ctx.drawImage(canvas, 0, position, imgWidth, canvasPage.height, 0, 0, imgWidth, canvasPage.height);
-          
-          const pageData = canvasPage.toDataURL('image/jpeg', 0.95);
-          pdf.addImage(pageData, 'JPEG', 0, 0, pdfWidth, (canvasPage.height * pdfWidth) / imgWidth);
-          
-          position += pageHeightInPx;
-          heightLeft -= pageHeightInPx;
-          pageCount++;
-        }
-        
-        const pdfBlob = pdf.output('blob');
-        setResult(pdfBlob);
-        document.body.removeChild(container);
-        setStatus('success');
-      } else {
-        // Fallback to worker for other formats (Excel/PPT)
-        const resultBuffer = await libreOfficeApi.officeToPdf(file);
-        setResult(resultBuffer);
-        setStatus('success');
+      if (!response.ok) {
+        throw new Error('Server conversion failed');
       }
+
+      const blob = await response.blob();
+      setResult(blob);
+      setStatus('success');
     } catch (err) {
-      console.error('High-fidelity conversion failed:', err);
+      console.error('Server conversion failed:', err);
       setStatus('idle');
-      alert('Conversion failed. Please ensure the file is a valid .docx document.');
+      alert('Conversion failed. Our server engine is currently unavailable or the file is too large.');
     }
   };
 
