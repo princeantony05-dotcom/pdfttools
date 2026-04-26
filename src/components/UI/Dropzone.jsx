@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { Upload, FileText, FileSpreadsheet, Presentation, Image as ImageIcon, File, X, Plus } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const Dropzone = ({ onFilesSelected, accept = ".pdf", multiple = true }) => {
   const [isDragActive, setIsDragActive] = useState(false);
