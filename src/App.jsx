@@ -13,7 +13,8 @@ import {
   ChevronLeft,
   Edit3,
   Stamp,
-  Presentation
+  Presentation,
+  LayoutDashboard
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
