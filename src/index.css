@@ -476,7 +476,6 @@ p { color: var(--text-muted); font-size: 1.1rem; }
 
   main {
     padding: 0.5rem 2% !important;
-    overflow-y: auto;
   }
 }
 
@@ -486,9 +485,9 @@ main {
 }
 
 .tool-layout-wrapper {
-  min-height: calc(100vh - 120px);
   display: flex;
   flex-direction: column;
+  min-height: calc(100vh - 150px);
 }
 
 .tool-workspace-container {
