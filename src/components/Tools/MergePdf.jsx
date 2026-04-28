@@ -1,20 +1,55 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Dropzone from '../UI/Dropzone';
 import { mergePdfs, downloadBlob } from '../../utils/pdfHelpers';
-import { Loader2, CheckCircle, Combine, ArrowRight, Download, GripVertical, Trash2 } from 'lucide-react';
+import { Loader2, CheckCircle, Combine, ArrowRight, Download, GripVertical, Trash2, FileText } from 'lucide-react';
 import { motion, Reorder } from 'framer-motion';
+import * as pdfjs from 'pdfjs-dist';
+
+// Set worker source for PDF.js
+pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@5.6.205/build/pdf.worker.min.mjs`;
 
 const MergePdf = () => {
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState([]); // { file, thumbnail }
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [result, setResult] = useState(null);
+
+  const generateThumbnail = async (file) => {
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const loadingTask = pdfjs.getDocument({ data: arrayBuffer });
+      const pdf = await loadingTask.promise;
+      const page = await pdf.getPage(1);
+      const viewport = page.getViewport({ scale: 0.2 });
+      
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+      
+      await page.render({ canvasContext: context, viewport }).promise;
+      return canvas.toDataURL();
+    } catch (err) {
+      console.error("Error generating thumbnail:", err);
+      return null;
+    }
+  };
+
+  const handleFilesSelected = async (newFiles) => {
+    const updatedFiles = [...files];
+    for (const file of newFiles) {
+      const thumbnail = await generateThumbnail(file);
+      updatedFiles.push({ file, thumbnail, id: `${file.name}-${Date.now()}-${Math.random()}` });
+    }
+    setFiles(updatedFiles);
+  };
 
   const handleMerge = async () => {
     if (files.length < 2) return;
     setIsProcessing(true);
     try {
-      const mergedPdfBytes = await mergePdfs(files);
+      const fileObjects = files.map(f => f.file);
+      const mergedPdfBytes = await mergePdfs(fileObjects);
       setResult(mergedPdfBytes);
       downloadBlob(mergedPdfBytes, 'merged_document.pdf', 'application/pdf');
       setIsComplete(true);
@@ -26,8 +61,8 @@ const MergePdf = () => {
     }
   };
 
-  const removeFile = (index) => {
-    setFiles(prev => prev.filter((_, i) => i !== index));
+  const removeFile = (id) => {
+    setFiles(prev => prev.filter(f => f.id !== id));
   };
 
   const reset = () => {
@@ -42,12 +77,12 @@ const MergePdf = () => {
         <>
           {files.length === 0 ? (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ maxWidth: '800px', margin: '4rem auto' }}>
-              <Dropzone onFilesSelected={setFiles} />
+              <Dropzone onFilesSelected={handleFilesSelected} />
             </motion.div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 350px', gap: '2rem', alignItems: 'start' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '2rem', alignItems: 'start' }}>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                <Dropzone onFilesSelected={(newFiles) => setFiles(prev => [...prev, ...newFiles])} />
+                <Dropzone onFilesSelected={handleFilesSelected} />
               </motion.div>
 
               <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="glass-card" style={{ padding: '1.5rem', borderRadius: '24px', position: 'sticky', top: '1rem' }}>
@@ -57,40 +92,61 @@ const MergePdf = () => {
                   axis="y" 
                   values={files} 
                   onReorder={setFiles}
-                  style={{ marginBottom: '2rem', display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: '400px', overflowY: 'auto', padding: '0.5rem' }}
+                  style={{ marginBottom: '2rem', display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: '500px', overflowY: 'auto', padding: '0.5rem' }}
                 >
-                  {files.map((file, index) => (
+                  {files.map((fileObj) => (
                     <Reorder.Item 
-                      key={`${file.name}-${index}`} 
-                      value={file}
+                      key={fileObj.id} 
+                      value={fileObj}
                       style={{ 
                         listStyle: 'none',
                         cursor: 'grab'
                       }}
                     >
                       <div className="glass" style={{ 
-                        padding: '1rem', 
-                        borderRadius: '12px', 
+                        padding: '0.75rem', 
+                        borderRadius: '14px', 
                         border: '1px solid var(--border)', 
                         display: 'flex', 
                         alignItems: 'center', 
-                        gap: '0.75rem',
+                        gap: '1rem',
                         background: 'rgba(255,255,255,0.03)'
                       }}>
-                        <GripVertical size={16} style={{ opacity: 0.3 }} />
+                        <GripVertical size={16} style={{ opacity: 0.2 }} />
+                        
+                        {/* Thumbnail Preview */}
+                        <div style={{ 
+                          width: '50px', 
+                          height: '65px', 
+                          backgroundColor: '#fff', 
+                          borderRadius: '6px', 
+                          overflow: 'hidden',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                        }}>
+                          {fileObj.thumbnail ? (
+                            <img src={fileObj.thumbnail} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                          ) : (
+                            <FileText size={24} color="#94a3b8" />
+                          )}
+                        </div>
+
                         <div style={{ flex: 1, minWidth: 0 }}>
-                          <div style={{ fontSize: '0.85rem', fontWeight: 500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                            {file.name}
+                          <div style={{ fontSize: '0.85rem', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            {fileObj.file.name}
                           </div>
                           <div style={{ fontSize: '0.7rem', opacity: 0.5 }}>
-                            {(file.size / 1024).toFixed(1)} KB
+                            {(fileObj.file.size / 1024).toFixed(1)} KB
                           </div>
                         </div>
+                        
                         <button 
-                          onClick={() => removeFile(index)}
-                          style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px', opacity: 0.6 }}
+                          onClick={() => removeFile(fileObj.id)}
+                          style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '8px', opacity: 0.6 }}
                         >
-                          <Trash2 size={16} />
+                          <Trash2 size={18} />
                         </button>
                       </div>
                     </Reorder.Item>
@@ -98,10 +154,10 @@ const MergePdf = () => {
                 </Reorder.Group>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                  <button className="btn-primary" onClick={handleMerge} disabled={files.length < 2} style={{ width: '100%', padding: '1.1rem', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem' }}>
+                  <button className="btn-primary" onClick={handleMerge} disabled={files.length < 2} style={{ width: '100%', padding: '1.25rem', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', fontSize: '1rem', fontWeight: 600 }}>
                     Merge Documents <ArrowRight size={20} />
                   </button>
-                  <button onClick={reset} className="btn-secondary" style={{ width: '100%', padding: '0.9rem', borderRadius: '14px' }}>Clear All</button>
+                  <button onClick={reset} className="btn-secondary" style={{ width: '100%', padding: '1rem', borderRadius: '16px' }}>Clear All</button>
                 </div>
               </motion.div>
             </div>
