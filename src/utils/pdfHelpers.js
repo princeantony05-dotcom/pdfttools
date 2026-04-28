@@ -18,23 +18,60 @@ export async function splitPdf(file, ranges) {
   const pdf = await PDFDocument.load(arrayBuffer);
   const newPdf = await PDFDocument.create();
   
-  // ranges is an array of page numbers or strings like "1-3"
+  // ranges is an array of strings like "1-3", "5", or numbers
   const pageIndices = [];
   ranges.forEach(range => {
-    if (typeof range === 'number') {
-      pageIndices.push(range - 1);
-    } else if (range.includes('-')) {
-      const [start, end] = range.split('-').map(Number);
-      for (let i = start; i <= end; i++) {
-        pageIndices.push(i - 1);
+    const rangeStr = String(range).trim();
+    if (!rangeStr) return;
+
+    if (rangeStr.includes('-')) {
+      const [start, end] = rangeStr.split('-').map(Number);
+      if (!isNaN(start) && !isNaN(end)) {
+        for (let i = Math.min(start, end); i <= Math.max(start, end); i++) {
+          if (i > 0 && i <= pdf.getPageCount()) {
+            pageIndices.push(i - 1);
+          }
+        }
+      }
+    } else if (!isNaN(rangeStr)) {
+      const pageNum = Number(rangeStr);
+      if (pageNum > 0 && pageNum <= pdf.getPageCount()) {
+        pageIndices.push(pageNum - 1);
       }
     }
   });
   
-  const copiedPages = await newPdf.copyPages(pdf, pageIndices);
+  // Remove duplicates and sort
+  const uniqueIndices = [...new Set(pageIndices)].sort((a, b) => a - b);
+  
+  if (uniqueIndices.length === 0) {
+    throw new Error('No valid pages selected');
+  }
+
+  const copiedPages = await newPdf.copyPages(pdf, uniqueIndices);
   copiedPages.forEach(page => newPdf.addPage(page));
   
   return await newPdf.save();
+}
+
+export async function extractAllPages(file) {
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await PDFDocument.load(arrayBuffer);
+  const numPages = pdf.getPageCount();
+  const pdfs = [];
+
+  for (let i = 0; i < numPages; i++) {
+    const newPdf = await PDFDocument.create();
+    const [copiedPage] = await newPdf.copyPages(pdf, [i]);
+    newPdf.addPage(copiedPage);
+    const pdfBytes = await newPdf.save();
+    pdfs.push({
+      name: `${file.name.replace('.pdf', '')}_page_${i + 1}.pdf`,
+      bytes: pdfBytes
+    });
+  }
+
+  return pdfs;
 }
 
 export async function rotatePdf(file, degree) {

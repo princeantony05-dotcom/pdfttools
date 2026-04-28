@@ -153,10 +153,12 @@ const PdfOrganizer = () => {
             values={pages} 
             onReorder={setPages}
             style={{ 
-              display: 'grid', 
-              gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', 
-              gap: '2rem',
-              padding: '1rem'
+              display: 'flex', 
+              flexDirection: 'column',
+              gap: '1rem',
+              padding: '1rem',
+              maxWidth: '800px',
+              margin: '0 auto'
             }}
           >
             {pages.map((page) => (
@@ -168,24 +170,26 @@ const PdfOrganizer = () => {
                   padding: '1rem', 
                   cursor: 'grab',
                   position: 'relative',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '0.75rem',
-                  border: '1px solid rgba(255,255,255,0.05)'
+                  display: 'grid',
+                  gridTemplateColumns: '100px 1fr auto',
+                  alignItems: 'center',
+                  gap: '1.5rem',
+                  border: '1px solid rgba(255,255,255,0.05)',
+                  borderRadius: '16px'
                 }}
-                whileDrag={{ scale: 1.05, boxShadow: '0 20px 40px rgba(0,0,0,0.4)', zIndex: 1000 }}
+                whileDrag={{ scale: 1.02, boxShadow: '0 20px 40px rgba(0,0,0,0.4)', zIndex: 1000 }}
               >
                 {/* Page Preview */}
                 <div style={{ 
-                  width: '100%', 
-                  aspectRatio: '1/1.4', 
+                  width: '100px', 
+                  height: '140px', 
                   backgroundColor: 'white',
-                  borderRadius: '4px',
+                  borderRadius: '8px',
                   overflow: 'hidden',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  transition: 'transform 0.3s ease'
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
                 }}>
                   <img 
                     src={page.canvasUrl} 
@@ -199,31 +203,40 @@ const PdfOrganizer = () => {
                   />
                 </div>
 
-                {/* Page Number & Controls */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <GripHorizontal size={14} style={{ opacity: 0.3 }} />
-                    <span style={{ fontSize: '0.85rem', fontWeight: 600, opacity: 0.7 }}>#{pages.indexOf(page) + 1}</span>
-                  </div>
-                  
-                  <div style={{ display: 'flex', gap: '4px' }}>
+                {/* Page Info */}
+                <div>
+                  <h4 style={{ margin: '0 0 0.25rem 0', fontSize: '1.1rem' }}>Page {pages.indexOf(page) + 1}</h4>
+                  <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                    Original Position: {page.originalIndex + 1}
+                  </p>
+                  {page.rotation !== 0 && (
+                    <span style={{ fontSize: '0.75rem', background: 'rgba(var(--primary-rgb), 0.1)', color: 'var(--primary)', padding: '2px 8px', borderRadius: '4px', marginTop: '0.5rem', display: 'inline-block' }}>
+                      Rotated {page.rotation}°
+                    </span>
+                  )}
+                </div>
+
+                {/* Controls */}
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', gap: '4px', marginRight: '1rem' }}>
                     <button 
                       onClick={(e) => { e.stopPropagation(); rotatePage(page.id); }}
                       className="btn-icon"
-                      style={{ width: '28px', height: '28px', padding: 0 }}
+                      style={{ width: '40px', height: '40px', background: 'rgba(255,255,255,0.03)', borderRadius: '10px' }}
                       title="Rotate 90°"
                     >
-                      <RotateCw size={14} />
+                      <RotateCw size={18} />
                     </button>
                     <button 
                       onClick={(e) => { e.stopPropagation(); removePage(page.id); }}
                       className="btn-icon"
-                      style={{ width: '28px', height: '28px', padding: 0, color: '#ef4444' }}
+                      style={{ width: '40px', height: '40px', background: 'rgba(239, 68, 68, 0.05)', borderRadius: '10px', color: '#ef4444' }}
                       title="Delete Page"
                     >
-                      <Trash2 size={14} />
+                      <Trash2 size={18} />
                     </button>
                   </div>
+                  <GripHorizontal size={24} style={{ opacity: 0.2 }} />
                 </div>
               </Reorder.Item>
             ))}

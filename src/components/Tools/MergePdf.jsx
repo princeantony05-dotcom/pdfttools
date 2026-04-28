@@ -1,8 +1,8 @@
 import { useState } from "react";
 import Dropzone from '../UI/Dropzone';
 import { mergePdfs, downloadBlob } from '../../utils/pdfHelpers';
-import { Loader2, CheckCircle, Combine, ArrowRight, Download } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Loader2, CheckCircle, Combine, ArrowRight, Download, GripVertical, Trash2 } from 'lucide-react';
+import { motion, Reorder } from 'framer-motion';
 
 const MergePdf = () => {
   const [files, setFiles] = useState([]);
@@ -26,6 +26,10 @@ const MergePdf = () => {
     }
   };
 
+  const removeFile = (index) => {
+    setFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
   const reset = () => {
     setFiles([]);
     setIsComplete(false);
@@ -41,24 +45,64 @@ const MergePdf = () => {
               <Dropzone onFilesSelected={setFiles} />
             </motion.div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '2rem', alignItems: 'start' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 350px', gap: '2rem', alignItems: 'start' }}>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                <Dropzone onFilesSelected={setFiles} />
+                <Dropzone onFilesSelected={(newFiles) => setFiles(prev => [...prev, ...newFiles])} />
               </motion.div>
 
-              <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} style={{ backgroundColor: 'rgba(0,0,0,0.02)', padding: '1.5rem', borderRadius: '20px', border: '1px solid var(--border)', position: 'sticky', top: '1rem' }}>
-                <h4 style={{ marginBottom: '1.5rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.6 }}>Merge Options</h4>
-                <div style={{ marginBottom: '1.5rem', maxHeight: '200px', overflowY: 'auto', padding: '0.5rem' }}>
-                  {files.map((f, i) => (
-                    <div key={i} style={{ fontSize: '0.75rem', padding: '0.5rem', backgroundColor: 'white', borderRadius: '8px', border: '1px solid var(--border)', marginBottom: '0.5rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      {f.name}
-                    </div>
+              <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="glass-card" style={{ padding: '1.5rem', borderRadius: '24px', position: 'sticky', top: '1rem' }}>
+                <h4 style={{ marginBottom: '1.5rem', fontSize: '0.9rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.6 }}>Files to Merge</h4>
+                
+                <Reorder.Group 
+                  axis="y" 
+                  values={files} 
+                  onReorder={setFiles}
+                  style={{ marginBottom: '2rem', display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: '400px', overflowY: 'auto', padding: '0.5rem' }}
+                >
+                  {files.map((file, index) => (
+                    <Reorder.Item 
+                      key={`${file.name}-${index}`} 
+                      value={file}
+                      style={{ 
+                        listStyle: 'none',
+                        cursor: 'grab'
+                      }}
+                    >
+                      <div className="glass" style={{ 
+                        padding: '1rem', 
+                        borderRadius: '12px', 
+                        border: '1px solid var(--border)', 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: '0.75rem',
+                        background: 'rgba(255,255,255,0.03)'
+                      }}>
+                        <GripVertical size={16} style={{ opacity: 0.3 }} />
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ fontSize: '0.85rem', fontWeight: 500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            {file.name}
+                          </div>
+                          <div style={{ fontSize: '0.7rem', opacity: 0.5 }}>
+                            {(file.size / 1024).toFixed(1)} KB
+                          </div>
+                        </div>
+                        <button 
+                          onClick={() => removeFile(index)}
+                          style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '4px', opacity: 0.6 }}
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </Reorder.Item>
                   ))}
+                </Reorder.Group>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  <button className="btn-primary" onClick={handleMerge} disabled={files.length < 2} style={{ width: '100%', padding: '1.1rem', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem' }}>
+                    Merge Documents <ArrowRight size={20} />
+                  </button>
+                  <button onClick={reset} className="btn-secondary" style={{ width: '100%', padding: '0.9rem', borderRadius: '14px' }}>Clear All</button>
                 </div>
-                <button className="btn-primary" onClick={handleMerge} disabled={files.length < 2} style={{ width: '100%', padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem' }}>
-                  Merge Files <ArrowRight size={20} />
-                </button>
-                <button onClick={reset} className="btn-secondary" style={{ width: '100%', marginTop: '1rem' }}>Clear All</button>
               </motion.div>
             </div>
           )}
