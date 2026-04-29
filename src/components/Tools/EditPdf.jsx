@@ -327,6 +327,49 @@ const EditPdf = () => {
           </div>
         </>
       )}
+
+      {/* SEO Content Section */}
+      <div style={{ marginTop: '6rem', borderTop: '1px solid var(--border)', paddingTop: '4rem' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <h2 style={{ fontSize: '2.5rem', marginBottom: '1.5rem', textAlign: 'center' }}>How to Edit PDF Online for Free</h2>
+          <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: 'var(--text-muted)', textAlign: 'center', marginBottom: '4rem' }}>
+            Annotate, sign, and modify your PDF documents directly in your web browser. Our professional-grade PDF editor provides a secure and private way to edit your files without any software installation.
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '3rem', marginBottom: '5rem' }}>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Add Text & Annotations</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Easily add comments, fill out forms, or insert new text into any PDF. Our intuitive text tool allows you to place text exactly where you need it and drag it to reposition.</p>
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Draw & Sign</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Use the freehand drawing tool to sign documents, underline important sections, or add handwritten notes. All drawings are rendered with high fidelity in the final PDF.</p>
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>100% Private Editing</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Your documents never leave your computer. All editing and rendering happen locally in your browser, ensuring that your sensitive information remains completely confidential.</p>
+            </div>
+          </div>
+
+          <div className="glass-card" style={{ padding: '3rem', borderRadius: '32px' }}>
+            <h2 style={{ fontSize: '2rem', marginBottom: '2rem' }}>Frequently Asked Questions</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Can I edit existing text in the PDF?</h4>
+                <p style={{ opacity: 0.7 }}>Currently, our editor allows you to add new text, drawings, and annotations over the existing content. We focus on providing the best experience for filling forms and signing documents.</p>
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Is my signature safe?</h4>
+                <p style={{ opacity: 0.7 }}>Yes. Since you are signing the document locally in your browser, your signature is never transmitted to our servers or stored anywhere in the cloud.</p>
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Does it work on mobile devices?</h4>
+                <p style={{ opacity: 0.7 }}>Yes, PDFMasterstool is fully responsive and works on smartphones and tablets, allowing you to sign and edit documents on the go.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

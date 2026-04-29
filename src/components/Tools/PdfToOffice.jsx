@@ -129,6 +129,49 @@ const PdfToOffice = ({ type = 'word' }) => {
           </motion.div>
         </div>
       )}
+
+      {/* SEO Content Section */}
+      <div style={{ marginTop: '6rem', borderTop: '1px solid var(--border)', paddingTop: '4rem' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <h2 style={{ fontSize: '2.5rem', marginBottom: '1.5rem', textAlign: 'center' }}>Convert PDF to Editable Office Documents</h2>
+          <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: 'var(--text-muted)', textAlign: 'center', marginBottom: '4rem' }}>
+            Transform static PDF files back into fully editable Word, Excel, and PowerPoint documents. Our advanced reconstruction engine preserves layouts, fonts, and table structures.
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '3rem', marginBottom: '5rem' }}>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>High-Fidelity Reconstruction</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>We don't just extract text; we reconstruct the entire document structure. Tables remain tables, and paragraphs remain paragraphs, ensuring your Word or Excel file is actually editable.</p>
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Smart Table Extraction</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Our PDF to Excel converter identifies cell boundaries and data types, allowing you to move data from a static PDF report into a live spreadsheet for analysis in seconds.</p>
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Secure & Private</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Your documents are processed in a highly secure, isolated environment and are never stored on our servers. We value your privacy as much as you do.</p>
+            </div>
+          </div>
+
+          <div className="glass-card" style={{ padding: '3rem', borderRadius: '32px' }}>
+            <h2 style={{ fontSize: '2rem', marginBottom: '2rem' }}>Frequently Asked Questions</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Will the Word document be fully editable?</h4>
+                <p style={{ opacity: 0.7 }}>Yes. Our engine attempts to reconstruct the flow of the document so you can edit text, change formatting, and move images just like a native Word file.</p>
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Can I convert scanned PDFs to Word?</h4>
+                <p style={{ opacity: 0.7 }}>For scanned documents (images), we recommend using our OCR tool first to extract the text, or choosing our high-fidelity Word conversion which includes basic OCR capabilities.</p>
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Is the conversion free?</h4>
+                <p style={{ opacity: 0.7 }}>Yes, PDFMasterstool provides these professional conversion tools for free. We believe in providing high-quality document tools accessible to everyone.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

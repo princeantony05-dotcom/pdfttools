@@ -250,6 +250,49 @@ const PdfOrganizer = () => {
           )}
         </div>
       )}
+
+      {/* SEO Content Section */}
+      <div style={{ marginTop: '6rem', borderTop: '1px solid var(--border)', paddingTop: '4rem' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <h2 style={{ fontSize: '2.5rem', marginBottom: '1.5rem', textAlign: 'center' }}>How to Organize PDF Pages Online</h2>
+          <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: 'var(--text-muted)', textAlign: 'center', marginBottom: '4rem' }}>
+            Rearrange, rotate, and delete PDF pages with our visual organizer. 100% private and secure processing directly in your browser.
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '3rem', marginBottom: '5rem' }}>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Visual Drag & Drop</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>See every page of your PDF as a thumbnail. Drag pages to reorder them exactly how you want. It's the most intuitive way to manage document structure.</p>
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Rotate & Delete</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Fix upside-down pages with a single click or remove unwanted pages instantly. You have full control over every single page in your document.</p>
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Private Processing</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Your files never leave your device. All thumbnails and page operations are handled locally, ensuring your data remains 100% confidential.</p>
+            </div>
+          </div>
+
+          <div className="glass-card" style={{ padding: '3rem', borderRadius: '32px' }}>
+            <h2 style={{ fontSize: '2rem', marginBottom: '2rem' }}>Frequently Asked Questions</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Can I reorder pages from different PDFs?</h4>
+                <p style={{ opacity: 0.7 }}>Currently, this tool focuses on organizing a single PDF. To combine pages from multiple PDFs, use our 'Merge PDF' tool first, then organize the resulting file here.</p>
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Will the quality of my PDF decrease?</h4>
+                <p style={{ opacity: 0.7 }}>No. Our organizer preserves the original quality of your PDF pages. We only change the order and orientation, without re-compressing the actual page content.</p>
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Is there a page limit?</h4>
+                <p style={{ opacity: 0.7 }}>While there is no strict limit, organizing very large documents (500+ pages) might be slower depending on your computer's RAM, as all page previews are generated locally.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

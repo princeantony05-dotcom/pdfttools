@@ -199,6 +199,49 @@ const WatermarkTool = () => {
           </div>
         </motion.div>
       )}
+
+      {/* SEO Content Section */}
+      <div style={{ marginTop: '6rem', borderTop: '1px solid var(--border)', paddingTop: '4rem' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <h2 style={{ fontSize: '2.5rem', marginBottom: '1.5rem', textAlign: 'center' }}>How to Watermark PDF Online</h2>
+          <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: 'var(--text-muted)', textAlign: 'center', marginBottom: '4rem' }}>
+            Protect your intellectual property and prevent unauthorized distribution of your PDF documents. Our professional watermark tool allows you to add text or image overlays with full control over opacity and positioning.
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '3rem', marginBottom: '5rem' }}>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Text Watermarks</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Add custom text like "CONFIDENTIAL", "DRAFT", or your company name. Customize the font size, color, rotation, and opacity to ensure your message is clear without obscuring the document content.</p>
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Image & Logo Overlays</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Upload your company logo or a custom seal to use as a watermark. This is perfect for branding official documents or adding a professional touch to your PDF reports.</p>
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Secure & Private</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Watermarking happens entirely in your browser. Your sensitive files are never uploaded to our servers, ensuring your business data remains 100% private and secure.</p>
+            </div>
+          </div>
+
+          <div className="glass-card" style={{ padding: '3rem', borderRadius: '32px' }}>
+            <h2 style={{ fontSize: '2rem', marginBottom: '2rem' }}>Frequently Asked Questions</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Can watermarks be removed easily?</h4>
+                <p style={{ opacity: 0.7 }}>Our tool embeds the watermark directly into the PDF content stream, making it difficult to remove with standard PDF viewers. For maximum security, we recommend using a lower opacity and placing the watermark over text.</p>
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Is there a fee for adding watermarks?</h4>
+                <p style={{ opacity: 0.7 }}>No. PDFMasterstool provides professional watermarking for free. You can protect as many documents as you need without any subscription or watermarks from our site added to your file.</p>
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Will the watermark appear on every page?</h4>
+                <p style={{ opacity: 0.7 }}>Yes. Our tool automatically applies your chosen text or image watermark to every single page of your PDF document in one go.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

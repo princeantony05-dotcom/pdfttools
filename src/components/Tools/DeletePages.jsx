@@ -100,6 +100,49 @@ const DeletePages = () => {
           </button>
         </div>
       )}
+
+      {/* SEO Content Section */}
+      <div style={{ marginTop: '6rem', borderTop: '1px solid var(--border)', paddingTop: '4rem' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <h2 style={{ fontSize: '2.5rem', marginBottom: '1.5rem', textAlign: 'center' }}>How to Remove Pages from PDF Online</h2>
+          <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: 'var(--text-muted)', textAlign: 'center', marginBottom: '4rem' }}>
+            Quickly delete unwanted pages from your PDF documents. Whether it's a blank page or a sensitive section, our tool removes it permanently and securely in your browser.
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '3rem', marginBottom: '5rem' }}>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Easy Page Selection</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Just enter the page numbers you want to remove, separated by commas. Our tool handles the rest, ensuring the remaining pages are correctly re-sequenced in the final PDF.</p>
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Instant Browser-Side Processing</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>No more waiting for slow uploads. Our Delete PDF Pages tool runs entirely on your device, providing an instant result while keeping your data 100% private.</p>
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>100% Secure & Private</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Your files never leave your computer. We believe your documents should remain your business, which is why all processing happens locally in your web browser.</p>
+            </div>
+          </div>
+
+          <div className="glass-card" style={{ padding: '3rem', borderRadius: '32px' }}>
+            <h2 style={{ fontSize: '2rem', marginBottom: '2rem' }}>Frequently Asked Questions</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Can I undo a page deletion?</h4>
+                <p style={{ opacity: 0.7 }}>Since the deletion is permanent in the new file, we recommend keeping your original PDF until you are sure the new version is correct. You can always re-upload the original if you make a mistake.</p>
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>How do I know the page numbers?</h4>
+                <p style={{ opacity: 0.7 }}>You can view your PDF in any standard viewer to identify the pages you want to remove. For a more visual experience, try our **'PDF Organizer'** tool which shows thumbnails for every page.</p>
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Is there a limit to how many pages I can delete?</h4>
+                <p style={{ opacity: 0.7 }}>No. You can delete one page or dozens at once. The only requirement is that at least one page must remain in the final PDF document.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

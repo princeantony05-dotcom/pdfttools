@@ -14,7 +14,17 @@ import {
   Edit3,
   Stamp,
   Presentation,
-  LayoutDashboard
+  LayoutDashboard,
+  Box,
+  LifeBuoy,
+  ShieldAlert,
+  Hash,
+  Layout,
+  PenTool,
+  MessageSquare,
+  Crop,
+  Sparkles,
+  Languages
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
@@ -31,8 +41,18 @@ import OfficeToPdf from './components/Tools/OfficeToPdf';
 import PdfToOffice from './components/Tools/PdfToOffice';
 import PasswordTool from './components/Tools/PasswordTool';
 import EditPdf from './components/Tools/EditPdf';
+import RepairPdf from './components/Tools/RepairPdf';
 import WatermarkTool from './components/Tools/WatermarkTool';
 import PdfOrganizer from './components/Tools/PdfOrganizer';
+import PdfToDwg from './components/Tools/PdfToDwg';
+import RedactPdf from './components/Tools/RedactPdf';
+import PageNumbers from './components/Tools/PageNumbers';
+import HeaderFooter from './components/Tools/HeaderFooter';
+import EsignPdf from './components/Tools/EsignPdf';
+import AnnotatePdf from './components/Tools/AnnotatePdf';
+import CropPdf from './components/Tools/CropPdf';
+import AiSummarize from './components/Tools/AiSummarize';
+import TranslatePdf from './components/Tools/TranslatePdf';
 import Navbar from './components/UI/Navbar';
 import { getUserData } from './utils/userStore';
 
@@ -54,23 +74,33 @@ import SEO from './components/UI/SEO';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 
 const TOOLS = [
-  { id: 'merge', path: '/merge', name: 'Merge PDF', icon: Combine, description: 'Combine multiple PDFs into one document', color: '#1e293b' },
-  { id: 'split', path: '/split', name: 'Split PDF', icon: Scissors, description: 'Extract pages or split into separate files', color: '#334155' },
-  { id: 'compress', path: '/compress', name: 'Compress PDF', icon: Zap, description: 'Reduce file size without losing quality', color: '#2563eb' },
-  { id: 'jpg-pdf', path: '/jpg-pdf', name: 'JPG ↔ PDF', icon: ImageIcon, description: 'Convert images to PDF and vice versa', color: '#0f172a' },
-  { id: 'rotate', path: '/rotate', name: 'Rotate PDF', icon: RotateCw, description: 'Rotate pages to correct orientation', color: '#64748b' },
-  { id: 'delete', path: '/delete', name: 'Delete Pages', icon: Trash2, description: 'Remove unwanted pages from your PDF', color: '#ef4444' },
-  { id: 'edit', path: '/edit', name: 'PDF Editor', icon: Edit3, description: 'Annotate, sign, and add text to your PDF', color: '#2563eb' },
-  { id: 'watermark', path: '/watermark', name: 'Watermark', icon: Stamp, description: 'Add text or image watermarks to your PDF', color: '#475569' },
-  { id: 'ocr', path: '/ocr', name: 'OCR (Img → Text)', icon: Type, description: 'Extract text from scanned images/PDFs', color: '#1e293b' },
-  { id: 'word-pdf', path: '/word-pdf', name: 'Word to PDF', icon: FileText, description: 'Convert .docx and .doc to PDF', color: '#2563eb' },
-  { id: 'excel-pdf', path: '/excel-pdf', name: 'Excel to PDF', icon: FileSpreadsheet, description: 'Convert .xlsx and .xls to PDF', color: '#059669' },
-  { id: 'ppt-pdf', path: '/ppt-pdf', name: 'PPT to PDF', icon: Presentation, description: 'Convert .pptx and .ppt to PDF', color: '#d97706' },
-  { id: 'pdf-word', path: '/pdf-word', name: 'PDF to Word', icon: FileText, description: 'Convert PDF to editable Word', color: '#2563eb' },
-  { id: 'pdf-excel', path: '/pdf-excel', name: 'PDF to Excel', icon: FileSpreadsheet, description: 'Convert PDF to Excel spreadsheets', color: '#059669' },
-  { id: 'pdf-ppt', path: '/pdf-ppt', name: 'PDF to PPT', icon: Presentation, description: 'Convert PDF to PPT presentations', color: '#d97706' },
-  { id: 'organizer', path: '/organizer', name: 'PDF Organizer', icon: LayoutDashboard, description: 'Reorder, rotate, and delete pages visually', color: '#6366f1' },
-  { id: 'password', path: '/password', name: 'Protect/Remove', icon: Lock, description: 'Add or remove password protection', color: '#475569' },
+  { id: 'merge', path: '/merge', name: 'Merge PDF Online', icon: Combine, description: 'Merge multiple PDF files into one professional document instantly. 100% private, browser-side processing with no file uploads.', color: '#1e293b' },
+  { id: 'split', path: '/split', name: 'Split PDF Pages', icon: Scissors, description: 'Extract pages or split your PDF into separate files. Fast, secure, and entirely handled in your local browser.', color: '#334155' },
+  { id: 'compress', path: '/compress', name: 'Compress PDF Size', icon: Zap, description: 'Reduce PDF file size without losing quality. Optimize your documents for email and web sharing locally.', color: '#2563eb' },
+  { id: 'jpg-pdf', path: '/jpg-pdf', name: 'JPG to PDF Converter', icon: ImageIcon, description: 'Convert images (JPG, PNG) to PDF or extract images from your PDF documents securely.', color: '#0f172a' },
+  { id: 'rotate', path: '/rotate', name: 'Rotate PDF Pages', icon: RotateCw, description: 'Rotate PDF pages to the correct orientation. Permanently fix upside-down or sideways pages in your browser.', color: '#64748b' },
+  { id: 'delete', path: '/delete', name: 'Delete PDF Pages', icon: Trash2, description: 'Remove unwanted pages from your PDF documents. Clean up your files without uploading them to any server.', color: '#ef4444' },
+  { id: 'edit', path: '/edit', name: 'PDF Editor & Annotator', icon: Edit3, description: 'Annotate, sign, and add text to your PDF. A complete, private PDF editor that runs entirely on your device.', color: '#2563eb' },
+  { id: 'watermark', path: '/watermark', name: 'Watermark PDF', icon: Stamp, description: 'Add text or image watermarks to your PDF files. Protect your intellectual property with custom stamps.', color: '#475569' },
+  { id: 'ocr', path: '/ocr', name: 'OCR Image to Text', icon: Type, description: 'Extract editable text from scanned images and PDFs using advanced browser-side OCR technology.', color: '#1e293b' },
+  { id: 'word-pdf', path: '/word-pdf', name: 'Word to PDF Converter', icon: FileText, description: 'Convert Word documents (.docx, .doc) to professional PDF files with perfect formatting.', color: '#2563eb' },
+  { id: 'excel-pdf', path: '/excel-pdf', name: 'Excel to PDF Converter', icon: FileSpreadsheet, description: 'Convert Excel spreadsheets (.xlsx, .xls) to PDF while preserving table layouts and data integrity.', color: '#059669' },
+  { id: 'ppt-pdf', path: '/ppt-pdf', name: 'PowerPoint to PDF', icon: Presentation, description: 'Convert PPT and PPTX presentations to PDF. Ideal for sharing slides with guaranteed layout consistency.', color: '#d97706' },
+  { id: 'pdf-word', path: '/pdf-word', name: 'PDF to Word (Editable)', icon: FileText, description: 'Convert PDF files back to editable Word documents using our high-fidelity reconstruction engine.', color: '#2563eb' },
+  { id: 'pdf-excel', path: '/pdf-excel', name: 'PDF to Excel Converter', icon: FileSpreadsheet, description: 'Extract tables from PDF into editable Excel spreadsheets for data analysis and reporting.', color: '#059669' },
+  { id: 'pdf-ppt', path: '/pdf-ppt', name: 'PDF to PowerPoint', icon: Presentation, description: 'Transform PDF pages back into editable PowerPoint slides for your next presentation.', color: '#d97706' },
+  { id: 'organizer', path: '/organizer', name: 'Organize PDF Pages', icon: LayoutDashboard, description: 'Visual PDF organizer. Reorder, rotate, and delete pages with an intuitive drag-and-drop interface.', color: '#6366f1' },
+  { id: 'password', path: '/password', name: 'Protect & Unlock PDF', icon: Lock, description: 'Add strong password protection to your PDF or remove existing restrictions securely.', color: '#475569' },
+  { id: 'pdf-dwg', path: '/pdf-dwg', name: 'PDF to DWG Converter', icon: Box, description: 'Convert PDF drawings to editable DWG or DXF CAD files for engineering and architecture.', color: '#0f172a' },
+  { id: 'repair', path: '/repair', name: 'Repair PDF Document', icon: LifeBuoy, description: 'Fix corrupted or broken PDF files. Recover content and rebuild document structures instantly.', color: '#10b981' },
+  { id: 'redact', path: '/redact', name: 'Redact PDF Info', icon: ShieldAlert, description: 'Permanently blackout sensitive information from your PDF. Securely remove private data.', color: '#ef4444' },
+  { id: 'page-numbers', path: '/page-numbers', name: 'Add Page Numbers', icon: Hash, description: 'Number your PDF pages automatically. Customize position, font, and style in your browser.', color: '#6366f1' },
+  { id: 'header-footer', path: '/header-footer', name: 'Header and Footer', icon: Layout, description: 'Add custom headers and footers to your PDF documents. Perfect for branding and citations.', color: '#475569' },
+  { id: 'esign', path: '/esign', name: 'Esign PDF Online', icon: PenTool, description: 'Electronically sign your PDF documents with ease. Safe, legal, and private browser-side signing.', color: '#2563eb' },
+  { id: 'annotate', path: '/annotate', name: 'Annotate PDF', icon: MessageSquare, description: 'Add comments, shapes, and notes to your PDF files. Collaborate and review documents privately.', color: '#1e293b' },
+  { id: 'crop', path: '/crop', name: 'Crop PDF Pages', icon: Crop, description: 'Trim PDF margins and crop pages to specific areas. Perfect for removing white space or focusing on content.', color: '#6366f1' },
+  { id: 'ai-summarize', path: '/ai-summarize', name: 'AI PDF Summarizer', icon: Sparkles, description: 'Extract key insights and summaries from long PDF documents using advanced AI analysis.', color: '#6366f1' },
+  { id: 'translate', path: '/translate', name: 'Translate PDF', icon: Languages, description: 'Translate your PDF documents into over 100 languages while preserving the original layout.', color: '#2563eb' },
 ];
 
 function AppContent() {
@@ -276,6 +306,16 @@ function AppContent() {
             <Route path="/pdf-ppt" element={renderToolWrapper('pdf-ppt', PdfToOffice, { type: "ppt" })} />
             <Route path="/organizer" element={renderToolWrapper('organizer', PdfOrganizer)} />
             <Route path="/password" element={renderToolWrapper('password', PasswordTool)} />
+            <Route path="/pdf-dwg" element={renderToolWrapper('pdf-dwg', PdfToDwg)} />
+            <Route path="/repair" element={renderToolWrapper('repair', RepairPdf)} />
+            <Route path="/redact" element={renderToolWrapper('redact', RedactPdf)} />
+            <Route path="/page-numbers" element={renderToolWrapper('page-numbers', PageNumbers)} />
+            <Route path="/header-footer" element={renderToolWrapper('header-footer', HeaderFooter)} />
+            <Route path="/esign" element={renderToolWrapper('esign', EsignPdf)} />
+            <Route path="/annotate" element={renderToolWrapper('annotate', AnnotatePdf)} />
+            <Route path="/crop" element={renderToolWrapper('crop', CropPdf)} />
+            <Route path="/ai-summarize" element={renderToolWrapper('ai-summarize', AiSummarize)} />
+            <Route path="/translate" element={renderToolWrapper('translate', TranslatePdf)} />
 
             {/* Page Routes */}
             <Route path="/privacy" element={renderPageWrapper('privacy', PrivacyPolicy, 'Privacy Policy')} />

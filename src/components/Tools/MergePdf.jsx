@@ -189,6 +189,49 @@ const MergePdf = () => {
           </motion.div>
         </div>
       )}
+
+      {/* SEO Content Section */}
+      <div style={{ marginTop: '6rem', borderTop: '1px solid var(--border)', paddingTop: '4rem' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <h2 style={{ fontSize: '2.5rem', marginBottom: '1.5rem', textAlign: 'center' }}>How to Merge PDF Files Online for Free</h2>
+          <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: 'var(--text-muted)', textAlign: 'center', marginBottom: '4rem' }}>
+            Combine multiple PDF documents into a single, professional file in seconds. PDFMasterstool offers a 100% private, browser-side solution—your files never leave your computer.
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '3rem', marginBottom: '5rem' }}>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>1. Upload Your Files</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Drag and drop your PDF files into the box above. You can add as many files as you need, and they will be loaded instantly from your local storage.</p>
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>2. Reorder & Organize</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Drag the files to change their order in the final document. Use the preview thumbnails to ensure everything is in the right place before merging.</p>
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>3. Merge & Download</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Click 'Merge Documents' and our browser-side engine will combine them into one file. Download your result immediately without waiting for server uploads.</p>
+            </div>
+          </div>
+
+          <div className="glass-card" style={{ padding: '3rem', borderRadius: '32px' }}>
+            <h2 style={{ fontSize: '2rem', marginBottom: '2rem' }}>Frequently Asked Questions</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Is it safe to merge my PDFs here?</h4>
+                <p style={{ opacity: 0.7 }}>Yes, absolutely. Unlike traditional online PDF tools, PDFMasterstool processes everything locally in your web browser. Your sensitive documents are never uploaded to any server, making it the most private way to merge PDFs.</p>
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Is there a limit on the number of files I can merge?</h4>
+                <p style={{ opacity: 0.7 }}>There is no hard limit on the number of files, though very large documents (hundreds of MBs) may depend on your device's memory since all processing happens locally.</p>
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Do I need to install any software?</h4>
+                <p style={{ opacity: 0.7 }}>No installation is required. Our tool works directly in any modern web browser like Chrome, Firefox, or Safari, leveraging the latest web technologies to provide professional-grade PDF processing.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

@@ -164,6 +164,49 @@ const CompressPdf = () => {
           </div>
         </motion.div>
       )}
+
+      {/* SEO Content Section */}
+      <div style={{ marginTop: '6rem', borderTop: '1px solid var(--border)', paddingTop: '4rem' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <h2 style={{ fontSize: '2.5rem', marginBottom: '1.5rem', textAlign: 'center' }}>How to Compress PDF Without Losing Quality</h2>
+          <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: 'var(--text-muted)', textAlign: 'center', marginBottom: '4rem' }}>
+            Reduce your PDF file size instantly for easier email sharing and faster web loading. Our browser-side compression engine optimizes your document structure while maintaining high visual quality.
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '3rem', marginBottom: '5rem' }}>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Smart Optimization</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>We use advanced algorithms to remove redundant data, metadata, and optimize internal PDF structures. This leads to significant size reduction without visibly affecting your document's text and graphics.</p>
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Three Compression Levels</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Choose from Basic, Recommended, or Extreme compression depending on your needs. Whether you need a tiny file for a web form or a high-quality document for a client, we've got you covered.</p>
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>100% Private</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Compression happens entirely on your device. Your sensitive PDFs are never uploaded to any cloud server, ensuring your data remains completely secure and confidential.</p>
+            </div>
+          </div>
+
+          <div className="glass-card" style={{ padding: '3rem', borderRadius: '32px' }}>
+            <h2 style={{ fontSize: '2rem', marginBottom: '2rem' }}>Frequently Asked Questions</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Will my PDF look blurry after compression?</h4>
+                <p style={{ opacity: 0.7 }}>Our 'Recommended' and 'Basic' levels are designed to preserve high visual quality. 'Extreme' compression may slightly reduce image clarity to achieve the smallest possible file size for restricted uploads.</p>
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Is there a limit on file size?</h4>
+                <p style={{ opacity: 0.7 }}>Since processing happens in your browser, the limit depends on your computer's memory (RAM). Most users can easily compress files up to 100MB without any issues.</p>
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Is this tool free?</h4>
+                <p style={{ opacity: 0.7 }}>Yes, PDFMasterstool provides professional PDF compression for free. We believe in providing essential document tools without any hidden costs or privacy risks.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

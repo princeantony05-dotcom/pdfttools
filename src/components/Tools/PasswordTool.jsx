@@ -176,6 +176,49 @@ const PasswordTool = () => {
           </div>
         </motion.div>
       )}
+
+      {/* SEO Content Section */}
+      <div style={{ marginTop: '6rem', borderTop: '1px solid var(--border)', paddingTop: '4rem' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <h2 style={{ fontSize: '2.5rem', marginBottom: '1.5rem', textAlign: 'center' }}>Secure Your PDF Documents Online</h2>
+          <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: 'var(--text-muted)', textAlign: 'center', marginBottom: '4rem' }}>
+            Take full control of your document security. Whether you need to encrypt a sensitive file with a strong password or remove existing restrictions from a known PDF, our toolkit provides a professional and private solution.
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '3rem', marginBottom: '5rem' }}>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Strong Encryption</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Add a password to your PDF to prevent unauthorized viewing, printing, or copying. Our tool uses standard PDF encryption methods to ensure your documents remain accessible only to those with the correct credentials.</p>
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Remove Password Restrictions</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>If you have the password but want to remove it for easier access, our 'Unlock' feature strips away the protection and allows you to save a completely open version of your PDF.</p>
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>100% Private & Browser-Based</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Security is our priority. All encryption and decryption happen locally in your web browser. Your passwords and sensitive documents are never sent to our servers, keeping your data entirely in your hands.</p>
+            </div>
+          </div>
+
+          <div className="glass-card" style={{ padding: '3rem', borderRadius: '32px' }}>
+            <h2 style={{ fontSize: '2rem', marginBottom: '2rem' }}>Frequently Asked Questions</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Can you recover a lost PDF password?</h4>
+                <p style={{ opacity: 0.7 }}>No. Because we value privacy and use local browser processing, we do not have access to your passwords or files. If you forget a password you set, we cannot recover it for you.</p>
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>What is the difference between an owner and a user password?</h4>
+                <p style={{ opacity: 0.7 }}>A user password is required to open the document, while an owner password restricts specific actions like printing or editing. Our tool helps you manage both levels of protection.</p>
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Is there a limit on password length?</h4>
+                <p style={{ opacity: 0.7 }}>There is no specific limit on length, but we recommend using a strong combination of letters, numbers, and symbols to ensure maximum security for your documents.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

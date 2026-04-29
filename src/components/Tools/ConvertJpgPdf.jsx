@@ -106,6 +106,49 @@ const ConvertJpgPdf = () => {
           </button>
         </div>
       )}
+
+      {/* SEO Content Section */}
+      <div style={{ marginTop: '6rem', borderTop: '1px solid var(--border)', paddingTop: '4rem' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <h2 style={{ fontSize: '2.5rem', marginBottom: '1.5rem', textAlign: 'center' }}>How to Convert JPG to PDF Online</h2>
+          <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: 'var(--text-muted)', textAlign: 'center', marginBottom: '4rem' }}>
+            Turn your images into professional PDF documents in seconds. Whether it's a single photo or a batch of scans, our tool merges them into one high-quality PDF file.
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '3rem', marginBottom: '5rem' }}>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Support for Multiple Formats</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Easily convert JPG, JPEG, and PNG images. Our tool automatically embeds your images into PDF pages, preserving their original resolution and color profile.</p>
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Batch Conversion</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Upload multiple images at once to create a single multi-page PDF. This is perfect for digitizing physical documents, receipts, or creating a photo portfolio.</p>
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Secure Browser Processing</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Your images never leave your device. All conversion happens locally in your browser, providing a level of privacy that traditional online converters can't match.</p>
+            </div>
+          </div>
+
+          <div className="glass-card" style={{ padding: '3rem', borderRadius: '32px' }}>
+            <h2 style={{ fontSize: '2rem', marginBottom: '2rem' }}>Frequently Asked Questions</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Will my images lose quality?</h4>
+                <p style={{ opacity: 0.7 }}>No. We embed the original image bytes directly into the PDF structure, ensuring that the visual quality remains identical to your source files.</p>
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>What image formats are supported?</h4>
+                <p style={{ opacity: 0.7 }}>Currently, we support JPG (JPEG) and PNG files. These are the most common formats for photos and scanned documents.</p>
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Is there a limit on the number of images?</h4>
+                <p style={{ opacity: 0.7 }}>There is no hard limit, though your browser's performance may vary depending on your computer's RAM if you upload hundreds of high-resolution photos at once.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

@@ -263,6 +263,49 @@ const SplitPdf = () => {
         </div>
       )}
 
+      {/* SEO Content Section */}
+      <div style={{ marginTop: '6rem', borderTop: '1px solid var(--border)', paddingTop: '4rem' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <h2 style={{ fontSize: '2.5rem', marginBottom: '1.5rem', textAlign: 'center' }}>How to Split PDF Files Online</h2>
+          <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: 'var(--text-muted)', textAlign: 'center', marginBottom: '4rem' }}>
+            Extract specific pages or ranges from your PDF or split every page into a separate document. Safe, fast, and 100% private browser-side processing.
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '3rem', marginBottom: '5rem' }}>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Split by Range</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Enter specific page numbers or ranges (like 1-5, 10, 12-15) to create a new PDF containing only the pages you need. Perfect for extracting chapters or sections.</p>
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Extract All Pages</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Instantly split your entire document into individual one-page PDF files. We'll bundle them all into a convenient ZIP file for easy downloading.</p>
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>No Upload Required</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Your documents never leave your computer. Our advanced Split PDF tool runs entirely in your browser, ensuring maximum security for your sensitive data.</p>
+            </div>
+          </div>
+
+          <div className="glass-card" style={{ padding: '3rem', borderRadius: '32px' }}>
+            <h2 style={{ fontSize: '2rem', marginBottom: '2rem' }}>Frequently Asked Questions</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>How do I enter page ranges?</h4>
+                <p style={{ opacity: 0.7 }}>Use commas to separate individual pages or ranges. For example, '1-3, 5, 8' will extract pages 1, 2, 3, 5, and 8 into a single new PDF file.</p>
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Is it safe to split sensitive documents?</h4>
+                <p style={{ opacity: 0.7 }}>Yes. Since PDFMasterstool processes your files locally on your machine, your data is never transmitted to any server. It's the most secure way to handle confidential PDFs.</p>
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Can I split password-protected PDFs?</h4>
+                <p style={{ opacity: 0.7 }}>You first need to remove the password using our 'Unlock PDF' tool. Once the file is unlocked, you can split it as needed.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <style>{`
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }

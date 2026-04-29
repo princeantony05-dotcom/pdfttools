@@ -96,12 +96,17 @@ app.post('/api/convert', upload.single('file'), async (req, res) => {
 
     // Determine if we should use the specialized pdf2docx engine (only for PDF to Word)
     const isPdfToWord = inputExt.toLowerCase() === '.pdf' && cleanFormat === 'docx';
+    const isRepair = cleanFormat === 'repair';
     
     let cmd;
     if (isPdfToWord) {
       console.log(`>>> [API] Using high-end pdf2docx engine for reconstruction...`);
       // Use python3 -c to run pdf2docx directly
       cmd = `python3 -c "from pdf2docx import Converter; cv = Converter('${tempInputPath}'); cv.convert('${tempOutputPath}'); cv.close()"`;
+    } else if (isRepair) {
+      console.log(`>>> [API] Using Ghostscript for structural repair...`);
+      // Rebuild PDF structure using Ghostscript
+      cmd = `gs -o ${tempOutputPath} -sDEVICE=pdfwrite -dPDFSETTINGS=/prepress ${tempInputPath}`;
     } else {
       // Select the best filter for the output format
       let filter = cleanFormat;
@@ -143,10 +148,11 @@ app.post('/api/convert', upload.single('file'), async (req, res) => {
 
     // Determine Content-Type
     let contentType = 'application/octet-stream';
-    if (cleanFormat === 'pdf') contentType = 'application/pdf';
+    if (cleanFormat === 'pdf' || cleanFormat === 'repair') contentType = 'application/pdf';
     else if (cleanFormat === 'docx') contentType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
     else if (cleanFormat === 'xlsx') contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
     else if (cleanFormat === 'pptx') contentType = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
+    else if (cleanFormat === 'dwg' || cleanFormat === 'dxf') contentType = 'application/x-dwg';
 
     res.set({
       'Content-Type': contentType,

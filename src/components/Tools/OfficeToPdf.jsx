@@ -130,6 +130,49 @@ const OfficeToPdf = ({ type = 'word' }) => {
           </motion.div>
         </div>
       )}
+
+      {/* SEO Content Section */}
+      <div style={{ marginTop: '6rem', borderTop: '1px solid var(--border)', paddingTop: '4rem' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <h2 style={{ fontSize: '2.5rem', marginBottom: '1.5rem', textAlign: 'center' }}>Professional Office to PDF Conversion</h2>
+          <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: 'var(--text-muted)', textAlign: 'center', marginBottom: '4rem' }}>
+            Convert Word, Excel, and PowerPoint documents to professional-grade PDF files. We ensure perfect layout retention and high-fidelity reconstruction for all your business documents.
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '3rem', marginBottom: '5rem' }}>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Perfect Layouts</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Our conversion engine uses industry-standard LibreOffice technology to ensure your fonts, tables, and images remain exactly where you put them. No more broken layouts or shifted text.</p>
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Multi-Format Support</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>Whether you have a .docx Word file, a complex .xlsx spreadsheet, or a .pptx presentation, our tools handle them with ease, producing high-quality PDFs ready for sharing.</p>
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Privacy First</h3>
+              <p style={{ fontSize: '0.95rem', opacity: 0.8 }}>We understand the sensitivity of business documents. While conversion happens through our secure isolated engine, files are processed in-memory and never stored permanently on our servers.</p>
+            </div>
+          </div>
+
+          <div className="glass-card" style={{ padding: '3rem', borderRadius: '32px' }}>
+            <h2 style={{ fontSize: '2rem', marginBottom: '2rem' }}>Frequently Asked Questions</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Are my documents secure during conversion?</h4>
+                <p style={{ opacity: 0.7 }}>Absolutely. We use a strictly isolated environment for every conversion. Your files are automatically deleted the moment the conversion is finished and the file is returned to you. We do not store, view, or share your data.</p>
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Will the PDF look the same as my Word file?</h4>
+                <p style={{ opacity: 0.7 }}>Yes. We use the most accurate reconstruction engines available to ensure that what you see in your Office application is exactly what you get in the final PDF document.</p>
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Is there a file size limit?</h4>
+                <p style={{ opacity: 0.7 }}>We support files up to 20MB for conversion. For larger files, we recommend compressing the images within your Office document before converting to PDF.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
