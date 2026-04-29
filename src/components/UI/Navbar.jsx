@@ -19,39 +19,41 @@ import {
   ChevronRight,
   Globe
 } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 
 const Navbar = ({ onSelectTool, isLoggedIn, userRole, onLogout }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { lang, changeLanguage, t, languages } = useLanguage();
+  const navigate = useNavigate();
 
   const categories = [
     {
       name: 'Convert to PDF',
       tools: [
-        { id: 'word-pdf', name: 'Word to PDF', icon: FileText, color: '#2563eb' },
-        { id: 'excel-pdf', name: 'Excel to PDF', icon: FileSpreadsheet, color: '#059669' },
-        { id: 'ppt-pdf', name: 'PPT to PDF', icon: Presentation, color: '#d97706' },
-        { id: 'jpg-pdf', name: 'JPG to PDF', icon: ImageIcon, color: '#0f172a' },
+        { id: 'word-pdf', path: '/word-pdf', name: 'Word to PDF', icon: FileText, color: '#2563eb' },
+        { id: 'excel-pdf', path: '/excel-pdf', name: 'Excel to PDF', icon: FileSpreadsheet, color: '#059669' },
+        { id: 'ppt-pdf', path: '/ppt-pdf', name: 'PPT to PDF', icon: Presentation, color: '#d97706' },
+        { id: 'jpg-pdf', path: '/jpg-pdf', name: 'JPG to PDF', icon: ImageIcon, color: '#0f172a' },
       ]
     },
     {
       name: 'Convert from PDF',
       tools: [
-        { id: 'pdf-word', name: 'PDF to Word', icon: FileText, color: '#2563eb' },
-        { id: 'pdf-excel', name: 'PDF to Excel', icon: FileSpreadsheet, color: '#059669' },
-        { id: 'pdf-ppt', name: 'PDF to PPT', icon: Presentation, color: '#d97706' },
+        { id: 'pdf-word', path: '/pdf-word', name: 'PDF to Word', icon: FileText, color: '#2563eb' },
+        { id: 'pdf-excel', path: '/pdf-excel', name: 'PDF to Excel', icon: FileSpreadsheet, color: '#059669' },
+        { id: 'pdf-ppt', path: '/pdf-ppt', name: 'PDF to PPT', icon: Presentation, color: '#d97706' },
       ]
     },
     {
       name: 'Edit & Organize',
       tools: [
-        { id: 'merge', name: t('tools.merge'), icon: Combine, color: '#1e293b' },
-        { id: 'split', name: t('tools.split'), icon: Scissors, color: '#334155' },
-        { id: 'rotate', name: 'Rotate PDF', icon: RotateCw, color: '#64748b' },
-        { id: 'delete', name: 'Delete Pages', icon: Trash2, color: '#ef4444' },
-        { id: 'edit', name: t('tools.edit'), icon: Edit3, color: '#2563eb' },
-        { id: 'watermark', name: 'Watermark', icon: Stamp, color: '#475569' },
+        { id: 'merge', path: '/merge', name: t('tools.merge'), icon: Combine, color: '#1e293b' },
+        { id: 'split', path: '/split', name: t('tools.split'), icon: Scissors, color: '#334155' },
+        { id: 'rotate', path: '/rotate', name: 'Rotate PDF', icon: RotateCw, color: '#64748b' },
+        { id: 'delete', path: '/delete', name: 'Delete Pages', icon: Trash2, color: '#ef4444' },
+        { id: 'edit', path: '/edit', name: t('tools.edit'), icon: Edit3, color: '#2563eb' },
+        { id: 'watermark', path: '/watermark', name: 'Watermark', icon: Stamp, color: '#475569' },
       ]
     }
   ];
@@ -72,12 +74,12 @@ const Navbar = ({ onSelectTool, isLoggedIn, userRole, onLogout }) => {
           {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer' }} onClick={() => handleToolSelect(null)}>
+        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '1rem', textDecoration: 'none' }} onClick={() => setMobileMenuOpen(false)}>
           <div style={{ background: 'linear-gradient(135deg, #6366f1, #ec4899)', width: '36px', height: '36px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <FileText size={20} color="white" />
           </div>
           <h2 className="logo-text">PDF<span style={{ color: 'var(--primary)' }}>Masterstool</span></h2>
-        </div>
+        </Link>
       </div>
       
       {/* Desktop Navigation */}
@@ -87,16 +89,17 @@ const Navbar = ({ onSelectTool, isLoggedIn, userRole, onLogout }) => {
             {cat.name} <ChevronDown size={14} />
             <div className="dropdown-menu">
               {cat.tools.map((tool) => (
-                <div 
-                   key={tool.id} 
+                <Link 
+                  to={tool.path}
+                  key={tool.id} 
                   className="dropdown-item" 
-                  onClick={() => handleToolSelect(tool.id)}
+                  style={{ textDecoration: 'none' }}
                 >
                   <div className="dropdown-item-icon" style={{ backgroundColor: `${tool.color}15`, color: tool.color }}>
                     <tool.icon size={18} />
                   </div>
                   {tool.name}
-                </div>
+                </Link>
               ))}
             </div>
           </div>
@@ -127,23 +130,23 @@ const Navbar = ({ onSelectTool, isLoggedIn, userRole, onLogout }) => {
         {isLoggedIn ? (
           <>
             {userRole === 'admin' && (
-              <button 
+              <Link 
+                to="/admin"
                 className="btn-secondary desktop-only" 
-                style={{ padding: '8px 16px', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-                onClick={() => handleToolSelect('admin')}
+                style={{ padding: '8px 16px', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}
               >
                 <Settings size={16} /> Admin
-              </button>
+              </Link>
             )}
-            <div 
-              onClick={() => handleToolSelect('user-dashboard')}
-              style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '4px 12px', background: 'rgba(0,0,0,0.03)', borderRadius: '12px', cursor: 'pointer' }}
+            <Link 
+              to="/user-dashboard"
+              style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '4px 12px', background: 'rgba(0,0,0,0.03)', borderRadius: '12px', textDecoration: 'none' }}
             >
               <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <User size={18} />
               </div>
               <span className="desktop-only" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)' }}>{userRole === 'admin' ? 'Administrator' : t('nav.dashboard')}</span>
-            </div>
+            </Link>
             <button 
               className="btn-secondary" 
               style={{ padding: '8px 12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
@@ -155,9 +158,9 @@ const Navbar = ({ onSelectTool, isLoggedIn, userRole, onLogout }) => {
           </>
         ) : (
           <div className="desktop-only" style={{ display: 'flex', gap: '0.75rem' }}>
-            <button className="btn-secondary" style={{ padding: '8px 16px', fontSize: '0.9rem' }} onClick={() => handleToolSelect('blog')}>{t('nav.blog')}</button>
-            <button className="btn-secondary" style={{ padding: '8px 16px', fontSize: '0.9rem' }} onClick={() => handleToolSelect('pricing')}>{t('nav.pricing')}</button>
-            <button className="btn-primary" style={{ padding: '8px 20px', fontSize: '0.9rem' }} onClick={() => handleToolSelect('login')}>{t('nav.login')}</button>
+            <Link to="/blog" className="btn-secondary" style={{ padding: '8px 16px', fontSize: '0.9rem', textDecoration: 'none' }}>{t('nav.blog')}</Link>
+            <Link to="/pricing" className="btn-secondary" style={{ padding: '8px 16px', fontSize: '0.9rem', textDecoration: 'none' }}>{t('nav.pricing')}</Link>
+            <Link to="/login" className="btn-primary" style={{ padding: '8px 20px', fontSize: '0.9rem', textDecoration: 'none' }}>{t('nav.login')}</Link>
           </div>
         )}
       </div>
@@ -191,17 +194,19 @@ const Navbar = ({ onSelectTool, isLoggedIn, userRole, onLogout }) => {
                 <div className="mobile-category-title">{cat.name}</div>
                 <div className="mobile-tool-list">
                   {cat.tools.map((tool) => (
-                    <div 
+                    <Link 
+                      to={tool.path}
                       key={tool.id} 
                       className="mobile-tool-item"
-                      onClick={() => handleToolSelect(tool.id)}
+                      style={{ textDecoration: 'none' }}
+                      onClick={() => setMobileMenuOpen(false)}
                     >
                       <div className="mobile-tool-icon" style={{ backgroundColor: `${tool.color}15`, color: tool.color }}>
                         <tool.icon size={18} />
                       </div>
                       <span>{tool.name}</span>
                       <ChevronRight size={14} style={{ marginLeft: 'auto', opacity: 0.5 }} />
-                    </div>
+                    </Link>
                   ))}
                 </div>
               </div>
@@ -210,9 +215,9 @@ const Navbar = ({ onSelectTool, isLoggedIn, userRole, onLogout }) => {
             <div style={{ padding: '1rem', borderTop: '1px solid var(--border)', marginTop: '0.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               {!isLoggedIn && (
                 <>
-                  <button className="btn-secondary" style={{ width: '100%' }} onClick={() => handleToolSelect('blog')}>{t('nav.blog')}</button>
-                  <button className="btn-secondary" style={{ width: '100%' }} onClick={() => handleToolSelect('pricing')}>{t('nav.pricing')}</button>
-                  <button className="btn-primary" style={{ width: '100%' }} onClick={() => handleToolSelect('login')}>{t('nav.login')}</button>
+                  <Link to="/blog" className="btn-secondary" style={{ width: '100%', textAlign: 'center', textDecoration: 'none' }} onClick={() => setMobileMenuOpen(false)}>{t('nav.blog')}</Link>
+                  <Link to="/pricing" className="btn-secondary" style={{ width: '100%', textAlign: 'center', textDecoration: 'none' }} onClick={() => setMobileMenuOpen(false)}>{t('nav.pricing')}</Link>
+                  <Link to="/login" className="btn-primary" style={{ width: '100%', textAlign: 'center', textDecoration: 'none' }} onClick={() => setMobileMenuOpen(false)}>{t('nav.login')}</Link>
                 </>
               )}
             </div>
