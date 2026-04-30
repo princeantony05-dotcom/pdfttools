@@ -91,7 +91,7 @@ const TOOLS = [
   { id: 'pdf-ppt', path: '/pdf-ppt', name: 'PDF to PowerPoint', icon: Presentation, description: 'Transform PDF pages back into editable PowerPoint slides for your next presentation.', color: '#d97706' },
   { id: 'organizer', path: '/organizer', name: 'Organize PDF Pages', icon: LayoutDashboard, description: 'Visual PDF organizer. Reorder, rotate, and delete pages with an intuitive drag-and-drop interface.', color: '#6366f1' },
   { id: 'password', path: '/password', name: 'Protect & Unlock PDF', icon: Lock, description: 'Add strong password protection to your PDF or remove existing restrictions securely.', color: '#475569' },
-  { id: 'pdf-dwg', path: '/pdf-dwg', name: 'PDF to DWG Converter', icon: Box, description: 'Convert PDF drawings to editable DWG or DXF CAD files for engineering and architecture.', color: '#0f172a' },
+  { id: 'pdf-dwg', path: '/pdf-dwg', name: 'PDF to CAD (DWG/DXF)', icon: Box, description: 'Convert PDF drawings to editable DWG or DXF CAD files for engineering and architecture.', color: '#0f172a' },
   { id: 'repair', path: '/repair', name: 'Repair PDF Document', icon: LifeBuoy, description: 'Fix corrupted or broken PDF files. Recover content and rebuild document structures instantly.', color: '#10b981' },
   { id: 'redact', path: '/redact', name: 'Redact PDF Info', icon: ShieldAlert, description: 'Permanently blackout sensitive information from your PDF. Securely remove private data.', color: '#ef4444' },
   { id: 'page-numbers', path: '/page-numbers', name: 'Add Page Numbers', icon: Hash, description: 'Number your PDF pages automatically. Customize position, font, and style in your browser.', color: '#6366f1' },

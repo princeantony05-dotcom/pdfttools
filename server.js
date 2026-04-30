@@ -94,19 +94,24 @@ app.post('/api/convert', upload.single('file'), async (req, res) => {
     await fs.writeFile(tempInputPath, inputBuffer);
     console.log(`>>> [API] Workspace created: ${workDir}`);
 
-    // Determine if we should use the specialized pdf2docx engine (only for PDF to Word)
     const isPdfToWord = inputExt.toLowerCase() === '.pdf' && cleanFormat === 'docx';
     const isRepair = cleanFormat === 'repair';
+    const isCad = cleanFormat === 'dwg' || cleanFormat === 'dxf';
     
     let cmd;
     if (isPdfToWord) {
       console.log(`>>> [API] Using high-end pdf2docx engine for reconstruction...`);
-      // Use python3 -c to run pdf2docx directly
       cmd = `python3 -c "from pdf2docx import Converter; cv = Converter('${tempInputPath}'); cv.convert('${tempOutputPath}'); cv.close()"`;
     } else if (isRepair) {
       console.log(`>>> [API] Using Ghostscript for structural repair...`);
-      // Rebuild PDF structure using Ghostscript
       cmd = `gs -o ${tempOutputPath} -sDEVICE=pdfwrite -dPDFSETTINGS=/prepress ${tempInputPath}`;
+    } else if (isCad) {
+      console.log(`>>> [API] Using pstoedit for high-fidelity CAD vectorization...`);
+      // Convert PDF to DXF using pstoedit (most compatible with CAD software)
+      // We use the 'dxf' backend with polygons as lines and metric units
+      const cadFormat = 'dxf'; // Always use dxf as the high-quality backend
+      tempOutputPath = path.join(workDir, `output.${cadFormat}`);
+      cmd = `pstoedit -f "dxf:-polyaslines -mm" ${tempInputPath} ${tempOutputPath}`;
     } else {
       // Select the best filter for the output format
       let filter = cleanFormat;
@@ -114,18 +119,34 @@ app.post('/api/convert', upload.single('file'), async (req, res) => {
       if (inputExt.toLowerCase() === '.pdf') {
         inFilter = '--infilter="writer_pdf_import"';
       }
-      cmd = `${sofficePath} --headless --nologo --nofirststartwizard "-env:UserInstallation=file://${userProfilePath}" ${inFilter} --convert-to ${filter} --outdir ${workDir} ${tempInputPath}`;
+      // Added Java suppression and isolated user installation
+      cmd = `${sofficePath} --headless --nologo --nofirststartwizard "-env:UserInstallation=file://${userProfilePath}" --nodefault --norestore ${inFilter} --convert-to ${filter} --outdir ${workDir} ${tempInputPath}`;
     }
     
     console.log(`>>> [Exec] ${cmd}`);
 
     await new Promise((resolve, reject) => {
-      exec(cmd, { timeout: 120000 }, (error, stdout, stderr) => {
+      exec(cmd, { 
+        timeout: 120000,
+        env: { ...process.env, JAVA_HOME: '', SAL_USE_VCLPLUGIN: 'gen' } // Suppress Java and UI warnings
+      }, (error, stdout, stderr) => {
         if (stdout) console.log(`>>> [Stdout] ${stdout}`);
-        if (stderr) console.warn(`>>> [Stderr] ${stderr}`);
+        
+        // Filter out common harmless warnings from stderr
+        if (stderr) {
+          const filteredStderr = stderr.split('\n')
+            .filter(line => !line.includes('javaldx') && !line.includes('java may not function') && line.trim())
+            .join('\n');
+          
+          if (filteredStderr) {
+            console.warn(`>>> [Stderr Filtered] ${filteredStderr}`);
+          }
+        }
         
         if (error) {
           console.error(`>>> [Engine Exec Error]:`, error);
+          // If it's just a Java warning but the exit code is 0, we shouldn't fail
+          // But exec error usually means non-zero exit code
           return reject(new Error(stderr || 'Conversion engine failed to respond'));
         }
         resolve();

@@ -22,6 +22,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     fonts-dejavu \
     fontconfig \
     ghostscript \
+    pstoedit \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Stage 3: Install Python Conversion AI in a Virtual Environment

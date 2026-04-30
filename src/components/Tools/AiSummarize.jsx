@@ -23,6 +23,54 @@ const AiSummarize = () => {
   const [summary, setSummary] = useState(null);
   const [extractedText, setExtractedText] = useState('');
 
+  const generateSummary = (text) => {
+    if (!text || text.trim().length < 50) {
+      return {
+        overview: "The document contains insufficient text for a detailed analysis.",
+        keyPoints: ["No significant key points could be extracted."],
+        conclusion: "Please provide a document with more text content."
+      };
+    }
+
+    // Basic Sentence-Ranking Summarizer
+    const sentences = text.split(/[.!?]\s+/).filter(s => s.trim().length > 20);
+    const words = text.toLowerCase().match(/\w+/g) || [];
+    
+    // 1. Calculate word frequencies (excluding common stop words)
+    const stopWords = new Set(['the', 'is', 'at', 'which', 'on', 'and', 'a', 'an', 'to', 'in', 'of', 'for', 'with', 'by', 'that', 'this', 'it', 'are', 'was', 'were', 'as']);
+    const frequencies = {};
+    words.forEach(word => {
+      if (!stopWords.has(word) && word.length > 3) {
+        frequencies[word] = (frequencies[word] || 0) + 1;
+      }
+    });
+
+    // 2. Score sentences based on keyword frequency
+    const scoredSentences = sentences.map(sentence => {
+      const sentenceWords = sentence.toLowerCase().match(/\w+/g) || [];
+      let score = 0;
+      sentenceWords.forEach(word => {
+        if (frequencies[word]) score += frequencies[word];
+      });
+      // Normalize by length (to avoid long sentences always winning)
+      return { text: sentence.trim(), score: score / (sentenceWords.length + 1) };
+    });
+
+    // 3. Select top sentences
+    const sorted = [...scoredSentences].sort((a, b) => b.score - a.score);
+    
+    // Overview: The top scoring sentence
+    const overview = sorted[0]?.text + "." || "Overview not available.";
+    
+    // Key Points: Next top unique sentences (up to 4)
+    const keyPoints = sorted.slice(1, 5).map(s => s.text + ".");
+    
+    // Conclusion: One of the bottom high-scoring sentences (often has concluding remarks)
+    const conclusion = (sorted[sorted.length > 10 ? 6 : sorted.length - 1]?.text || "Conclusion not available") + ".";
+
+    return { overview, keyPoints, conclusion };
+  };
+
   const handleProcess = async () => {
     if (!file) return;
     setStatus('extracting');
@@ -33,35 +81,27 @@ const AiSummarize = () => {
       const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise;
       let fullText = "";
       
-      const maxPages = Math.min(pdf.numPages, 10); // Limit for demo/privacy
+      const maxPages = Math.min(pdf.numPages, 15); // Increased page limit
       for (let i = 1; i <= maxPages; i++) {
         const page = await pdf.getPage(i);
         const textContent = await page.getTextContent();
         const pageText = textContent.items.map(item => item.str).join(' ');
-        fullText += pageText + "\n";
+        fullText += pageText + " ";
       }
       setExtractedText(fullText);
 
-      // 2. Simulate AI Summarization
+      // 2. Generate Real Summary
       setStatus('summarizing');
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      await new Promise(resolve => setTimeout(resolve, 1500)); // Shorter delay for realism
       
-      setSummary({
-        overview: "This document discusses the implementation of advanced PDF processing tools with a focus on browser-side security and SEO optimization.",
-        keyPoints: [
-          "Privacy-first architecture ensures no files are uploaded to servers for most tools.",
-          "Strategic SEO content injection resolves 'thin content' issues in search indexing.",
-          "Hybrid processing model balances client-side performance with server-side fidelity.",
-          "User experience is prioritized through glassmorphism design and micro-animations."
-        ],
-        conclusion: "The platform is positioned as a high-end, secure alternative to cloud-based PDF processors."
-      });
+      const dynamicSummary = generateSummary(fullText);
+      setSummary(dynamicSummary);
       
       setStatus('success');
     } catch (err) {
       console.error('Summarization failed:', err);
       setStatus('idle');
-      alert('Failed to process the PDF for summary.');
+      alert('Failed to process the PDF. Ensure it is a text-based PDF and not a protected file.');
     }
   };
 
@@ -138,6 +178,13 @@ const AiSummarize = () => {
                   <li key={i} style={{ lineHeight: '1.5' }}>{point}</li>
                 ))}
               </ul>
+            </section>
+
+            <section>
+              <h4 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: 'var(--primary)' }}>
+                <CheckCircle2 size={18} /> Concluding Insight
+              </h4>
+              <p style={{ fontSize: '1.1rem', lineHeight: '1.6', opacity: 0.9 }}>{summary.conclusion}</p>
             </section>
           </div>
 

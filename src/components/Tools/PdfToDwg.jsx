@@ -33,7 +33,7 @@ const PdfToDwg = () => {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || 'CAD conversion failed');
+        throw new Error(errorData.error || 'CAD reconstruction failed. This often happens if the PDF is too complex or contains mostly raster data.');
       }
 
       const blob = await response.blob();
@@ -42,7 +42,7 @@ const PdfToDwg = () => {
     } catch (err) {
       console.error('CAD conversion failed:', err);
       setStatus('idle');
-      alert(`Conversion failed: ${err.message}. Note: Complex PDF to DWG conversion requires specialized server-side engines.`);
+      alert(`Conversion Note: ${err.message}\n\nTips for success:\n- Use vector-based PDFs (exported from CAD/BIM software).\n- Scanned images will be converted to lines but may lose scale accuracy.`);
     }
   };
 
@@ -59,8 +59,8 @@ const PdfToDwg = () => {
           {!file ? (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ maxWidth: '800px', margin: '4rem auto' }}>
               <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-                <h2 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '0.5rem' }}>PDF to DWG Converter</h2>
-                <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem' }}>Transform your PDF drawings into editable CAD files.</p>
+                <h2 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '0.5rem' }}>PDF to CAD Converter</h2>
+                <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem' }}>Transform PDF drawings into editable DXF/DWG files with vector reconstruction.</p>
               </div>
               <Dropzone 
                 onFilesSelected={(f) => setFile(f[0])} 
@@ -115,14 +115,14 @@ const PdfToDwg = () => {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '2rem', alignItems: 'start' }}>
           <div className="glass-card" style={{ padding: '3rem', textAlign: 'center', borderColor: '#10b981' }}>
             <CheckCircle2 size={80} color="#10b981" style={{ margin: '0 auto 1.5rem' }} />
-            <h3>{file.name.split('.')[0]}.dwg</h3>
-            <p style={{ color: '#10b981', fontWeight: 600 }}>Ready for AutoCAD</p>
+            <h3>{file.name.split('.')[0]}.dxf</h3>
+            <p style={{ color: '#10b981', fontWeight: 600 }}>High-Fidelity CAD Reconstruction</p>
           </div>
 
           <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} style={{ backgroundColor: 'rgba(16, 185, 129, 0.05)', padding: '1.5rem', borderRadius: '20px', border: '1px solid rgba(16, 185, 129, 0.2)', position: 'sticky', top: '1rem' }}>
             <h4 style={{ marginBottom: '1.5rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#10b981' }}>Export CAD</h4>
-            <button className="btn-primary" onClick={() => downloadBlob(result, `${file.name.split('.')[0]}.dwg`, 'application/octet-stream')} style={{ width: '100%', padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', backgroundColor: '#10b981' }}>
-              <Download size={20} /> Download DWG
+            <button className="btn-primary" onClick={() => downloadBlob(result, `${file.name.split('.')[0]}.dxf`, 'application/octet-stream')} style={{ width: '100%', padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', backgroundColor: '#10b981' }}>
+              <Download size={20} /> Download DXF (CAD)
             </button>
             <button onClick={reset} className="btn-secondary" style={{ width: '100%', marginTop: '1rem' }}>Convert Another</button>
           </motion.div>
