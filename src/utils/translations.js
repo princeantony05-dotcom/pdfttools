@@ -7,7 +7,18 @@ export const translations = {
       pricing: 'Pricing',
       blog: 'Blog',
       login: 'Sign In',
-      dashboard: 'Dashboard'
+      dashboard: 'Dashboard',
+      cat_convertToPdf: 'Convert to PDF',
+      cat_convertFromPdf: 'Convert from PDF',
+      cat_editOrganize: 'Edit & Organize'
+    },
+    footer: {
+      copyright: '© 2026 PDFMasterstool. All processing happens in your browser. Your files never leave your device.',
+      privacy: 'Privacy Policy',
+      about: 'About Us',
+      disclaimer: 'Disclaimer',
+      contact: 'Contact',
+      support: 'Support'
     },
     home: {
       heroTitle: 'Professional PDF Tools, Reimagined.',
@@ -15,12 +26,36 @@ export const translations = {
       getStarted: 'Get Started',
       popularTools: 'Popular Tools'
     },
+    toolList: {
+      'merge': { name: 'Merge PDF Online', desc: 'Merge multiple PDF files into one professional document instantly. 100% private, browser-side processing with no file uploads.' },
+      'split': { name: 'Split PDF Pages', desc: 'Extract pages or split your PDF into separate files. Fast, secure, and entirely handled in your local browser.' },
+      'compress': { name: 'Compress PDF Size', desc: 'Reduce PDF file size without losing quality. Optimize your documents for email and web sharing locally.' },
+      'jpg-pdf': { name: 'JPG to PDF Converter', desc: 'Convert images (JPG, PNG) to PDF or extract images from your PDF documents securely.' },
+      'rotate': { name: 'Rotate PDF Pages', desc: 'Rotate PDF pages to the correct orientation. Permanently fix upside-down or sideways pages in your browser.' },
+      'delete': { name: 'Delete PDF Pages', desc: 'Remove unwanted pages from your PDF documents. Clean up your files without uploading them to any server.' },
+      'edit': { name: 'PDF Editor & Annotator', desc: 'Annotate, sign, and add text to your PDF. A complete, private PDF editor that runs entirely on your device.' },
+      'watermark': { name: 'Watermark PDF', desc: 'Add text or image watermarks to your PDF files. Protect your intellectual property with custom stamps.' },
+      'ocr': { name: 'OCR Image to Text', desc: 'Extract editable text from scanned images and PDFs using advanced browser-side OCR technology.' },
+      'word-pdf': { name: 'Word to PDF Converter', desc: 'Convert Word documents (.docx, .doc) to professional PDF files with perfect formatting.' },
+      'excel-pdf': { name: 'Excel to PDF Converter', desc: 'Convert Excel spreadsheets (.xlsx, .xls) to PDF while preserving table layouts and data integrity.' },
+      'ppt-pdf': { name: 'PowerPoint to PDF', desc: 'Convert PPT and PPTX presentations to PDF. Ideal for sharing slides with guaranteed layout consistency.' },
+      'pdf-word': { name: 'PDF to Word (Editable)', desc: 'Convert PDF files back to editable Word documents using our high-fidelity reconstruction engine.' },
+      'pdf-excel': { name: 'PDF to Excel Converter', desc: 'Extract tables from PDF into editable Excel spreadsheets for data analysis and reporting.' },
+      'pdf-ppt': { name: 'PDF to PowerPoint', desc: 'Transform PDF pages back into editable PowerPoint slides for your next presentation.' },
+      'organizer': { name: 'Organize PDF Pages', desc: 'Visual PDF organizer. Reorder, rotate, and delete pages with an intuitive drag-and-drop interface.' },
+      'password': { name: 'Protect & Unlock PDF', desc: 'Add strong password protection to your PDF or remove existing restrictions securely.' },
+      'pdf-dwg': { name: 'PDF to CAD (DWG/DXF)', desc: 'Convert PDF drawings to editable DWG or DXF CAD files for engineering and architecture.' },
+      'repair': { name: 'Repair PDF Document', desc: 'Fix corrupted or broken PDF files. Recover content and rebuild document structures instantly.' },
+      'redact': { name: 'Redact PDF Info', desc: 'Permanently blackout sensitive information from your PDF. Securely remove private data.' },
+      'page-numbers': { name: 'Add Page Numbers', desc: 'Number your PDF pages automatically. Customize position, font, and style in your browser.' },
+      'header-footer': { name: 'Header and Footer', desc: 'Add custom headers and footers to your PDF documents. Perfect for branding and citations.' },
+      'esign': { name: 'Esign PDF Online', desc: 'Electronically sign your PDF documents with ease. Safe, legal, and private browser-side signing.' },
+      'annotate': { name: 'Annotate PDF', desc: 'Add comments, shapes, and notes to your PDF files. Collaborate and review documents privately.' },
+      'crop': { name: 'Crop PDF Pages', desc: 'Trim PDF margins and crop pages to specific areas. Perfect for removing white space or focusing on content.' },
+      'ai-summarize': { name: 'AI PDF Summarizer', desc: 'Extract key insights and summaries from long PDF documents using advanced AI analysis.' },
+      'translate': { name: 'Translate PDF', desc: 'Translate your PDF documents into over 100 languages while preserving the original layout.' }
+    },
     tools: {
-      merge: 'Merge PDF',
-      split: 'Split PDF',
-      compress: 'Compress PDF',
-      edit: 'PDF Editor',
-      convert: 'Convert & Download',
       upload: 'Click to upload or drag and drop',
       supported: 'Supported formats: PDF, Word, Excel, Images'
     }
@@ -33,22 +68,57 @@ export const translations = {
       pricing: 'Precios',
       blog: 'Blog',
       login: 'Iniciar Sesión',
-      dashboard: 'Tablero'
+      dashboard: 'Tablero',
+      cat_convertToPdf: 'Convertir a PDF',
+      cat_convertFromPdf: 'Convertir desde PDF',
+      cat_editOrganize: 'Editar y Organizar'
+    },
+    footer: {
+      copyright: '© 2026 PDFMasterstool. Todo el procesamiento ocurre en su navegador. Sus archivos nunca salen de su dispositivo.',
+      privacy: 'Política de Privacidad',
+      about: 'Sobre Nosotros',
+      disclaimer: 'Aviso Legal',
+      contact: 'Contacto',
+      support: 'Soporte'
     },
     home: {
-      heroTitle: 'Herramientas PDF Profesionales, Reutilizadas.',
+      heroTitle: 'Herramientas PDF Profesionales.',
       heroSubtitle: 'Herramientas de conversión y edición de alta fidelidad con tecnología WASM. 100% privado, 100% en el navegador.',
       getStarted: 'Empezar',
       popularTools: 'Herramientas Populares'
     },
+    toolList: {
+      'merge': { name: 'Unir PDF', desc: 'Fusione varios archivos PDF en un documento al instante. 100% privado en su navegador.' },
+      'split': { name: 'Dividir PDF', desc: 'Extraiga páginas o divida su PDF. Rápido, seguro y manejado localmente.' },
+      'compress': { name: 'Comprimir PDF', desc: 'Reduzca el tamaño del archivo PDF sin perder calidad. Optimice sus documentos.' },
+      'jpg-pdf': { name: 'JPG a PDF', desc: 'Convierta imágenes a PDF o extraiga imágenes de sus documentos PDF.' },
+      'rotate': { name: 'Rotar PDF', desc: 'Rote páginas de PDF a la orientación correcta en su navegador.' },
+      'delete': { name: 'Eliminar Páginas', desc: 'Elimine páginas no deseadas de sus documentos PDF de forma segura.' },
+      'edit': { name: 'Editor PDF', desc: 'Anote, firme y agregue texto a su PDF. Un editor privado completo.' },
+      'watermark': { name: 'Marca de agua', desc: 'Agregue marcas de agua de texto o imagen a sus archivos PDF.' },
+      'ocr': { name: 'OCR a Texto', desc: 'Extraiga texto editable de imágenes usando tecnología OCR.' },
+      'word-pdf': { name: 'Word a PDF', desc: 'Convierta documentos de Word a archivos PDF profesionales.' },
+      'excel-pdf': { name: 'Excel a PDF', desc: 'Convierta hojas de cálculo de Excel a PDF preservando el diseño.' },
+      'ppt-pdf': { name: 'PowerPoint a PDF', desc: 'Convierta presentaciones a PDF manteniendo la consistencia visual.' },
+      'pdf-word': { name: 'PDF a Word', desc: 'Convierta archivos PDF a documentos de Word editables.' },
+      'pdf-excel': { name: 'PDF a Excel', desc: 'Extraiga tablas de PDF a hojas de cálculo de Excel editables.' },
+      'pdf-ppt': { name: 'PDF a PowerPoint', desc: 'Transforme páginas PDF en diapositivas de PowerPoint.' },
+      'organizer': { name: 'Organizador PDF', desc: 'Reordene, rote y elimine páginas con una interfaz intuitiva.' },
+      'password': { name: 'Proteger PDF', desc: 'Agregue contraseñas fuertes o elimine restricciones de forma segura.' },
+      'pdf-dwg': { name: 'PDF a CAD', desc: 'Convierta dibujos PDF a archivos CAD DWG o DXF editables.' },
+      'repair': { name: 'Reparar PDF', desc: 'Arregle archivos PDF corruptos y recupere el contenido al instante.' },
+      'redact': { name: 'Censurar PDF', desc: 'Oculte información sensible de forma permanente de su PDF.' },
+      'page-numbers': { name: 'Numerar Páginas', desc: 'Agregue números a sus páginas PDF de forma automática.' },
+      'header-footer': { name: 'Encabezado y Pie', desc: 'Agregue encabezados y pies de página personalizados.' },
+      'esign': { name: 'Firmar PDF', desc: 'Firme sus documentos PDF electrónicamente con seguridad.' },
+      'annotate': { name: 'Anotar PDF', desc: 'Agregue comentarios y notas a sus archivos PDF.' },
+      'crop': { name: 'Recortar PDF', desc: 'Recorte los márgenes de las páginas PDF a áreas específicas.' },
+      'ai-summarize': { name: 'Resumen IA', desc: 'Extraiga puntos clave de documentos usando análisis avanzado.' },
+      'translate': { name: 'Traducir PDF', desc: 'Traduzca sus documentos PDF preservando el diseño original.' }
+    },
     tools: {
-      merge: 'Combinar PDF',
-      split: 'Dividir PDF',
-      compress: 'Comprimir PDF',
-      edit: 'Editor de PDF',
-      convert: 'Convertir y Descargar',
       upload: 'Haga clic para cargar o arrastre y suelte',
-      supported: 'Formatos soportados: PDF, Word, Excel, Imágenes'
+      supported: 'Formatos: PDF, Word, Excel, Imágenes'
     }
   },
   hi: {
@@ -59,22 +129,57 @@ export const translations = {
       pricing: 'कीमतें',
       blog: 'ब्लॉग',
       login: 'साइन इन करें',
-      dashboard: 'डैशबोर्ड'
+      dashboard: 'डैशबोर्ड',
+      cat_convertToPdf: 'PDF में बदलें',
+      cat_convertFromPdf: 'PDF से बदलें',
+      cat_editOrganize: 'संपादित और व्यवस्थित करें'
+    },
+    footer: {
+      copyright: '© 2026 PDFMasterstool. सभी प्रक्रिया आपके ब्राउज़र में होती है। आपकी फ़ाइलें आपके उपकरण को नहीं छोड़ती हैं।',
+      privacy: 'गोपनीयता नीति',
+      about: 'हमारे बारे में',
+      disclaimer: 'अस्वीकरण',
+      contact: 'संपर्क करें',
+      support: 'सहायता'
     },
     home: {
-      heroTitle: 'प्रोफेशनल PDF टूल्स, नए अंदाज में।',
-      heroSubtitle: 'WASM द्वारा संचालित उच्च-गुणवत्ता वाले कन्वर्शन और एडिटिंग टूल्स। 100% निजी, 100% ब्राउज़र में।',
+      heroTitle: 'प्रोफेशनल PDF टूल्स।',
+      heroSubtitle: 'WASM द्वारा संचालित उच्च-गुणवत्ता वाले कन्वर्शन और एडिटिंग टूल्स। 100% निजी, ब्राउज़र में।',
       getStarted: 'शुरू करें',
       popularTools: 'लोकप्रिय टूल्स'
     },
+    toolList: {
+      'merge': { name: 'PDF मर्ज करें', desc: 'कई PDF को एक में मिलाएं। 100% निजी ब्राउज़र-साइड प्रोसेसिंग।' },
+      'split': { name: 'PDF स्प्लिट करें', desc: 'पेज निकालें या PDF को विभाजित करें। तेज़ और सुरक्षित।' },
+      'compress': { name: 'PDF कंप्रेस करें', desc: 'गुणवत्ता खोए बिना PDF का आकार कम करें।' },
+      'jpg-pdf': { name: 'JPG से PDF', desc: 'छवियों को PDF में बदलें या PDF से छवियां निकालें।' },
+      'rotate': { name: 'PDF पेज घुमाएं', desc: 'PDF पेजों को सही दिशा में घुमाएं।' },
+      'delete': { name: 'PDF पेज हटाएं', desc: 'अपने दस्तावेज़ों से अवांछित पेज हटाएं।' },
+      'edit': { name: 'PDF एडिटर', desc: 'टेक्स्ट जोड़ें, एनोटेट करें और अपने PDF पर हस्ताक्षर करें।' },
+      'watermark': { name: 'वॉटरमार्क', desc: 'कस्टम वॉटरमार्क के साथ अपनी संपत्ति को सुरक्षित रखें।' },
+      'ocr': { name: 'OCR टू टेक्स्ट', desc: 'स्कैन की गई छवियों से संपादन योग्य टेक्स्ट निकालें।' },
+      'word-pdf': { name: 'Word से PDF', desc: 'Word दस्तावेज़ों को पेशेवर PDF में बदलें।' },
+      'excel-pdf': { name: 'Excel से PDF', desc: 'Excel को PDF में बदलें और लेआउट सुरक्षित रखें।' },
+      'ppt-pdf': { name: 'PowerPoint से PDF', desc: 'PPT प्रस्तुतियों को PDF में बदलें।' },
+      'pdf-word': { name: 'PDF से Word', desc: 'PDF को संपादन योग्य Word दस्तावेज़ों में बदलें।' },
+      'pdf-excel': { name: 'PDF से Excel', desc: 'डेटा विश्लेषण के लिए PDF से टेबल निकालें।' },
+      'pdf-ppt': { name: 'PDF से PowerPoint', desc: 'PDF पेजों को PowerPoint स्लाइड में बदलें।' },
+      'organizer': { name: 'PDF पेज व्यवस्थित करें', desc: 'पेजों को पुनः व्यवस्थित, रोटेट और हटाएं।' },
+      'password': { name: 'PDF सुरक्षित करें', desc: 'मजबूत पासवर्ड सुरक्षा जोड़ें या हटाएं।' },
+      'pdf-dwg': { name: 'PDF से CAD', desc: 'PDF रेखाचित्रों को CAD फ़ाइलों (DWG/DXF) में बदलें।' },
+      'repair': { name: 'PDF मरम्मत', desc: 'दूषित PDF फ़ाइलों को ठीक करें और सामग्री पुनर्प्राप्त करें।' },
+      'redact': { name: 'संवेदनशील जानकारी हटाएं', desc: 'PDF से व्यक्तिगत जानकारी स्थायी रूप से हटाएं।' },
+      'page-numbers': { name: 'पेज नंबर जोड़ें', desc: 'अपने PDF पेजों को स्वचालित रूप से नंबर दें।' },
+      'header-footer': { name: 'हेडर और फूटर', desc: 'कस्टम हेडर और फूटर जोड़ें।' },
+      'esign': { name: 'Esign PDF', desc: 'आसानी से अपने PDF दस्तावेज़ों पर इलेक्ट्रॉनिक हस्ताक्षर करें।' },
+      'annotate': { name: 'एनोटेट PDF', desc: 'टिप्पणियाँ, आकार और नोट्स जोड़ें।' },
+      'crop': { name: 'क्रॉप PDF', desc: 'PDF मार्जिन को ट्रिम करें और विशिष्ट क्षेत्रों को क्रॉप करें।' },
+      'ai-summarize': { name: 'AI PDF सारांश', desc: 'लंबे PDF दस्तावेज़ों से मुख्य अंतर्दृष्टि निकालें।' },
+      'translate': { name: 'PDF अनुवाद', desc: 'मूल लेआउट को संरक्षित करते हुए 100+ भाषाओं में अनुवाद करें।' }
+    },
     tools: {
-      merge: 'PDF मर्ज करें',
-      split: 'PDF स्प्लिट करें',
-      compress: 'PDF कंप्रेस करें',
-      edit: 'PDF एडिटर',
-      convert: 'कन्वर्ट और डाउनलोड करें',
       upload: 'अपलोड करने के लिए क्लिक करें या ड्रैग करें',
-      supported: 'समर्थित फॉर्मेट: PDF, Word, Excel, Images'
+      supported: 'प्रारूप: PDF, Word, Excel, छवियाँ'
     }
   },
   fr: {
@@ -85,22 +190,57 @@ export const translations = {
       pricing: 'Tarifs',
       blog: 'Blog',
       login: 'Connexion',
-      dashboard: 'Tableau de bord'
+      dashboard: 'Tableau de bord',
+      cat_convertToPdf: 'Convertir en PDF',
+      cat_convertFromPdf: 'Convertir depuis PDF',
+      cat_editOrganize: 'Éditer et Organiser'
+    },
+    footer: {
+      copyright: '© 2026 PDFMasterstool. Tout le traitement se fait dans votre navigateur. Vos fichiers ne quittent jamais votre appareil.',
+      privacy: 'Confidentialité',
+      about: 'À Propos',
+      disclaimer: 'Avis de non-responsabilité',
+      contact: 'Contact',
+      support: 'Support'
     },
     home: {
-      heroTitle: 'Outils PDF professionnels, réimaginés.',
-      heroSubtitle: 'Outils de conversion et d\'édition haute fidélité propulsés par WASM. 100% privé, 100% dans le navigateur.',
+      heroTitle: 'Outils PDF Professionnels.',
+      heroSubtitle: 'Outils de conversion et d\'édition haute fidélité. 100% privé, 100% dans le navigateur.',
       getStarted: 'Commencer',
-      popularTools: 'Outils populaires'
+      popularTools: 'Outils Populaires'
+    },
+    toolList: {
+      'merge': { name: 'Fusionner PDF', desc: 'Fusionnez plusieurs fichiers PDF en un seul instantanément.' },
+      'split': { name: 'Diviser PDF', desc: 'Extrayez des pages ou divisez votre PDF en toute sécurité.' },
+      'compress': { name: 'Compresser PDF', desc: 'Réduisez la taille du fichier PDF sans perte de qualité.' },
+      'jpg-pdf': { name: 'JPG en PDF', desc: 'Convertissez des images en PDF ou extrayez des images.' },
+      'rotate': { name: 'Faire pivoter PDF', desc: 'Faites pivoter les pages du PDF dans le bon sens.' },
+      'delete': { name: 'Supprimer des pages', desc: 'Supprimez les pages indésirables de vos PDF.' },
+      'edit': { name: 'Éditeur PDF', desc: 'Annotez, signez et ajoutez du texte à votre PDF.' },
+      'watermark': { name: 'Filigrane', desc: 'Ajoutez des filigranes à vos fichiers PDF.' },
+      'ocr': { name: 'OCR (Image en Texte)', desc: 'Extrayez du texte à partir d\'images numérisées.' },
+      'word-pdf': { name: 'Word en PDF', desc: 'Convertissez des documents Word en PDF.' },
+      'excel-pdf': { name: 'Excel en PDF', desc: 'Convertissez Excel en PDF en conservant la mise en page.' },
+      'ppt-pdf': { name: 'PowerPoint en PDF', desc: 'Convertissez des présentations PPT en PDF.' },
+      'pdf-word': { name: 'PDF en Word', desc: 'Convertissez des PDF en documents Word éditables.' },
+      'pdf-excel': { name: 'PDF en Excel', desc: 'Extrayez des tableaux PDF vers Excel.' },
+      'pdf-ppt': { name: 'PDF en PowerPoint', desc: 'Transformez des pages PDF en diapositives PPT.' },
+      'organizer': { name: 'Organiser PDF', desc: 'Réorganisez, faites pivoter et supprimez des pages.' },
+      'password': { name: 'Protéger PDF', desc: 'Ajoutez un mot de passe ou supprimez les restrictions.' },
+      'pdf-dwg': { name: 'PDF en CAD', desc: 'Convertissez des dessins PDF en fichiers CAD (DWG/DXF).' },
+      'repair': { name: 'Réparer PDF', desc: 'Réparez les fichiers PDF corrompus instantanément.' },
+      'redact': { name: 'Caviarder PDF', desc: 'Masquez définitivement les informations sensibles.' },
+      'page-numbers': { name: 'Numéroter Pages', desc: 'Ajoutez des numéros à vos pages PDF.' },
+      'header-footer': { name: 'En-tête et pied de page', desc: 'Ajoutez des en-têtes et des pieds de page personnalisés.' },
+      'esign': { name: 'Signer PDF', desc: 'Signez vos documents PDF électroniquement.' },
+      'annotate': { name: 'Annoter PDF', desc: 'Ajoutez des commentaires et des notes à vos PDF.' },
+      'crop': { name: 'Recadrer PDF', desc: 'Rognez les marges et recadrez les pages.' },
+      'ai-summarize': { name: 'Résumé IA', desc: 'Extrayez des informations clés avec l\'IA.' },
+      'translate': { name: 'Traduire PDF', desc: 'Traduisiez vos documents PDF dans plus de 100 langues.' }
     },
     tools: {
-      merge: 'Fusionner PDF',
-      split: 'Diviser PDF',
-      compress: 'Compresser PDF',
-      edit: 'Éditeur PDF',
-      convert: 'Convertir & Télécharger',
-      upload: 'Cliquez pour télécharger ou glisser-déposer',
-      supported: 'Formats supportés : PDF, Word, Excel, Images'
+      upload: 'Cliquez pour télécharger ou glissez-déposez',
+      supported: 'Formats : PDF, Word, Excel, Images'
     }
   },
   ar: {
@@ -111,22 +251,57 @@ export const translations = {
       pricing: 'الأسعار',
       blog: 'المدونة',
       login: 'تسجيل الدخول',
-      dashboard: 'لوحة التحكم'
+      dashboard: 'لوحة التحكم',
+      cat_convertToPdf: 'تحويل إلى PDF',
+      cat_convertFromPdf: 'تحويل من PDF',
+      cat_editOrganize: 'تعديل وتنظيم'
+    },
+    footer: {
+      copyright: '© 2026 PDFMasterstool. تتم جميع المعالجات في متصفحك. ملفاتك لا تغادر جهازك أبدا.',
+      privacy: 'سياسة الخصوصية',
+      about: 'معلومات عنا',
+      disclaimer: 'إخلاء المسؤولية',
+      contact: 'اتصل بنا',
+      support: 'الدعم'
     },
     home: {
-      heroTitle: 'أدوات PDF احترافية، بتصميم جديد.',
-      heroSubtitle: 'أدوات تحويل وتحرير عالية الدقة مدعومة بـ WASM. خصوصية 100٪، داخل المتصفح 100٪.',
+      heroTitle: 'أدوات PDF احترافية.',
+      heroSubtitle: 'أدوات تحويل وتحرير عالية الدقة. خصوصية 100٪، داخل المتصفح 100٪.',
       getStarted: 'ابدأ الآن',
       popularTools: 'الأدوات الشائعة'
     },
+    toolList: {
+      'merge': { name: 'دمج PDF', desc: 'دمج ملفات PDF متعددة في مستند واحد احترافي على الفور.' },
+      'split': { name: 'تقسيم PDF', desc: 'استخراج الصفحات أو تقسيم PDF الخاص بك إلى ملفات منفصلة.' },
+      'compress': { name: 'ضغط PDF', desc: 'تقليل حجم ملف PDF دون فقدان الجودة.' },
+      'jpg-pdf': { name: 'تحويل الصور إلى PDF', desc: 'تحويل الصور إلى PDF أو استخراج الصور بشكل آمن.' },
+      'rotate': { name: 'تدوير PDF', desc: 'تدوير صفحات PDF إلى الاتجاه الصحيح بشكل دائم.' },
+      'delete': { name: 'حذف صفحات PDF', desc: 'إزالة الصفحات غير المرغوب فيها من مستنداتك.' },
+      'edit': { name: 'محرر PDF', desc: 'أضف تعليقات توضيحية ونصوص وتوقيعات على جهازك.' },
+      'watermark': { name: 'علامة مائية', desc: 'حماية ملكيتك الفكرية بأختام مخصصة.' },
+      'ocr': { name: 'استخراج النص (OCR)', desc: 'استخراج نص قابل للتحرير من الصور الممسوحة ضوئيا.' },
+      'word-pdf': { name: 'Word إلى PDF', desc: 'تحويل مستندات Word إلى ملفات PDF احترافية.' },
+      'excel-pdf': { name: 'Excel إلى PDF', desc: 'تحويل جداول Excel إلى PDF مع الحفاظ على التخطيط.' },
+      'ppt-pdf': { name: 'PowerPoint إلى PDF', desc: 'تحويل عروض PPT التقديمية إلى PDF.' },
+      'pdf-word': { name: 'PDF إلى Word', desc: 'تحويل ملفات PDF إلى مستندات Word قابلة للتحرير.' },
+      'pdf-excel': { name: 'PDF إلى Excel', desc: 'استخراج الجداول من PDF إلى جداول Excel.' },
+      'pdf-ppt': { name: 'PDF إلى PowerPoint', desc: 'تحويل صفحات PDF إلى شرائح PowerPoint.' },
+      'organizer': { name: 'تنظيم PDF', desc: 'إعادة ترتيب وتدوير وحذف الصفحات بواجهة سهلة.' },
+      'password': { name: 'حماية PDF', desc: 'إضافة حماية بكلمة مرور أو إزالة القيود.' },
+      'pdf-dwg': { name: 'PDF إلى CAD', desc: 'تحويل رسومات PDF إلى ملفات CAD (DWG/DXF).' },
+      'repair': { name: 'إصلاح PDF', desc: 'إصلاح ملفات PDF التالفة واستعادة المحتوى.' },
+      'redact': { name: 'تنقيح PDF', desc: 'إزالة المعلومات الحساسة بشكل دائم وآمن.' },
+      'page-numbers': { name: 'ترقيم الصفحات', desc: 'ترقيم صفحات PDF الخاصة بك تلقائيا.' },
+      'header-footer': { name: 'رأس وتذييل', desc: 'إضافة رؤوس وتذييلات مخصصة لمستنداتك.' },
+      'esign': { name: 'توقيع PDF', desc: 'توقيع المستندات إلكترونيا بسهولة وأمان.' },
+      'annotate': { name: 'التعليق التوضيحي', desc: 'إضافة تعليقات وملاحظات إلى ملفاتك.' },
+      'crop': { name: 'قص PDF', desc: 'قص هوامش PDF والتركيز على المحتوى.' },
+      'ai-summarize': { name: 'ملخص ذكاء اصطناعي', desc: 'استخراج الرؤى الرئيسية باستخدام الذكاء الاصطناعي.' },
+      'translate': { name: 'ترجمة PDF', desc: 'ترجمة مستندات PDF مع الحفاظ على التخطيط الأصلي.' }
+    },
     tools: {
-      merge: 'دمج PDF',
-      split: 'تقسيم PDF',
-      compress: 'ضغط PDF',
-      edit: 'محرر PDF',
-      convert: 'تحويل وتحميل',
       upload: 'انقر للرفع أو قم بالسحب والإفلات',
-      supported: 'التنسيقات المدعومة: PDF، Word، Excel، الصور'
+      supported: 'التنسيقات: PDF، Word، Excel، الصور'
     }
   }
 };

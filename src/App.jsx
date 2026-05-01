@@ -156,8 +156,8 @@ function AppContent() {
 
   const renderToolWrapper = (toolId, Component, props = {}) => {
     const tool = TOOLS.find(t => t.id === toolId);
-    const title = tool ? tool.name : toolId.charAt(0).toUpperCase() + toolId.slice(1);
-    const description = tool ? tool.description : `Manage your PDFs with our ${title} tool. Fast, secure, and private.`;
+    const title = t(`toolList.${toolId}.name`) !== `toolList.${toolId}.name` ? t(`toolList.${toolId}.name`) : (tool ? tool.name : toolId.charAt(0).toUpperCase() + toolId.slice(1));
+    const description = t(`toolList.${toolId}.desc`) !== `toolList.${toolId}.desc` ? t(`toolList.${toolId}.desc`) : (tool ? tool.description : `Manage your PDFs with our ${title} tool. Fast, secure, and private.`);
 
     return (
       <motion.div 
@@ -277,8 +277,8 @@ function AppContent() {
                       }}>
                         <tool.icon size={32} />
                       </div>
-                      <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{tool.name}</h3>
-                      <p style={{ fontSize: '0.9rem', lineHeight: '1.4' }}>{tool.description}</p>
+                      <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{t(`toolList.${tool.id}.name`) !== `toolList.${tool.id}.name` ? t(`toolList.${tool.id}.name`) : tool.name}</h3>
+                      <p style={{ fontSize: '0.9rem', lineHeight: '1.4' }}>{t(`toolList.${tool.id}.desc`) !== `toolList.${tool.id}.desc` ? t(`toolList.${tool.id}.desc`) : tool.description}</p>
                     </div>
                   ))}
                 </div>
@@ -337,13 +337,13 @@ function AppContent() {
       </main>
 
       <footer style={{ padding: '3rem 5%', borderTop: '1px solid var(--border)', marginTop: '4rem', textAlign: 'center' }}>
-        <p style={{ fontSize: '0.9rem' }}>© 2026 PDFMasterstool. All processing happens in your browser. Your files never leave your device.</p>
+        <p style={{ fontSize: '0.9rem' }}>{t('footer.copyright')}</p>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginTop: '1rem' }}>
-          <button onClick={() => navigate('/privacy')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', cursor: 'pointer' }}>Privacy Policy</button>
-          <button onClick={() => navigate('/about')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', cursor: 'pointer' }}>About Us</button>
-          <button onClick={() => navigate('/disclaimer')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', cursor: 'pointer' }}>Disclaimer</button>
-          <button onClick={() => navigate('/contact')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', cursor: 'pointer' }}>Contact</button>
-          <button onClick={() => navigate('/support')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', cursor: 'pointer' }}>Support</button>
+          <button onClick={() => navigate('/privacy')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', cursor: 'pointer' }}>{t('footer.privacy')}</button>
+          <button onClick={() => navigate('/about')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', cursor: 'pointer' }}>{t('footer.about')}</button>
+          <button onClick={() => navigate('/disclaimer')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', cursor: 'pointer' }}>{t('footer.disclaimer')}</button>
+          <button onClick={() => navigate('/contact')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', cursor: 'pointer' }}>{t('footer.contact')}</button>
+          <button onClick={() => navigate('/support')} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.8rem', cursor: 'pointer' }}>{t('footer.support')}</button>
         </div>
       </footer>
     </div>

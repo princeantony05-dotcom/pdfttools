@@ -78,7 +78,7 @@ app.post('/api/convert', upload.single('file'), async (req, res) => {
     }
 
     const { format = 'pdf' } = req.body;
-    const cleanFormat = format.startsWith('.') ? format.slice(1) : format;
+    let cleanFormat = format.startsWith('.') ? format.slice(1) : format;
     const inputBuffer = req.file.buffer;
     
     // Create a truly isolated workspace for this specific conversion
@@ -104,14 +104,14 @@ app.post('/api/convert', upload.single('file'), async (req, res) => {
       cmd = `python3 -c "from pdf2docx import Converter; cv = Converter('${tempInputPath}'); cv.convert('${tempOutputPath}'); cv.close()"`;
     } else if (isRepair) {
       console.log(`>>> [API] Using Ghostscript for structural repair...`);
-      cmd = `gs -o ${tempOutputPath} -sDEVICE=pdfwrite -dPDFSETTINGS=/prepress ${tempInputPath}`;
+      cmd = `gs -o "${tempOutputPath}" -sDEVICE=pdfwrite -dPDFSETTINGS=/prepress "${tempInputPath}"`;
     } else if (isCad) {
       console.log(`>>> [API] Using pstoedit for high-fidelity CAD vectorization...`);
       // Convert PDF to DXF using pstoedit (most compatible with CAD software)
       // We use the 'dxf' backend with polygons as lines and metric units
-      const cadFormat = 'dxf'; // Always use dxf as the high-quality backend
-      tempOutputPath = path.join(workDir, `output.${cadFormat}`);
-      cmd = `pstoedit -f "dxf:-polyaslines -mm" ${tempInputPath} ${tempOutputPath}`;
+      cleanFormat = 'dxf'; // Always use dxf as the high-quality backend
+      tempOutputPath = path.join(workDir, `output.${cleanFormat}`);
+      cmd = `pstoedit -f "dxf:-polyaslines -mm" "${tempInputPath}" "${tempOutputPath}"`;
     } else {
       // Select the best filter for the output format
       let filter = cleanFormat;

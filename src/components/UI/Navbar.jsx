@@ -29,31 +29,31 @@ const Navbar = ({ onSelectTool, isLoggedIn, userRole, onLogout }) => {
 
   const categories = [
     {
-      name: 'Convert to PDF',
+      name: t('nav.cat_convertToPdf') !== 'nav.cat_convertToPdf' ? t('nav.cat_convertToPdf') : 'Convert to PDF',
       tools: [
-        { id: 'word-pdf', path: '/word-pdf', name: 'Word to PDF', icon: FileText, color: '#2563eb' },
-        { id: 'excel-pdf', path: '/excel-pdf', name: 'Excel to PDF', icon: FileSpreadsheet, color: '#059669' },
-        { id: 'ppt-pdf', path: '/ppt-pdf', name: 'PPT to PDF', icon: Presentation, color: '#d97706' },
-        { id: 'jpg-pdf', path: '/jpg-pdf', name: 'JPG to PDF', icon: ImageIcon, color: '#0f172a' },
+        { id: 'word-pdf', path: '/word-pdf', name: t('toolList.word-pdf.name') !== 'toolList.word-pdf.name' ? t('toolList.word-pdf.name') : 'Word to PDF', icon: FileText, color: '#2563eb' },
+        { id: 'excel-pdf', path: '/excel-pdf', name: t('toolList.excel-pdf.name') !== 'toolList.excel-pdf.name' ? t('toolList.excel-pdf.name') : 'Excel to PDF', icon: FileSpreadsheet, color: '#059669' },
+        { id: 'ppt-pdf', path: '/ppt-pdf', name: t('toolList.ppt-pdf.name') !== 'toolList.ppt-pdf.name' ? t('toolList.ppt-pdf.name') : 'PPT to PDF', icon: Presentation, color: '#d97706' },
+        { id: 'jpg-pdf', path: '/jpg-pdf', name: t('toolList.jpg-pdf.name') !== 'toolList.jpg-pdf.name' ? t('toolList.jpg-pdf.name') : 'JPG to PDF', icon: ImageIcon, color: '#0f172a' },
       ]
     },
     {
-      name: 'Convert from PDF',
+      name: t('nav.cat_convertFromPdf') !== 'nav.cat_convertFromPdf' ? t('nav.cat_convertFromPdf') : 'Convert from PDF',
       tools: [
-        { id: 'pdf-word', path: '/pdf-word', name: 'PDF to Word', icon: FileText, color: '#2563eb' },
-        { id: 'pdf-excel', path: '/pdf-excel', name: 'PDF to Excel', icon: FileSpreadsheet, color: '#059669' },
-        { id: 'pdf-ppt', path: '/pdf-ppt', name: 'PDF to PPT', icon: Presentation, color: '#d97706' },
+        { id: 'pdf-word', path: '/pdf-word', name: t('toolList.pdf-word.name') !== 'toolList.pdf-word.name' ? t('toolList.pdf-word.name') : 'PDF to Word', icon: FileText, color: '#2563eb' },
+        { id: 'pdf-excel', path: '/pdf-excel', name: t('toolList.pdf-excel.name') !== 'toolList.pdf-excel.name' ? t('toolList.pdf-excel.name') : 'PDF to Excel', icon: FileSpreadsheet, color: '#059669' },
+        { id: 'pdf-ppt', path: '/pdf-ppt', name: t('toolList.pdf-ppt.name') !== 'toolList.pdf-ppt.name' ? t('toolList.pdf-ppt.name') : 'PDF to PPT', icon: Presentation, color: '#d97706' },
       ]
     },
     {
-      name: 'Edit & Organize',
+      name: t('nav.cat_editOrganize') !== 'nav.cat_editOrganize' ? t('nav.cat_editOrganize') : 'Edit & Organize',
       tools: [
-        { id: 'merge', path: '/merge', name: t('tools.merge'), icon: Combine, color: '#1e293b' },
-        { id: 'split', path: '/split', name: t('tools.split'), icon: Scissors, color: '#334155' },
-        { id: 'rotate', path: '/rotate', name: 'Rotate PDF', icon: RotateCw, color: '#64748b' },
-        { id: 'delete', path: '/delete', name: 'Delete Pages', icon: Trash2, color: '#ef4444' },
-        { id: 'edit', path: '/edit', name: t('tools.edit'), icon: Edit3, color: '#2563eb' },
-        { id: 'watermark', path: '/watermark', name: 'Watermark', icon: Stamp, color: '#475569' },
+        { id: 'merge', path: '/merge', name: t('toolList.merge.name') !== 'toolList.merge.name' ? t('toolList.merge.name') : 'Merge PDF', icon: Combine, color: '#1e293b' },
+        { id: 'split', path: '/split', name: t('toolList.split.name') !== 'toolList.split.name' ? t('toolList.split.name') : 'Split PDF', icon: Scissors, color: '#334155' },
+        { id: 'rotate', path: '/rotate', name: t('toolList.rotate.name') !== 'toolList.rotate.name' ? t('toolList.rotate.name') : 'Rotate PDF', icon: RotateCw, color: '#64748b' },
+        { id: 'delete', path: '/delete', name: t('toolList.delete.name') !== 'toolList.delete.name' ? t('toolList.delete.name') : 'Delete Pages', icon: Trash2, color: '#ef4444' },
+        { id: 'edit', path: '/edit', name: t('toolList.edit.name') !== 'toolList.edit.name' ? t('toolList.edit.name') : 'PDF Editor', icon: Edit3, color: '#2563eb' },
+        { id: 'watermark', path: '/watermark', name: t('toolList.watermark.name') !== 'toolList.watermark.name' ? t('toolList.watermark.name') : 'Watermark', icon: Stamp, color: '#475569' },
       ]
     }
   ];

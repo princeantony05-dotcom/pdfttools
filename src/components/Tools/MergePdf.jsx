@@ -4,6 +4,7 @@ import { mergePdfs, downloadBlob } from '../../utils/pdfHelpers';
 import { Loader2, CheckCircle, Combine, ArrowRight, Download, GripVertical, Trash2, FileText } from 'lucide-react';
 import { motion, Reorder } from 'framer-motion';
 import * as pdfjs from 'pdfjs-dist';
+import { useLanguage } from '../../context/LanguageContext';
 
 // Set worker source for PDF.js
 pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@5.6.205/build/pdf.worker.min.mjs`;
@@ -13,6 +14,7 @@ const MergePdf = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [result, setResult] = useState(null);
+  const { t } = useLanguage();
 
   const generateThumbnail = async (file) => {
     try {
@@ -155,7 +157,7 @@ const MergePdf = () => {
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                   <button className="btn-primary" onClick={handleMerge} disabled={files.length < 2} style={{ width: '100%', padding: '1.25rem', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', fontSize: '1rem', fontWeight: 600 }}>
-                    Merge Documents <ArrowRight size={20} />
+                    {t('toolList.merge.name')} <ArrowRight size={20} />
                   </button>
                   <button onClick={reset} className="btn-secondary" style={{ width: '100%', padding: '1rem', borderRadius: '16px' }}>Clear All</button>
                 </div>
