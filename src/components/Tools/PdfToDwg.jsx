@@ -59,8 +59,8 @@ const PdfToDwg = () => {
           {!file ? (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ maxWidth: '800px', margin: '4rem auto' }}>
               <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-                <h2 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '0.5rem' }}>PDF to CAD Converter</h2>
-                <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem' }}>Transform PDF drawings into editable DXF/DWG files with vector reconstruction.</p>
+                <h2 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '0.5rem' }}>PDF to DWG Converter</h2>
+                <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem' }}>Transform PDF drawings into editable CAD files (DXF/DWG compatible) with vector reconstruction.</p>
               </div>
               <Dropzone 
                 onFilesSelected={(f) => setFile(f[0])} 
@@ -121,8 +121,8 @@ const PdfToDwg = () => {
 
           <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} style={{ backgroundColor: 'rgba(16, 185, 129, 0.05)', padding: '1.5rem', borderRadius: '20px', border: '1px solid rgba(16, 185, 129, 0.2)', position: 'sticky', top: '1rem' }}>
             <h4 style={{ marginBottom: '1.5rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#10b981' }}>Export CAD</h4>
-            <button className="btn-primary" onClick={() => downloadBlob(result, `${file.name.split('.')[0]}.dxf`, 'application/octet-stream')} style={{ width: '100%', padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', backgroundColor: '#10b981' }}>
-              <Download size={20} /> Download DXF (CAD)
+            <button className="btn-primary" onClick={() => downloadBlob(result, `${file.name.split('.')[0]}.dxf`, 'application/dxf')} style={{ width: '100%', padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', backgroundColor: '#10b981' }}>
+              <Download size={20} /> Download CAD (DXF)
             </button>
             <button onClick={reset} className="btn-secondary" style={{ width: '100%', marginTop: '1rem' }}>Convert Another</button>
           </motion.div>
@@ -157,7 +157,7 @@ const PdfToDwg = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
               <div>
                 <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>What is the difference between DWG and DXF?</h4>
-                <p style={{ opacity: 0.7 }}>DWG is the native format for AutoCAD, while DXF is an open exchange format. Our tool produces high-quality DWG files that are compatible with most modern CAD software.</p>
+                <p style={{ opacity: 0.7 }}>DWG is the native format for AutoCAD, while DXF is an open exchange format. Our tool produces high-quality DXF files that can be opened and edited as native DWG entities in almost all CAD software including AutoCAD.</p>
               </div>
               <div>
                 <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Can I convert scanned PDFs to DWG?</h4>

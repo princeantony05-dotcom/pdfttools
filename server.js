@@ -7,6 +7,7 @@ import fs from 'fs/promises';
 import cors from 'cors';
 import { promisify } from 'util';
 import { exec } from 'child_process';
+import os from 'os';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -56,6 +57,14 @@ async function findSoffice() {
   return 'soffice'; 
 }
 
+// Helper to check if a command exists
+async function commandExists(cmd) {
+  return new Promise(resolve => {
+    const checkCmd = process.platform === 'win32' ? `where ${cmd}` : `which ${cmd}`;
+    exec(checkCmd, (err) => resolve(!err));
+  });
+}
+
 const sofficePath = await findSoffice();
 
 app.use(cors());
@@ -83,7 +92,8 @@ app.post('/api/convert', upload.single('file'), async (req, res) => {
     
     // Create a truly isolated workspace for this specific conversion
     const timestamp = Date.now();
-    const workDir = path.join('/tmp', `conv_${timestamp}`);
+    const tmpBaseDir = os.tmpdir();
+    const workDir = path.join(tmpBaseDir, `pdfmaster_conv_${timestamp}`);
     await fs.mkdir(workDir, { recursive: true });
 
     const inputExt = path.extname(req.file.originalname) || '.pdf';
@@ -106,12 +116,21 @@ app.post('/api/convert', upload.single('file'), async (req, res) => {
       console.log(`>>> [API] Using Ghostscript for structural repair...`);
       cmd = `gs -o "${tempOutputPath}" -sDEVICE=pdfwrite -dPDFSETTINGS=/prepress "${tempInputPath}"`;
     } else if (isCad) {
-      console.log(`>>> [API] Using pstoedit for high-fidelity CAD vectorization...`);
-      // Convert PDF to DXF using pstoedit (most compatible with CAD software)
-      // We use the 'dxf' backend with polygons as lines and metric units
-      cleanFormat = 'dxf'; // Always use dxf as the high-quality backend
-      tempOutputPath = path.join(workDir, `output.${cleanFormat}`);
-      cmd = `pstoedit -f "dxf:-polyaslines -mm" "${tempInputPath}" "${tempOutputPath}"`;
+      console.log(`>>> [API] Attempting CAD vectorization...`);
+      const hasPstoedit = await commandExists('pstoedit');
+      
+      if (hasPstoedit) {
+        console.log(`>>> [API] Using pstoedit (high-fidelity)...`);
+        cleanFormat = 'dxf'; 
+        tempOutputPath = path.join(workDir, `output.${cleanFormat}`);
+        // Use DXF 2004 variant for maximum compatibility
+        cmd = `pstoedit -f "dxf:-polyaslines -mm" "${tempInputPath}" "${tempOutputPath}"`;
+      } else {
+        console.log(`>>> [API] pstoedit missing. Falling back to LibreOffice engine...`);
+        cleanFormat = 'dxf';
+        tempOutputPath = path.join(workDir, `output.${cleanFormat}`);
+        cmd = `${sofficePath} --headless --convert-to dxf --outdir ${workDir} ${tempInputPath}`;
+      }
     } else {
       // Select the best filter for the output format
       let filter = cleanFormat;
@@ -173,7 +192,7 @@ app.post('/api/convert', upload.single('file'), async (req, res) => {
     else if (cleanFormat === 'docx') contentType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
     else if (cleanFormat === 'xlsx') contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
     else if (cleanFormat === 'pptx') contentType = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
-    else if (cleanFormat === 'dwg' || cleanFormat === 'dxf') contentType = 'application/x-dwg';
+    else if (cleanFormat === 'dwg' || cleanFormat === 'dxf') contentType = 'application/dxf';
 
     res.set({
       'Content-Type': contentType,
